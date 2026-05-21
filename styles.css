@@ -2185,3 +2185,117 @@ body.intro-done .hero-rail{opacity:1}
 }
 .card.visible{opacity:1;transform:translateY(0)}
 .card.visible:hover{transform:translateY(-6px)}
+
+/* =========================================================
+   INSTAGRAM ICON BUTTON (in hero CTA row)
+   ========================================================= */
+.ig-icon{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding:14px 20px 14px 16px;
+  background:transparent;
+  color:var(--bone);
+  border:1px solid var(--rule-2);
+  text-decoration:none;
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  font-weight:600;
+  border-radius:99px;
+  position:relative;
+  overflow:hidden;
+  isolation:isolate;
+  transition:transform .4s cubic-bezier(.2,.7,.2,1), border-color .3s, color .3s;
+}
+.ig-icon svg{
+  width:18px;
+  height:18px;
+  flex-shrink:0;
+  position:relative;
+  z-index:2;
+  transition:transform .4s cubic-bezier(.2,.7,.2,1);
+}
+.ig-label{
+  position:relative;
+  z-index:2;
+}
+.ig-icon::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  z-index:0;
+  background:linear-gradient(135deg, #833ab4 0%, #fd1d1d 50%, #fcb045 100%);
+  opacity:0;
+  transition:opacity .45s cubic-bezier(.65,.05,.35,1);
+}
+.ig-icon:hover{
+  color:#fff;
+  border-color:transparent;
+  transform:translateY(-2px);
+}
+.ig-icon:hover::before{opacity:1}
+.ig-icon:hover svg{transform:rotate(6deg) scale(1.08)}
+
+/* =========================================================
+   ATELIER PHOTOS (in atelier blocks)
+   ========================================================= */
+.atelier-block{
+  background:rgba(0,0,0,.35);
+  border:1px solid var(--rule);
+  border-radius:3px;
+  padding:0;
+  overflow:hidden;
+  transition:border-color .3s, transform .3s, background .3s;
+  display:flex;
+  flex-direction:column;
+}
+.atelier-block:hover{
+  border-color:var(--green);
+  transform:translateY(-3px);
+  background:rgba(127,179,58,.06);
+}
+.atelier-block .ab-photo{
+  position:relative;
+  aspect-ratio:16/10;
+  overflow:hidden;
+  background:#0a0d0a;
+  border-bottom:1px solid var(--rule);
+}
+.atelier-block .ab-photo img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  filter:brightness(.75) saturate(1.05) contrast(1.05);
+  transition:transform .8s cubic-bezier(.2,.7,.2,1), filter .5s;
+}
+.atelier-block:hover .ab-photo img{
+  transform:scale(1.06);
+  filter:brightness(.95) saturate(1.15) contrast(1.05);
+}
+.atelier-block .ab-photo::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg, transparent 40%, rgba(0,0,0,.5) 100%);
+  pointer-events:none;
+}
+.ab-bracket{
+  position:absolute;
+  width:14px;height:14px;
+  border:1.5px solid var(--green);
+  z-index:2;
+  opacity:.7;
+}
+.ab-bracket.tl{top:10px;left:10px;border-right:none;border-bottom:none}
+.ab-bracket.br{bottom:10px;right:10px;border-left:none;border-top:none}
+
+.atelier-block .ab-label,
+.atelier-block .ab-name,
+.atelier-block .ab-desc{
+  padding-left:22px;
+  padding-right:22px;
+}
+.atelier-block .ab-label{padding-top:20px}
+.atelier-block .ab-desc{padding-bottom:22px}
