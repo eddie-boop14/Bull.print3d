@@ -1,86 +1,77 @@
 # BULLPRINT 3D — Site
 
 Site web pour Bullprint 3D. Build 2026.
+Signé Edmaster & Claudius · Bleu Canard Édition 2026.
 
 ## Structure
 ```
 bullprint/
 ├── index.html          # page unique, tout est dedans
 ├── styles.css          # tout le style
-├── script.js           # intro, scroll, filtres, curseur
+├── script.js           # intro, scroll, carousels, curseur
 └── assets/
     ├── logo.png        # logo bulldog (fond transparent)
     └── products/       # 19 photos produits
 ```
 
+## Sections de la page
+1. **Intro animée** — "BULLPRINT 3D" qui s'imprime lettre par lettre (clic pour passer)
+2. **Hero** — Titre + Pièce en vedette (Deadpool)
+3. **Reel Instagram** — embed du reel atelier
+4. **Galerie** — 7 catégories en carousels horizontaux (flèches gauche/droite)
+5. **L'Atelier** — texte + 4 postes (FDM, Résine, Ponçage, Peinture)
+6. **Sur Mesure** — Process 4 étapes : Tu envoies / On décide / On imprime / On livre
+7. **Commander** — CTA email + Insta
+8. **Footer** — liens + signature
+
 ## Tester en local
-Ouvrir un terminal dans ce dossier puis :
 ```bash
+cd bullprint/
 python3 -m http.server 8080
 ```
-Puis aller sur `http://localhost:8080` dans le navigateur.
-
-(Ouvrir `index.html` directement en double-cliquant marche aussi mais certains effets peuvent ne pas charger correctement à cause des restrictions CORS du protocole `file://`.)
+Puis aller sur `http://localhost:8080`.
 
 ## Mettre en ligne
-N'importe quel hébergeur de fichiers statiques fonctionne :
-
-- **Netlify** : glisser-déposer le dossier sur netlify.com → URL en 30 secondes, gratuit
-- **Vercel** : `vercel deploy` depuis ce dossier
+- **Netlify** : glisser-déposer le dossier sur netlify.com → URL en 30s, gratuit
+- **Vercel** : `vercel deploy`
 - **OVH / hébergement classique** : uploader le dossier via FTP dans `www/`
-- **GitHub Pages** : push le dossier sur un repo public, activer Pages dans Settings
+- **GitHub Pages** : push sur un repo, activer Pages
 
-Le site est 100% statique — pas de serveur, pas de base de données, pas de build.
+100% statique. Pas de serveur, pas de base de données.
 
 ## À faire avant mise en ligne réelle
 
-1. **Domaine** : acheter `bullprint3d.fr` (ou autre). Sans ça, le bouton "Écrire à l'atelier" pointe vers une adresse qui n'existe pas (`contact@bullprint3d.fr`).
-2. **Prix** : valider tous les prix dans `index.html` — ils sont basés sur le marché cosplay/3D français mais à toi de confirmer.
-3. **Noms de produits** : certains sont inventés ("Bar-Bot Mascotte", "Waitress Bot") — à changer si besoin.
-4. **Compresser les images** : les .jpg actuels font ~80-130KB chacun. Pour aller plus vite, les passer en .webp via squoosh.app (gain ~60%).
-5. **Vrai handle Insta** : le lien pointe vers `instagram.com/bull.print3d` — vérifier que c'est correct.
-
-## Sections de la page
-1. **Intro** : animation "impression 3D" qui imprime les mots BULLPRINT FAIT-LE EN 3D (clic pour passer)
-2. **Hero** : grand titre + pièce en vedette (Deadpool)
-3. **Ticker vert** : bandeau qui défile
-4. **Galerie** : 19 produits filtrables par catégorie (bento grid)
-5. **Les Signatures** : 3 pièces emblématiques en scroll sticky
-6. **Sur Mesure** : process en 4 étapes pour les commandes custom
-7. **Stats** : 19+, 24H, 5-21j, 1 atelier
-8. **Commander** : CTA email + Insta
-9. **Footer** : liens, contact, mentions
+1. **Domaine** : `bullprint3d.fr` (ou autre). Les CTA pointent vers `contact@bullprint3d.fr`.
+2. **Reel Instagram** : l'embed officiel d'Insta s'affichera automatiquement sur un vrai navigateur. Si tu préfères héberger la vidéo toi-même (chargement plus rapide, pas de tracking IG), déposer le fichier dans `assets/intro-reel.mp4` et remplacer le `<blockquote>` par un `<video autoplay muted loop playsinline>`.
+3. **Photos atelier** : ajouter quand prêtes — slot prévu dans la section "L'Atelier".
+4. **Compresser les images** : passer les `.jpg` en `.webp` via squoosh.app (gain ~60%).
+5. **Vérifier le handle Insta** : `instagram.com/bull.print3d`.
 
 ## Modifier le contenu
 
-**Changer une photo** :
-Remplacer le fichier dans `assets/products/` en gardant le même nom.
+**Changer une photo** : remplacer le fichier dans `assets/products/` en gardant le même nom.
 
-**Changer un prix** :
-Ouvrir `index.html`, chercher le nom du produit, modifier la valeur dans `<span class="price">`.
+**Ajouter un produit à une catégorie** :
+1. Ouvrir `index.html`, chercher la `<section class="cat-row">` de la catégorie
+2. Copier un bloc `<a href="#order" class="card">...</a>` complet
+3. Modifier l'image, le nom, le sous-titre
+4. Mettre à jour `<span class="cat-count">X pièces</span>`
 
-**Ajouter un produit** :
-Copier le bloc `<article class="piece ...">` complet d'un produit existant et modifier. Attention à la classe de taille (`feat`, `big`, `mid`, `tall`, `wide`, `std`) — voir grid plan ci-dessous.
+**Ajouter une nouvelle catégorie** : copier un bloc `<section class="cat-row reveal">` complet et personnaliser.
 
-**Grid plan** (12 colonnes) :
-- `feat` = 6 col × 3 row (gros)
-- `big` = 3 col × 3 row (haut)
-- `tall` = 4 col × 3 row (haut moyen)
-- `mid` = 4 col × 2 row (moyen)
-- `wide` = 6 col × 2 row (large)
-- `std` = 3 col × 2 row (petit)
-
-Chaque rangée doit totaliser 12 colonnes.
-
-## Ce qui manque (volontairement)
-- Pas de checkout / panier — tout passe par devis/DM. À ajouter plus tard si besoin (Stripe, Snipcart, etc.)
-- Pas d'admin — pour ajouter un produit il faut modifier le HTML. Plus tard on peut passer sur un CMS headless (Sanity, Strapi).
-- Pas de blog/news — à ajouter si pertinent pour le SEO.
-- Pas de vidéo intro de la reel Instagram — peut être ajoutée en remplaçant l'intro CSS par un `<video autoplay muted>` avec un fichier dans `assets/intro.mp4`.
+## Carousel
+Les flèches gauche/droite scrollent horizontalement par largeur de carte. Sur mobile, tu peux aussi swipe au doigt directement.
 
 ## Performance
-- 0 framework, 0 dépendance externe sauf fonts Google
-- Total page : ~2.3 MB (1.6 MB d'images, le reste 70 KB)
-- Compresser les images en webp ramène à ~1 MB
+- 0 framework, 0 dépendance sauf fonts Google et embed Instagram
+- ~2 MB total (1.6 MB d'images, le reste 70 KB)
+- Compresser en webp ramène à ~1 MB
 
-— Build par Claude pour J.M.
+## Ce qui manque (volontairement)
+- Pas de checkout : tout passe par devis/DM
+- Pas d'admin : modifier le HTML
+- Pas de prix : choix volontaire, le devis se fait au cas par cas
+- Pas de blog/news
+
+---
+Signé Edmaster & Claudius · Bleu Canard Édition 2026

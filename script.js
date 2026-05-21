@@ -53,8 +53,7 @@
   const stage = document.querySelector('.print-stage');
   if (stage) {
     stage.appendChild(buildPrintWord('BULLPRINT', 200, false));
-    stage.appendChild(buildPrintWord('FAIT-LE', 800, true));
-    stage.appendChild(buildPrintWord('EN 3D', 1400, false));
+    stage.appendChild(buildPrintWord('3D', 900, true));
   }
 
   // progress counter
@@ -109,8 +108,7 @@
 
   const reveals = [
     ...document.querySelectorAll('.reveal'),
-    ...document.querySelectorAll('.grid .piece'),
-    ...document.querySelectorAll('.stat'),
+    ...document.querySelectorAll('.card'),
   ];
   reveals.forEach(el => io.observe(el));
 
@@ -124,54 +122,51 @@
     });
   }, 2500);
 
-  /* ----- CHIP FILTERING ----- */
-  document.querySelectorAll('.chip').forEach(chip => {
-    chip.addEventListener('click', () => {
-      document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-      chip.classList.add('active');
-      const cat = chip.dataset.cat;
-      document.querySelectorAll('.piece').forEach(p => {
-        if (cat === 'all' || p.dataset.cat?.split(',').includes(cat)) {
-          p.dataset.hidden = 'false';
-        } else {
-          p.dataset.hidden = 'true';
-        }
-      });
+  /* ----- CATEGORY CAROUSEL ARROWS ----- */
+  document.querySelectorAll('.cat-row').forEach(row => {
+    const track = row.querySelector('.cat-track');
+    const prev = row.querySelector('.cat-nav.prev');
+    const next = row.querySelector('.cat-nav.next');
+    if (!track || !prev || !next) return;
+
+    const scrollAmount = () => {
+      const firstCard = track.querySelector('.card');
+      if (!firstCard) return 360;
+      // scroll by card width + gap
+      return firstCard.getBoundingClientRect().width + 14;
+    };
+
+    const updateNavState = () => {
+      const max = track.scrollWidth - track.clientWidth;
+      prev.disabled = track.scrollLeft <= 4;
+      next.disabled = track.scrollLeft >= max - 4;
+    };
+
+    prev.addEventListener('click', () => {
+      track.scrollBy({ left: -scrollAmount(), behavior: 'smooth' });
     });
+    next.addEventListener('click', () => {
+      track.scrollBy({ left: scrollAmount(), behavior: 'smooth' });
+    });
+    track.addEventListener('scroll', updateNavState, { passive: true });
+    // initial state
+    updateNavState();
+    // re-check after layout settles
+    setTimeout(updateNavState, 300);
+    window.addEventListener('resize', updateNavState);
   });
 
-  /* ----- SHOWCASE STICKY SCROLL ----- */
-  const showcaseItems = document.querySelectorAll('.showcase-item');
-  const showcaseImages = document.querySelectorAll('.showcase-img');
-  if (showcaseItems.length) {
-    const sio = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          const idx = parseInt(e.target.dataset.idx, 10);
-          showcaseItems.forEach(it => it.classList.remove('active'));
-          showcaseImages.forEach(im => im.classList.remove('active'));
-          e.target.classList.add('active');
-          if (showcaseImages[idx]) showcaseImages[idx].classList.add('active');
-        }
-      });
-    }, { threshold: 0.5, rootMargin: '-30% 0px -30% 0px' });
-    showcaseItems.forEach(it => sio.observe(it));
-    // activate first by default
-    showcaseItems[0]?.classList.add('active');
-    showcaseImages[0]?.classList.add('active');
-  }
-
-  /* ----- PIECE MAGNETIC HOVER (subtle tilt) ----- */
+  /* ----- CARD MAGNETIC HOVER (subtle tilt) ----- */
   if (window.matchMedia('(hover:hover)').matches) {
-    document.querySelectorAll('.piece').forEach(p => {
-      p.addEventListener('mousemove', (e) => {
-        const rect = p.getBoundingClientRect();
+    document.querySelectorAll('.card').forEach(c => {
+      c.addEventListener('mousemove', (e) => {
+        const rect = c.getBoundingClientRect();
         const x = ((e.clientX - rect.left) / rect.width - 0.5);
         const y = ((e.clientY - rect.top) / rect.height - 0.5);
-        p.style.transform = `translateY(-6px) perspective(800px) rotateY(${x * 4}deg) rotateX(${-y * 4}deg)`;
+        c.style.transform = `translateY(-6px) perspective(800px) rotateY(${x * 3}deg) rotateX(${-y * 3}deg)`;
       });
-      p.addEventListener('mouseleave', () => {
-        p.style.transform = '';
+      c.addEventListener('mouseleave', () => {
+        c.style.transform = '';
       });
     });
   }
