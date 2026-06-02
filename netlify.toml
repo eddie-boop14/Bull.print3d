@@ -1,0 +1,22 @@
+[build]
+  publish = "."
+  functions = "netlify/functions"
+
+# Make sure /secret-admin/ is reachable
+[[redirects]]
+  from = "/secret-admin"
+  to   = "/secret-admin/"
+  status = 301
+
+# Prevent search engines from indexing the admin
+[[headers]]
+  for = "/secret-admin/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+    Cache-Control = "no-store, no-cache, must-revalidate"
+
+# Don't cache content.json so admin edits go live fast
+[[headers]]
+  for = "/content.json"
+  [headers.values]
+    Cache-Control = "no-cache, must-revalidate"

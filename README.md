@@ -1,71 +1,125 @@
-# BULLPRINT 3D — Site
+# BULLPRINT 3D — Site + Admin
 
-Site web pour Bullprint 3D. Build 2026.
+Site web pour Bullprint 3D, avec admin éditeur de contenu.
 Signé Edmaster & Claudius · Bleu Canard Édition 2026.
 
 ## Structure
+
 ```
 bullprint/
-├── index.html          # page unique
-├── styles.css          # tout le style
-├── script.js           # intro, scroll, carousels, curseur
+├── index.html              # site public — coquille avec data-bind
+├── render.js               # remplit la coquille depuis content.json
+├── script.js               # animations, curseur, carousels
+├── styles.css              # design system complet
+├── content.json            # TOUT le contenu éditable (texte + cartes)
+├── netlify.toml            # config Netlify
+├── package.json            # déclaration des fonctions
+├── secret-admin/
+│   ├── index.html          # interface admin (mode admin orange)
+│   └── admin.js            # logique édition + commit
+├── netlify/
+│   └── functions/
+│       └── commit-content.js   # backend GitHub commit
 └── assets/
-    ├── logo.png        # logo bulldog
-    └── products/       # 19 photos produits
+    ├── logo.png
+    ├── products/           # 19 photos produits
+    └── atelier/            # 4 schémas postes
 ```
 
-## Sections de la page
-1. **Intro animée** — "BULLPRINT 3D" s'imprime lettre par lettre (clic = skip)
-2. **Hero** — Titre + Pièce en vedette (Deadpool) + 3 boutons (Galerie / Sur mesure / Instagram)
-3. **Galerie** — 7 catégories en carousels (Casques, Star Wars, Bustes, Lampes, Gaming, Déco, Pièces uniques)
-4. **L'Atelier** — Texte + 4 postes avec photos d'illustration (FDM, Résine, Ponçage, Peinture)
-5. **Sur Mesure** — Process 4 étapes : Tu envoies / On décide / On imprime / On livre
-6. **Commander** — CTA email + Insta
-7. **Footer** — liens + signature
+## Comment ça marche
 
-## Tester en local
-```bash
-cd bullprint/
-python3 -m http.server 8080
+### Site public
+1. Le navigateur charge `index.html`
+2. `render.js` récupère `content.json` et remplit tous les éléments `data-bind`
+3. `script.js` lance l'intro, les animations, les carousels
+
+### Admin (`/secret-admin`)
+1. Page protégée par mot de passe (env var `ADMIN_SECRET`)
+2. Charge `content.json` exactement comme le site public
+3. Ajoute une barre orange "MODE ADMIN" en haut
+4. Chaque texte/carte/catégorie devient cliquable pour édition en place
+5. Bouton "Valider" → modal avec résumé des changements → "Publier"
+6. Le bouton Publier envoie le nouveau `content.json` à la fonction Netlify
+7. La fonction commit sur GitHub
+8. Netlify détecte le push et redéploie automatiquement (~1 min)
+
+## Mise en ligne — première fois
+
+### 1. Pousser sur GitHub
+Créer un repo (ex: `eddie-boop14/bullprint3d`), pousser tout le contenu de `bullprint/` dessus.
+
+### 2. Connecter à Netlify
+- New site from Git → choisir le repo
+- Build settings : laisser par défaut (Netlify lit `netlify.toml`)
+- Deploy
+
+### 3. Créer un fine-grained GitHub PAT
+- github.com/settings/personal-access-tokens → Generate new
+- Nom : `bullprint-admin`
+- Expiration : 1 an
+- Repository access : **Only select** → choisir `bullprint3d` (UN SEUL repo)
+- Permissions → Contents : **Read and write**
+- Copier le token (commence par `github_pat_...`)
+
+### 4. Choisir un mot de passe admin
+30+ caractères aléatoires :
 ```
-Aller sur `http://localhost:8080`.
+openssl rand -base64 32
+```
 
-## Mettre en ligne
-- **Netlify** : drag-and-drop le dossier → URL en 30s, gratuit
-- **Vercel** : `vercel deploy`
-- **OVH / hébergement classique** : FTP dans `www/`
-- **GitHub Pages** : push + activer Pages
+### 5. Ajouter les variables d'environnement Netlify
+Dans Netlify → Site settings → Environment variables :
+- `GITHUB_TOKEN` = le PAT
+- `ADMIN_SECRET` = le mot de passe
+- (optionnel) `REPO_OWNER`, `REPO_NAME`, `REPO_BRANCH` si pas `eddie-boop14/bullprint3d/main`
 
-100% statique, pas de serveur ni de base de données.
+Redéployer (Deploys → Trigger deploy → Clear cache and deploy).
 
-## À faire avant mise en ligne
+### 6. Vérifier
+- Visiter `https://bullprint3d.fr/secret-admin/` (ou le domaine Netlify provisoire)
+- Entrer le mot de passe
+- Faire une petite édition de test
+- Valider, publier
+- Vérifier sur `github.com/eddie-boop14/bullprint3d/commits/main` que le commit apparaît
+- Attendre ~1 min, recharger le site, voir le changement
 
-1. **Domaine** : `bullprint3d.fr` (les CTA pointent vers `contact@bullprint3d.fr`)
-2. **Photos atelier** : les images dans la section "L'Atelier" sont des photos d'illustration Unsplash (libres de droits, gratuites, usage commercial OK). À remplacer par les vraies photos quand prêtes — voir ci-dessous.
-3. **Compresser les images produits** : passer en `.webp` via squoosh.app (gain ~60%)
-4. **Vérifier handle Insta** : `instagram.com/bull.print3d`
+## Pour le client (Bull)
 
-## Photos atelier — comment remplacer
+URL : `bullprint3d.fr/secret-admin`
+Mot de passe : (à lui transmettre séparément, à ne pas mettre dans un email avec l'URL)
 
-Les images dans la section L'Atelier viennent directement d'Unsplash via leur CDN. Pour mettre les vraies photos :
+Workflow :
+1. Va sur l'URL secrète
+2. Entre le mot de passe (le navigateur s'en souvient)
+3. La barre orange "MODE ADMIN" indique qu'il est en mode édition
+4. Cliquer sur n'importe quel texte pour le modifier
+5. Cliquer sur une carte produit pour modifier ses détails
+6. Boutons "+ Carte", "+ Catégorie" pour ajouter
+7. Quand prêt → bouton "Valider →"
+8. Vérifier le résumé → "Publier maintenant"
+9. Attendre 1 minute, le site est à jour
 
-1. Ouvrir `index.html`
-2. Chercher `<img src="https://images.unsplash.com/...`
-3. Remplacer par `<img src="assets/atelier/poste-01.jpg"` (etc.)
-4. Mettre les photos dans `assets/atelier/`
+## Sécurité
 
-## Carousel galerie
-Flèches gauche/droite scrollent par largeur de carte. Sur mobile, swipe au doigt.
+- Le mot de passe est validé côté serveur (fonction Netlify), pas dans le navigateur
+- Le GitHub PAT n'est **jamais** envoyé au navigateur — il reste dans les env vars Netlify
+- Le PAT est scopé à UN SEUL repo (Bullprint), donc même s'il fuit, dégâts limités
+- L'URL `/secret-admin` n'est pas indexée (X-Robots-Tag dans `netlify.toml`)
+- Le mot de passe est stocké en sessionStorage côté client (perdu en fermant l'onglet — il devra le re-entrer chaque session si Netlify Identity n'est pas utilisé)
 
-## Performance
-- 0 framework, 0 dépendance externe sauf fonts Google et photos Unsplash
-- ~2 MB total (sans les photos Unsplash hébergées chez eux)
+## Photos (pour plus tard)
 
-## Ce qui manque volontairement
-- Pas de checkout : devis/DM uniquement
-- Pas de prix : volonté de faire le devis cas par cas
-- Pas de délais affichés : volonté de ne pas s'engager
-- Pas d'admin : modifier le HTML directement
+Le système de photos n'est PAS dans cet admin. Eddie a un outil séparé
+(`picture-system-v1`) qu'il branchera quand il sera prêt.
+
+En attendant : pour changer une photo, remplacer le fichier dans
+`assets/products/` (même nom) et push sur GitHub. Le `content.json` n'a
+pas besoin d'être modifié si le nom de fichier reste le même.
+
+## Modifier le contenu sans admin (urgence / direct)
+
+Éditer `content.json` directement, commit, push. Le site se met à jour
+automatiquement.
 
 ---
 Signé Edmaster & Claudius · Bleu Canard Édition 2026
