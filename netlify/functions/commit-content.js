@@ -21,7 +21,7 @@
 // REPO_OWNER, REPO_NAME, REPO_BRANCH — all required.
 const REPO = {
   owner:  process.env.REPO_OWNER  || 'eddie-boop14',
-  repo:   process.env.REPO_NAME   || 'bullprint3d',
+  repo:   process.env.REPO_NAME   || 'Bull.print3d',
   branch: process.env.REPO_BRANCH || 'main',
 };
 

@@ -46,7 +46,7 @@ bullprint/
 ## Mise en ligne — première fois
 
 ### 1. Pousser sur GitHub
-Créer un repo (ex: `eddie-boop14/bullprint3d`), pousser tout le contenu de `bullprint/` dessus.
+Créer un repo (ex: `eddie-boop14/Bull.print3d`), pousser tout le contenu de `bullprint/` dessus.
 
 ### 2. Connecter à Netlify
 - New site from Git → choisir le repo
@@ -57,7 +57,7 @@ Créer un repo (ex: `eddie-boop14/bullprint3d`), pousser tout le contenu de `bul
 - github.com/settings/personal-access-tokens → Generate new
 - Nom : `bullprint-admin`
 - Expiration : 1 an
-- Repository access : **Only select** → choisir `bullprint3d` (UN SEUL repo)
+- Repository access : **Only select** → choisir `Bull.print3d` (UN SEUL repo)
 - Permissions → Contents : **Read and write**
 - Copier le token (commence par `github_pat_...`)
 
@@ -71,7 +71,7 @@ openssl rand -base64 32
 Dans Netlify → Site settings → Environment variables :
 - `GITHUB_TOKEN` = le PAT
 - `ADMIN_SECRET` = le mot de passe
-- (optionnel) `REPO_OWNER`, `REPO_NAME`, `REPO_BRANCH` si pas `eddie-boop14/bullprint3d/main`
+- (optionnel) `REPO_OWNER`, `REPO_NAME`, `REPO_BRANCH` si pas `eddie-boop14/Bull.print3d/main`
 
 Redéployer (Deploys → Trigger deploy → Clear cache and deploy).
 
@@ -80,7 +80,7 @@ Redéployer (Deploys → Trigger deploy → Clear cache and deploy).
 - Entrer le mot de passe
 - Faire une petite édition de test
 - Valider, publier
-- Vérifier sur `github.com/eddie-boop14/bullprint3d/commits/main` que le commit apparaît
+- Vérifier sur `github.com/eddie-boop14/Bull.print3d/commits/main` que le commit apparaît
 - Attendre ~1 min, recharger le site, voir le changement
 
 ## Pour le client (Bull)
