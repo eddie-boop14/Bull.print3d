@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-05-21",
+  "updatedAt": "2026-06-03",
   "site": {
     "title": "BULLPRINT 3D — Casques, Lampes & Pièces de Collection · Impression 3D Fait Main",
     "description": "Bullprint 3D. Atelier d'impression 3D fan-culture grade. Casques cosplay, lampes de personnages, statues, figurines articulées. Fait à la commande, livraison France · Belgique · Suisse.",
@@ -11,28 +11,94 @@
     "email": "contact@bullprint3d.fr"
   },
   "nav": [
-    { "label": "Galerie", "href": "#galerie" },
-    { "label": "L'Atelier", "href": "#atelier" },
-    { "label": "Sur Mesure", "href": "#custom" },
-    { "label": "Commander", "href": "#order" }
+    {
+      "label": "Galerie",
+      "href": "#galerie"
+    },
+    {
+      "label": "L'Atelier",
+      "href": "#atelier"
+    },
+    {
+      "label": "Sur Mesure",
+      "href": "#custom"
+    },
+    {
+      "label": "Commander",
+      "href": "#order"
+    }
   ],
   "navCta": "Devis →",
   "statusBar": [
-    { "text": "Atelier en ligne", "warn": false },
-    { "text": "Fait à la commande", "warn": false },
-    { "text": "Quelques places ce mois-ci", "warn": true },
-    { "text": "Livraison FR · BE · CH", "warn": false },
-    { "text": "Une seule paire de mains", "warn": false },
-    { "text": "Pièces uniques signées", "warn": false }
+    {
+      "text": "Atelier en ligne",
+      "warn": false
+    },
+    {
+      "text": "Fait à la commande",
+      "warn": false
+    },
+    {
+      "text": "Quelques places ce mois-ci",
+      "warn": true
+    },
+    {
+      "text": "Livraison FR · BE · CH",
+      "warn": false
+    },
+    {
+      "text": "Une seule paire de mains",
+      "warn": false
+    },
+    {
+      "text": "Pièces uniques signées",
+      "warn": false
+    }
   ],
   "hero": {
     "rail": "BULLPRINT · ATELIER · MMXXVI · FRANCE",
     "eyebrow": "ATELIER OUVERT · COMMANDES EN COURS",
     "titleLines": [
-      [{ "text": "DES", "style": "solid" }, { "text": "CASQUES.", "style": "green" }],
-      [{ "text": "DES", "style": "outline" }, { "text": "LAMPES.", "style": "solid" }],
-      [{ "text": "DES", "style": "solid" }, { "text": "PIÈCES", "style": "green" }],
-      [{ "text": "DE", "style": "outline" }, { "text": "COLLECTION.", "style": "solid" }]
+      [
+        {
+          "text": "DES",
+          "style": "solid"
+        },
+        {
+          "text": "CASQUES.",
+          "style": "green"
+        }
+      ],
+      [
+        {
+          "text": "DES",
+          "style": "outline"
+        },
+        {
+          "text": "LAMPES.",
+          "style": "solid"
+        }
+      ],
+      [
+        {
+          "text": "DES",
+          "style": "solid"
+        },
+        {
+          "text": "PIÈCES",
+          "style": "green"
+        }
+      ],
+      [
+        {
+          "text": "DE",
+          "style": "outline"
+        },
+        {
+          "text": "COLLECTION.",
+          "style": "solid"
+        }
+      ]
     ],
     "lede": "Atelier d'impression 3D **fan-culture grade**. On imprime les pièces que les autres n'osent pas — casques portables, lampes de personnages, statues détaillées. Une commande, une pièce, signée. **Bullprint, fais-le.**",
     "ctaPrimary": "Voir la galerie",
@@ -51,8 +117,22 @@
     "sectionNum": "02",
     "sectionLabel": "GALERIE · L'ATELIER",
     "titleLines": [
-      [{ "text": "CE QU'ON A", "style": "solid" }, { "text": "DÉJÀ", "style": "green" }],
-      [{ "text": "IMPRIMÉ.", "style": "outline" }]
+      [
+        {
+          "text": "CE QU'ON A",
+          "style": "solid"
+        },
+        {
+          "text": "DÉJÀ",
+          "style": "green"
+        }
+      ],
+      [
+        {
+          "text": "IMPRIMÉ.",
+          "style": "outline"
+        }
+      ]
     ],
     "metaLines": [
       "19 PIÈCES SÉLECTIONNÉES",
@@ -266,6 +346,14 @@
             "category": "Pièce unique",
             "name": "Waitress Bot",
             "sub": "Articulée · rouge & blanc"
+          },
+          {
+            "image": "assets/products/null",
+            "badge": "Tag test",
+            "badgeStyle": "rare",
+            "category": "Test",
+            "name": "Produit test admin",
+            "sub": "Test#1"
           }
         ]
       }
@@ -275,8 +363,26 @@
     "sectionNum": "03",
     "sectionLabel": "L'ATELIER",
     "titleLines": [
-      [{ "text": "OÙ", "style": "solid" }, { "text": "TOUT", "style": "green" }],
-      [{ "text": "SE", "style": "outline" }, { "text": "FAIT.", "style": "solid" }]
+      [
+        {
+          "text": "OÙ",
+          "style": "solid"
+        },
+        {
+          "text": "TOUT",
+          "style": "green"
+        }
+      ],
+      [
+        {
+          "text": "SE",
+          "style": "outline"
+        },
+        {
+          "text": "FAIT.",
+          "style": "solid"
+        }
+      ]
     ],
     "paragraphs": [
       "Pas de showroom, pas d'open space. Une pièce, des imprimantes, un poste de finition. C'est là que tout sort — du modèle 3D jusqu'à la peinture main.",
@@ -315,8 +421,26 @@
     "sectionNum": "04",
     "sectionLabel": "COMMANDE SUR MESURE",
     "titleLines": [
-      [{ "text": "UNE", "style": "solid" }, { "text": "IDÉE.", "style": "green" }],
-      [{ "text": "ON LA", "style": "outline" }, { "text": "SORT.", "style": "solid" }]
+      [
+        {
+          "text": "UNE",
+          "style": "solid"
+        },
+        {
+          "text": "IDÉE.",
+          "style": "green"
+        }
+      ],
+      [
+        {
+          "text": "ON LA",
+          "style": "outline"
+        },
+        {
+          "text": "SORT.",
+          "style": "solid"
+        }
+      ]
     ],
     "paragraph": "Tu envoies une référence, une photo, un croquis, un fichier STL. On regarde, on décide ensemble, on imprime. **Casques, lampes, statues, props, mascottes, pièces de rechange** — si ça se modélise, ça se fait.",
     "ctaPrimary": "Demander un devis",
@@ -348,16 +472,39 @@
     "sectionNum": "05",
     "sectionLabel": "COMMANDER",
     "titleLines": [
-      [{ "text": "DIS-NOUS", "style": "solid" }],
-      [{ "text": "CE QUE TU", "style": "solid" }, { "text": "VEUX.", "style": "green" }]
+      [
+        {
+          "text": "DIS-NOUS",
+          "style": "solid"
+        }
+      ],
+      [
+        {
+          "text": "CE QUE TU",
+          "style": "solid"
+        },
+        {
+          "text": "VEUX.",
+          "style": "green"
+        }
+      ]
     ],
     "paragraph": "On répond toujours. On dit oui quand on peut, non quand on doit. Et quand on dit oui — on le fait bien.",
     "ctaPrimary": "Écrire à l'atelier",
     "ctaGhost": "DM Instagram",
     "handles": [
-      { "label": "@bull.print3d", "href": "https://instagram.com/bull.print3d" },
-      { "label": "contact@bullprint3d.fr", "href": "mailto:contact@bullprint3d.fr" },
-      { "label": "France · Belgique · Suisse", "href": "#" }
+      {
+        "label": "@bull.print3d",
+        "href": "https://instagram.com/bull.print3d"
+      },
+      {
+        "label": "contact@bullprint3d.fr",
+        "href": "mailto:contact@bullprint3d.fr"
+      },
+      {
+        "label": "France · Belgique · Suisse",
+        "href": "#"
+      }
     ]
   },
   "footer": {
@@ -366,28 +513,64 @@
       {
         "title": "Galerie",
         "links": [
-          { "label": "Casques", "href": "#galerie" },
-          { "label": "Star Wars", "href": "#galerie" },
-          { "label": "Bustes & Dioramas", "href": "#galerie" },
-          { "label": "Lampes", "href": "#galerie" },
-          { "label": "Pièces uniques", "href": "#galerie" }
+          {
+            "label": "Casques",
+            "href": "#galerie"
+          },
+          {
+            "label": "Star Wars",
+            "href": "#galerie"
+          },
+          {
+            "label": "Bustes & Dioramas",
+            "href": "#galerie"
+          },
+          {
+            "label": "Lampes",
+            "href": "#galerie"
+          },
+          {
+            "label": "Pièces uniques",
+            "href": "#galerie"
+          }
         ]
       },
       {
         "title": "Atelier",
         "links": [
-          { "label": "L'atelier", "href": "#atelier" },
-          { "label": "Sur mesure", "href": "#custom" },
-          { "label": "Devis", "href": "#order" },
-          { "label": "Contact", "href": "mailto:contact@bullprint3d.fr" }
+          {
+            "label": "L'atelier",
+            "href": "#atelier"
+          },
+          {
+            "label": "Sur mesure",
+            "href": "#custom"
+          },
+          {
+            "label": "Devis",
+            "href": "#order"
+          },
+          {
+            "label": "Contact",
+            "href": "mailto:contact@bullprint3d.fr"
+          }
         ]
       },
       {
         "title": "Suivre",
         "links": [
-          { "label": "Instagram", "href": "https://instagram.com/bull.print3d" },
-          { "label": "TikTok", "href": "#" },
-          { "label": "Discord", "href": "#" }
+          {
+            "label": "Instagram",
+            "href": "https://instagram.com/bull.print3d"
+          },
+          {
+            "label": "TikTok",
+            "href": "#"
+          },
+          {
+            "label": "Discord",
+            "href": "#"
+          }
         ]
       }
     ],
