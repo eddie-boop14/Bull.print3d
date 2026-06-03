@@ -1,0 +1,9 @@
+{
+  "name": "bullprint-functions",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Netlify functions for Bullprint 3D admin",
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -3,31 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BULLPRINT 3D — Casques, Lampes & Pièces de Collection · Impression 3D Fait Main</title>
-
-<meta name="description" content="Bullprint 3D. Atelier d'impression 3D fan-culture grade. Casques cosplay, lampes de personnages, statues, figurines articulées. Fait à la commande, livraison France · Belgique · Suisse.">
-<meta name="keywords" content="impression 3D France, casque cosplay imprimé 3D, lampe Grogu, lampe Baby Yoda, Deadpool helmet, statue Marvel 3D, figurine Star Wars 3D, sur mesure 3D">
-
+<title>BULLPRINT 3D</title>
+<meta name="description" content="Bullprint 3D — Atelier d'impression 3D">
 <meta property="og:type" content="website">
-<meta property="og:title" content="BULLPRINT 3D">
-<meta property="og:description" content="Atelier d'impression 3D fan-culture grade. Casques, lampes, statues, pièces de collection. Fait à la commande.">
 <meta property="og:locale" content="fr_FR">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;500;600&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
 <link rel="stylesheet" href="styles.css">
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  "name": "Bullprint 3D",
-  "description": "Atelier d'impression 3D : casques cosplay, lampes, statues, figurines articulées. Fait à la commande.",
-  "areaServed": ["FR", "CH", "BE"]
-}
-</script>
 </head>
 <body>
 
@@ -53,65 +37,40 @@
   <a href="#" class="brand" style="text-decoration:none;color:inherit">
     <div class="brand-mark"></div>
     <div class="brand-text">
-      BULLPRINT
-      <span class="sub">3D · ATELIER</span>
+      <span data-bind="brand.name">BULLPRINT</span>
+      <span class="sub" data-bind="brand.sub">3D · ATELIER</span>
     </div>
   </a>
-  <nav class="nav">
-    <a href="#galerie">Galerie</a>
-    <a href="#atelier">L'Atelier</a>
-    <a href="#custom">Sur Mesure</a>
-    <a href="#order">Commander</a>
-  </nav>
-  <a href="#order" class="nav-cta"><span>Devis &nbsp;→</span></a>
+  <nav class="nav" data-bind="nav"></nav>
+  <a href="#order" class="nav-cta"><span data-bind="navCta">Devis →</span></a>
 </header>
 
 <!-- ============ STATUS BAR ============ -->
 <div class="status-bar">
-  <div class="status-track">
-    <span class="item"><span class="dot"></span>Atelier en ligne</span>
-    <span class="item"><span class="dot"></span>Fait à la commande</span>
-    <span class="item warn"><span class="dot"></span>Quelques places ce mois-ci</span>
-    <span class="item"><span class="dot"></span>Livraison FR · BE · CH</span>
-    <span class="item"><span class="dot"></span>Une seule paire de mains</span>
-    <span class="item"><span class="dot"></span>Pièces uniques signées</span>
-    <span class="item"><span class="dot"></span>Atelier en ligne</span>
-    <span class="item"><span class="dot"></span>Fait à la commande</span>
-    <span class="item warn"><span class="dot"></span>Quelques places ce mois-ci</span>
-    <span class="item"><span class="dot"></span>Livraison FR · BE · CH</span>
-    <span class="item"><span class="dot"></span>Une seule paire de mains</span>
-    <span class="item"><span class="dot"></span>Pièces uniques signées</span>
-  </div>
+  <div class="status-track" data-bind="statusBar"></div>
 </div>
 
 <!-- ============ HERO ============ -->
 <section class="hero">
-  <div class="hero-rail">BULLPRINT · ATELIER · MMXXVI · FRANCE</div>
+  <div class="hero-rail" data-bind="hero.rail"></div>
 
   <div>
-    <div class="hero-eyebrow">
+    <div class="hero-eyebrow" data-bind="hero.eyebrow">
       <span class="live"></span>
-      ATELIER OUVERT · COMMANDES EN COURS
+      <span class="eyebrow-text"></span>
     </div>
-    <h1>
-      <span class="line"><span class="word" style="--d:.05s">DES</span> <span class="word green" style="--d:.18s">CASQUES.</span></span>
-      <span class="line"><span class="word outline" style="--d:.4s">DES</span> <span class="word" style="--d:.55s">LAMPES.</span></span>
-      <span class="line"><span class="word" style="--d:.78s">DES</span> <span class="word green" style="--d:.92s">PIÈCES</span></span>
-      <span class="line"><span class="word outline" style="--d:1.1s">DE</span> <span class="word" style="--d:1.22s">COLLECTION.</span></span>
-    </h1>
-    <p class="hero-lede">
-      Atelier d'impression 3D <strong>fan-culture grade</strong>. On imprime les pièces que les autres n'osent pas — casques portables, lampes de personnages, statues détaillées. Une commande, une pièce, signée. <strong>Bullprint, fais-le.</strong>
-    </p>
+    <h1 data-bind="hero.title"></h1>
+    <p class="hero-lede" data-bind="hero.lede"></p>
     <div class="hero-cta">
-      <a href="#galerie" class="btn btn-primary"><span class="label">Voir la galerie</span> <span class="arrow">→</span></a>
-      <a href="#custom" class="btn btn-ghost"><span class="label">Commande sur mesure</span></a>
-      <a href="https://www.instagram.com/bull.print3d" target="_blank" class="ig-icon" aria-label="Instagram @bull.print3d">
+      <a class="btn btn-primary" data-bind="hero.ctaPrimary"><span class="label"></span> <span class="arrow">→</span></a>
+      <a class="btn btn-ghost" data-bind="hero.ctaGhost"><span class="label"></span></a>
+      <a target="_blank" class="ig-icon" data-bind="site.instagramUrl" aria-label="Instagram">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
           <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
           <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
         </svg>
-        <span class="ig-label">@bull.print3d</span>
+        <span class="ig-label" data-bind="site.instagramHandle"></span>
       </a>
     </div>
   </div>
@@ -122,18 +81,15 @@
     <span class="bracket bl"></span>
     <span class="bracket br"></span>
     <div class="scan-line"></div>
-
-    <img src="assets/products/deadpool-red.jpg" alt="Casque Deadpool rouge imprimé 3D" class="product-img">
-
+    <img class="product-img" data-bind="hero.featuredCard.image" alt="">
     <div class="hero-card-meta">
-      <span class="hc-tag">PIÈCE EN VEDETTE</span>
-      <span class="hc-num">001</span>
+      <span class="hc-tag" data-bind="hero.featuredCard.tag"></span>
+      <span class="hc-num" data-bind="hero.featuredCard.num"></span>
     </div>
-
     <div class="hero-card-foot">
-      <h3>Casque Deadpool</h3>
+      <h3 data-bind="hero.featuredCard.title"></h3>
       <div class="meta-row">
-        <span>RÉSINE · PEINT MAIN · TAILLE ADULTE</span>
+        <span data-bind="hero.featuredCard.meta"></span>
       </div>
     </div>
   </div>
@@ -143,389 +99,29 @@
 <section class="gallery" id="galerie">
   <div class="section-head reveal cascade">
     <div>
-      <div class="section-num"><em>02 /</em>GALERIE · L'ATELIER</div>
-      <h2>CE QU'ON A <span class="green">DÉJÀ</span><br><span class="outline">IMPRIMÉ.</span></h2>
+      <div class="section-num"><em data-bind="gallery.sectionNum">02 /</em><span data-bind="gallery.sectionLabel"></span></div>
+      <h2 data-bind="gallery.title"></h2>
     </div>
-    <div class="meta">
-      19 PIÈCES SÉLECTIONNÉES<br>
-      7 CATÉGORIES<br>
-      TOUTES SUR COMMANDE
-    </div>
+    <div class="meta" data-bind="gallery.meta"></div>
   </div>
 
-  <div class="cat-stack">
-
-    <!-- 01 CASQUES -->
-    <section class="cat-row reveal">
-      <header class="cat-head">
-        <div>
-          <div class="cat-num">CAT · 01</div>
-          <h3>CASQUES</h3>
-        </div>
-        <div class="cat-controls">
-          <span class="cat-count">3 pièces</span>
-          <button class="cat-nav prev" aria-label="Précédent">←</button>
-          <button class="cat-nav next" aria-label="Suivant">→</button>
-        </div>
-      </header>
-      <div class="cat-track">
-        <a href="#order" class="card">
-          <img src="assets/products/deadpool-red.jpg" alt="Casque Deadpool rouge">
-          <span class="badge hot">BESTSELLER</span>
-          <div class="card-foot">
-            <div class="card-cat">Marvel</div>
-            <div class="card-name">Deadpool Classic Red</div>
-            <div class="card-sub">Résine · peint main · taille adulte</div>
-          </div>
-        </a>
-        <a href="#order" class="card">
-          <img src="assets/products/deadpool-blue.jpg" alt="Casque Deadpool variant bleu">
-          <span class="badge rare">VARIANT</span>
-          <div class="card-foot">
-            <div class="card-cat">Marvel</div>
-            <div class="card-name">Deadpool Blue</div>
-            <div class="card-sub">Édition rare · 32cm</div>
-          </div>
-        </a>
-        <a href="#order" class="card">
-          <img src="assets/products/blue-beetle.jpg" alt="Casque Blue Beetle">
-          <span class="badge new">DC</span>
-          <div class="card-foot">
-            <div class="card-cat">DC</div>
-            <div class="card-name">Blue Beetle Scarab</div>
-            <div class="card-sub">Adulte · 24cm · peint main</div>
-          </div>
-        </a>
-      </div>
-    </section>
-
-    <!-- 02 STAR WARS -->
-    <section class="cat-row reveal">
-      <header class="cat-head">
-        <div>
-          <div class="cat-num">CAT · 02</div>
-          <h3>STAR WARS</h3>
-        </div>
-        <div class="cat-controls">
-          <span class="cat-count">7 pièces</span>
-          <button class="cat-nav prev" aria-label="Précédent">←</button>
-          <button class="cat-nav next" aria-label="Suivant">→</button>
-        </div>
-      </header>
-      <div class="cat-track">
-        <a href="#order" class="card">
-          <img src="assets/products/b1-droid.jpg" alt="B1 Battle Droid">
-          <span class="badge hot">XL</span>
-          <div class="card-foot">
-            <div class="card-cat">Figurine</div>
-            <div class="card-name">B1 Battle Droid</div>
-            <div class="card-sub">80cm · socle hexagonal</div>
-          </div>
-        </a>
-        <a href="#order" class="card">
-          <img src="assets/products/k2so.jpg" alt="K-2SO Rogue One grandeur nature">
-          <span class="badge hot">GRANDEUR NATURE</span>
-          <div class="card-foot">
-            <div class="card-cat">Figurine</div>
-            <div class="card-name">K-2SO · Rogue One</div>
-            <div class="card-sub">180cm · taille humaine</div>
-          </div>
-        </a>
-        <a href="#order" class="card">
-          <img src="assets/products/millennium-falcon.jpg" alt="Maquette Millennium Falcon">
-          <span class="badge">ICÔNE</span>
-          <div class="card-foot">
-            <div class="card-cat">Maquette</div>
-            <div class="card-name">Millennium Falcon</div>
-            <div class="card-sub">35cm · grain de surface authentique</div>
-          </div>
-        </a>
-        <a href="#order" class="card">
-          <img src="assets/products/grogu-lamp.jpg" alt="Lampe Grogu">
-          <span class="badge">SÉRIE</span>
-          <div class="card-foot">
-            <div class="card-cat">Lampe</div>
-            <div class="card-name">Grogu Glow</div>
-            <div class="card-sub">LED inclus · 25cm</div>
-          </div>
-        </a>
-        <a href="#order" class="card">
-          <img src="assets/products/bd1.jpg" alt="Droïde BD-1">
-          <span class="badge">DROID</span>
-          <div class="card-foot">
-            <div class="card-cat">Figurine</div>
-            <div class="card-name">BD-1 Droïde</div>
-            <div class="card-sub">Jedi Survivor · 18cm</div>
-          </div>
-        </a>
-        <a href="#order" class="card">
-          <img src="assets/products/b1-droid-lamp.jpg" alt="B1 Battle pair">
-          <span class="badge rare">DUO</span>
-          <div class="card-foot">
-            <div class="card-cat">Figurines</div>
-            <div class="card-name">B1 Battle Pair</div>
-            <div class="card-sub">2 droïdes · 30cm chacun</div>
-          </div>
-        </a>
-        <a href="#order" class="card">
-          <img src="assets/products/deathstar-clock.jpg" alt="Horloge Death Star">
-          <span class="badge new">NOUVEAU</span>
-          <div class="card-foot">
-            <div class="card-cat">Horloge</div>
-            <div class="card-name">Death Star Clock</div>
-            <div class="card-sub">30cm · mécanisme silencieux</div>
-          </div>
-        </a>
-      </div>
-    </section>
-
-    <!-- 03 BUSTES & DIORAMAS -->
-    <section class="cat-row reveal">
-      <header class="cat-head">
-        <div>
-          <div class="cat-num">CAT · 03</div>
-          <h3>BUSTES & DIORAMAS</h3>
-        </div>
-        <div class="cat-controls">
-          <span class="cat-count">2 pièces</span>
-          <button class="cat-nav prev" aria-label="Précédent">←</button>
-          <button class="cat-nav next" aria-label="Suivant">→</button>
-        </div>
-      </header>
-      <div class="cat-track">
-        <a href="#order" class="card">
-          <img src="assets/products/vecna.jpg" alt="Buste Vecna Stranger Things">
-          <span class="badge rare">LIMITÉ</span>
-          <div class="card-foot">
-            <div class="card-cat">Stranger Things</div>
-            <div class="card-name">Vecna</div>
-            <div class="card-sub">Buste 20cm · finition rouge</div>
-          </div>
-        </a>
-        <a href="#order" class="card">
-          <img src="assets/products/slimer.jpg" alt="Slimer Ghostbusters">
-          <span class="badge">CULT</span>
-          <div class="card-foot">
-            <div class="card-cat">Ghostbusters</div>
-            <div class="card-name">Slimer + Trap</div>
-            <div class="card-sub">22cm · diorama complet</div>
-          </div>
-        </a>
-      </div>
-    </section>
-
-    <!-- 04 LAMPES -->
-    <section class="cat-row reveal">
-      <header class="cat-head">
-        <div>
-          <div class="cat-num">CAT · 04</div>
-          <h3>LAMPES</h3>
-        </div>
-        <div class="cat-controls">
-          <span class="cat-count">2 pièces</span>
-          <button class="cat-nav prev" aria-label="Précédent">←</button>
-          <button class="cat-nav next" aria-label="Suivant">→</button>
-        </div>
-      </header>
-      <div class="cat-track">
-        <a href="#order" class="card">
-          <img src="assets/products/grogu-lamp.jpg" alt="Lampe Grogu">
-          <span class="badge">SÉRIE</span>
-          <div class="card-foot">
-            <div class="card-cat">Star Wars</div>
-            <div class="card-name">Grogu Glow</div>
-            <div class="card-sub">LED inclus · 25cm</div>
-          </div>
-        </a>
-        <a href="#order" class="card">
-          <img src="assets/products/luxo.jpg" alt="Lampe Pixar Luxo Jr">
-          <span class="badge">ARTICULÉ</span>
-          <div class="card-foot">
-            <div class="card-cat">Pixar</div>
-            <div class="card-name">Luxo Jr</div>
-            <div class="card-sub">Articulée · LED chaude</div>
-          </div>
-        </a>
-      </div>
-    </section>
-
-    <!-- 05 GAMING & POP -->
-    <section class="cat-row reveal">
-      <header class="cat-head">
-        <div>
-          <div class="cat-num">CAT · 05</div>
-          <h3>GAMING & POP</h3>
-        </div>
-        <div class="cat-controls">
-          <span class="cat-count">2 pièces</span>
-          <button class="cat-nav prev" aria-label="Précédent">←</button>
-          <button class="cat-nav next" aria-label="Suivant">→</button>
-        </div>
-      </header>
-      <div class="cat-track">
-        <a href="#order" class="card">
-          <img src="assets/products/kong-bros.jpg" alt="Donkey Kong et Diddy Kong">
-          <span class="badge new">DUO</span>
-          <div class="card-foot">
-            <div class="card-cat">Nintendo</div>
-            <div class="card-name">Kong Bros · DK & Diddy</div>
-            <div class="card-sub">Duo · 20cm chacun · peint main</div>
-          </div>
-        </a>
-        <a href="#order" class="card">
-          <img src="assets/products/pandas.jpg" alt="Set porte-clés pandas">
-          <span class="badge new">SET</span>
-          <div class="card-foot">
-            <div class="card-cat">Set</div>
-            <div class="card-name">Panda Squad · 6 PCS</div>
-            <div class="card-sub">6 porte-clés + support bambou</div>
-          </div>
-        </a>
-      </div>
-    </section>
-
-    <!-- 06 DÉCO & INSOLITES -->
-    <section class="cat-row reveal">
-      <header class="cat-head">
-        <div>
-          <div class="cat-num">CAT · 06</div>
-          <h3>DÉCO & INSOLITES</h3>
-        </div>
-        <div class="cat-controls">
-          <span class="cat-count">2 pièces</span>
-          <button class="cat-nav prev" aria-label="Précédent">←</button>
-          <button class="cat-nav next" aria-label="Suivant">→</button>
-        </div>
-      </header>
-      <div class="cat-track">
-        <a href="#order" class="card">
-          <img src="assets/products/wine-skeleton.jpg" alt="Porte-bouteille squelette">
-          <span class="badge">INSOLITE</span>
-          <div class="card-foot">
-            <div class="card-cat">Déco</div>
-            <div class="card-name">Skeleton Wine Holder</div>
-            <div class="card-sub">Bouteille standard · gris</div>
-          </div>
-        </a>
-        <a href="#order" class="card">
-          <img src="assets/products/eye-hueforge.jpg" alt="Tableau œil Hueforge">
-          <span class="badge new">HUEFORGE</span>
-          <div class="card-foot">
-            <div class="card-cat">Tableau</div>
-            <div class="card-name">L'Œil · Hueforge</div>
-            <div class="card-sub">20×20cm · couches couleur</div>
-          </div>
-        </a>
-      </div>
-    </section>
-
-    <!-- 07 PIÈCES UNIQUES -->
-    <section class="cat-row reveal">
-      <header class="cat-head">
-        <div>
-          <div class="cat-num">CAT · 07</div>
-          <h3>PIÈCES UNIQUES</h3>
-        </div>
-        <div class="cat-controls">
-          <span class="cat-count">2 pièces</span>
-          <button class="cat-nav prev" aria-label="Précédent">←</button>
-          <button class="cat-nav next" aria-label="Suivant">→</button>
-        </div>
-      </header>
-      <div class="cat-track">
-        <a href="#order" class="card">
-          <img src="assets/products/robot-bar.jpg" alt="Robot bar mascotte">
-          <span class="badge rare">SUR MESURE</span>
-          <div class="card-foot">
-            <div class="card-cat">Pièce unique</div>
-            <div class="card-name">Bar-Bot Mascotte</div>
-            <div class="card-sub">Création pour bar local</div>
-          </div>
-        </a>
-        <a href="#order" class="card">
-          <img src="assets/products/robot-waitress.jpg" alt="Robot serveuse articulée">
-          <span class="badge">UNIQUE</span>
-          <div class="card-foot">
-            <div class="card-cat">Pièce unique</div>
-            <div class="card-name">Waitress Bot</div>
-            <div class="card-sub">Articulée · rouge & blanc</div>
-          </div>
-        </a>
-      </div>
-    </section>
-
-  </div>
+  <div class="cat-stack" data-bind="gallery.categories"></div>
 </section>
 
 <!-- ============ L'ATELIER ============ -->
 <section class="atelier" id="atelier">
   <div class="atelier-inner reveal cascade">
-    <div class="section-num"><em>03 /</em>L'ATELIER</div>
-    <h2 class="atelier-title">
-      <span>OÙ</span> <span class="green">TOUT</span><br>
-      <span class="outline">SE</span> <span>FAIT.</span>
-    </h2>
+    <div class="section-num"><em data-bind="atelier.sectionNum">03 /</em><span data-bind="atelier.sectionLabel"></span></div>
+    <h2 class="atelier-title" data-bind="atelier.title"></h2>
 
     <div class="atelier-grid">
-      <div class="atelier-text">
-        <p>
-          Pas de showroom, pas d'open space. Une pièce, des imprimantes, un poste de finition. C'est là que tout sort — du modèle 3D jusqu'à la peinture main.
-        </p>
-        <p>
-          On tourne souvent jusqu'à tard, parce que le bon ponçage prend du temps et que la peinture ne triche pas. Une pièce passe par toutes les étapes ici, du fichier brut au carton d'expédition.
-        </p>
-        <p>
-          C'est rugueux, c'est petit, c'est honnête. Et c'est pour ça qu'on peut faire ce qu'on fait.
-        </p>
-      </div>
-
-      <div class="atelier-stack">
-        <div class="atelier-block">
-          <div class="ab-photo">
-            <img src="https://images.unsplash.com/photo-1705475025559-ad8efdedc74f?fm=jpg&q=75&w=800&auto=format&fit=crop" alt="Imprimante FDM en atelier" loading="lazy">
-            <span class="ab-bracket tl"></span>
-            <span class="ab-bracket br"></span>
-          </div>
-          <div class="ab-label">POSTE 01</div>
-          <div class="ab-name">IMPRESSION FDM</div>
-          <div class="ab-desc">Pour les grosses pièces, les structures, les bases. PLA et PETG.</div>
-        </div>
-        <div class="atelier-block">
-          <div class="ab-photo">
-            <img src="https://images.unsplash.com/photo-1758387933125-5ac945b4e2cd?fm=jpg&q=75&w=800&auto=format&fit=crop" alt="Imprimante résine en action" loading="lazy">
-            <span class="ab-bracket tl"></span>
-            <span class="ab-bracket br"></span>
-          </div>
-          <div class="ab-label">POSTE 02</div>
-          <div class="ab-name">IMPRESSION RÉSINE</div>
-          <div class="ab-desc">Pour les détails fins, les bustes, les casques. Résine ABS-like.</div>
-        </div>
-        <div class="atelier-block">
-          <div class="ab-photo">
-            <img src="https://images.unsplash.com/photo-1705475364775-9cbe20c68849?fm=jpg&q=75&w=800&auto=format&fit=crop" alt="Poste de ponçage" loading="lazy">
-            <span class="ab-bracket tl"></span>
-            <span class="ab-bracket br"></span>
-          </div>
-          <div class="ab-label">POSTE 03</div>
-          <div class="ab-name">PONÇAGE & APPRÊT</div>
-          <div class="ab-desc">Là où les couches d'impression disparaissent pour de bon.</div>
-        </div>
-        <div class="atelier-block">
-          <div class="ab-photo">
-            <img src="https://images.unsplash.com/photo-1706895247302-20d321119c1c?fm=jpg&q=75&w=800&auto=format&fit=crop" alt="Pièce peinte main" loading="lazy">
-            <span class="ab-bracket tl"></span>
-            <span class="ab-bracket br"></span>
-          </div>
-          <div class="ab-label">POSTE 04</div>
-          <div class="ab-name">PEINTURE MAIN</div>
-          <div class="ab-desc">Aérographe et pinceau. Vernis mat ou satiné selon la pièce.</div>
-        </div>
-      </div>
+      <div class="atelier-text" data-bind="atelier.paragraphs"></div>
+      <div class="atelier-stack" data-bind="atelier.postes"></div>
     </div>
 
     <p class="atelier-foot">
-      <em>Visuels d'illustration. Les photos du vrai atelier arrivent.</em>
-      <a href="https://www.instagram.com/bull.print3d" target="_blank">@bull.print3d →</a>
+      <span data-bind="atelier.footNote"></span>
+      <a target="_blank" data-bind="site.instagramUrl"><span data-bind="site.instagramHandle"></span> →</a>
     </p>
   </div>
 </section>
@@ -534,66 +130,28 @@
 <section class="custom" id="custom">
   <div class="custom-inner reveal">
     <div>
-      <div class="section-num"><em>04 /</em>COMMANDE SUR MESURE</div>
-      <h2>UNE <span class="green">IDÉE.</span><br><span class="outline">ON LA</span> SORT.</h2>
-      <p>
-        Tu envoies une référence, une photo, un croquis, un fichier STL. On regarde, on décide ensemble, on imprime. <strong>Casques, lampes, statues, props, mascottes, pièces de rechange</strong> — si ça se modélise, ça se fait.
-      </p>
+      <div class="section-num"><em data-bind="custom.sectionNum">04 /</em><span data-bind="custom.sectionLabel"></span></div>
+      <h2 data-bind="custom.title"></h2>
+      <p data-bind="custom.paragraph"></p>
       <div class="custom-cta">
-        <a href="#order" class="btn btn-primary"><span class="label">Demander un devis</span> <span class="arrow">→</span></a>
-        <a href="https://instagram.com/bull.print3d" class="btn btn-ghost"><span class="label">Voir l'Insta</span></a>
+        <a href="#order" class="btn btn-primary" data-bind="custom.ctaPrimary"><span class="label"></span> <span class="arrow">→</span></a>
+        <a target="_blank" class="btn btn-ghost" data-bind="custom.ctaGhost"><span class="label"></span></a>
       </div>
     </div>
-
-    <div class="steps">
-      <div class="step">
-        <div class="step-num">01</div>
-        <div class="step-text">
-          <h4>Tu envoies</h4>
-          <p>Photo, référence, fichier STL, croquis sur un coin de table — tout passe.</p>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-num">02</div>
-        <div class="step-text">
-          <h4>On décide</h4>
-          <p>On regarde ensemble. Matière, finition, taille, budget. Si c'est non, on le dit franchement.</p>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-num">03</div>
-        <div class="step-text">
-          <h4>On imprime</h4>
-          <p>Photos pendant le process. Peinture main si tu veux. Une pièce à la fois.</p>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-num">04</div>
-        <div class="step-text">
-          <h4>On livre</h4>
-          <p>France, Belgique, Suisse. Emballage costaud. Si ça casse en chemin, on refait.</p>
-        </div>
-      </div>
-    </div>
+    <div class="steps" data-bind="custom.steps"></div>
   </div>
 </section>
 
 <!-- ============ ORDER ============ -->
 <section class="order reveal cascade" id="order">
-  <div class="section-num" style="justify-content:center"><em>05 /</em>COMMANDER</div>
-  <h2>DIS-NOUS<br>CE QUE TU <span class="green">VEUX.</span></h2>
-  <p>
-    On répond toujours. On dit oui quand on peut, non quand on doit. Et quand on dit oui — on le fait bien.
-  </p>
+  <div class="section-num" style="justify-content:center"><em data-bind="order.sectionNum">05 /</em><span data-bind="order.sectionLabel"></span></div>
+  <h2 data-bind="order.title"></h2>
+  <p data-bind="order.paragraph"></p>
   <div class="order-cta">
-    <a href="mailto:contact@bullprint3d.fr" class="btn btn-primary"><span class="label">Écrire à l'atelier</span> <span class="arrow">→</span></a>
-    <a href="https://instagram.com/bull.print3d" class="btn btn-ghost"><span class="label">DM Instagram</span></a>
+    <a class="btn btn-primary" data-bind="order.ctaPrimary"><span class="label"></span> <span class="arrow">→</span></a>
+    <a target="_blank" class="btn btn-ghost" data-bind="order.ctaGhost"><span class="label"></span></a>
   </div>
-  <div class="order-handles">
-    <a href="https://instagram.com/bull.print3d">@bull.print3d</a>
-    <a href="mailto:contact@bullprint3d.fr">contact@bullprint3d.fr</a>
-    <a href="#">France · Belgique · Suisse</a>
-  </div>
+  <div class="order-handles" data-bind="order.handles"></div>
 </section>
 
 <!-- ============ FOOTER ============ -->
@@ -603,40 +161,21 @@
       <div class="brand">
         <div class="brand-mark"></div>
         <div class="brand-text">
-          BULLPRINT
-          <span class="sub">3D · ATELIER</span>
+          <span data-bind="brand.name">BULLPRINT</span>
+          <span class="sub" data-bind="brand.sub">3D · ATELIER</span>
         </div>
       </div>
-      <p>Atelier d'impression 3D fan-culture grade. Casques, lampes, statues, pièces de collection. Fait à la commande.</p>
+      <p data-bind="footer.tagline"></p>
     </div>
-    <div>
-      <h4>Galerie</h4>
-      <a href="#galerie" class="f-link">Casques</a>
-      <a href="#galerie" class="f-link">Star Wars</a>
-      <a href="#galerie" class="f-link">Bustes & Dioramas</a>
-      <a href="#galerie" class="f-link">Lampes</a>
-      <a href="#galerie" class="f-link">Pièces uniques</a>
-    </div>
-    <div>
-      <h4>Atelier</h4>
-      <a href="#atelier" class="f-link">L'atelier</a>
-      <a href="#custom" class="f-link">Sur mesure</a>
-      <a href="#order" class="f-link">Devis</a>
-      <a href="mailto:contact@bullprint3d.fr" class="f-link">Contact</a>
-    </div>
-    <div>
-      <h4>Suivre</h4>
-      <a href="https://instagram.com/bull.print3d" class="f-link">Instagram</a>
-      <a href="#" class="f-link">TikTok</a>
-      <a href="#" class="f-link">Discord</a>
-    </div>
+    <div data-bind="footer.columns" style="display:contents"></div>
   </div>
   <div class="foot-bottom">
-    <div>© MMXXVI · BULLPRINT 3D</div>
-    <div class="sig">SIGNÉ <span class="sig-teal">EDMASTER &amp; CLAUDIUS</span> · BLEU CANARD ÉDITION 2026</div>
+    <div data-bind="footer.copyright"></div>
+    <div class="sig" data-bind="footer.signature"></div>
   </div>
 </footer>
 
+<script src="render.js"></script>
 <script src="script.js"></script>
 </body>
 </html>

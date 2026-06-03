@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>BULLPRINT 3D — Admin</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;500;600&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<!-- Use site styles, then layer admin styles on top -->
+<link rel="stylesheet" href="../styles.css">
+
+<style>
+  /* =========================================================
+     ADMIN OVERLAYS — sit on top of the rendered site
+     ========================================================= */
+
+  /* hide the intro animation in admin */
+  .intro{display:none !important}
+  html.locked{overflow:auto !important}
+
+  /* ── PASSWORD GATE ── */
+  .gate{
+    position:fixed;
+    inset:0;
+    z-index:99999;
+    background:#070907;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    padding:24px;
+    font-family:'JetBrains Mono', monospace;
+  }
+  .gate::before{
+    content:'';
+    position:absolute;
+    inset:0;
+    background:
+      radial-gradient(circle at 30% 20%, rgba(127,179,58,.08), transparent 50%),
+      radial-gradient(circle at 70% 80%, rgba(255,122,26,.05), transparent 50%);
+    pointer-events:none;
+  }
+  .gate-inner{
+    width:min(420px, 100%);
+    position:relative;
+    z-index:1;
+  }
+  .gate-brand{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    margin-bottom:40px;
+  }
+  .gate-mark{
+    width:42px;height:42px;
+    background:url('../assets/logo.png') center/contain no-repeat;
+    filter:drop-shadow(0 0 8px rgba(127,179,58,.4));
+  }
+  .gate-brand-text{
+    font-family:'Bebas Neue', Impact, sans-serif;
+    font-size:22px;
+    letter-spacing:.04em;
+    line-height:1;
+    color:#eae8df;
+  }
+  .gate-brand-text .sub{
+    display:block;
+    font-family:'JetBrains Mono', monospace;
+    font-size:9px;
+    letter-spacing:.2em;
+    color:#ff6a1a;
+    margin-top:3px;
+    font-weight:500;
+  }
+  .gate h1{
+    font-family:'Bebas Neue', Impact, sans-serif;
+    font-size:48px;
+    line-height:.95;
+    letter-spacing:.01em;
+    text-transform:uppercase;
+    color:#eae8df;
+    margin-bottom:8px;
+  }
+  .gate h1 .red{color:#ff6a1a}
+  .gate p{
+    font-size:12px;
+    line-height:1.6;
+    color:#9c9c92;
+    letter-spacing:.04em;
+    margin-bottom:32px;
+  }
+  .gate-form{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+  .gate-input{
+    background:#101310;
+    border:1px solid rgba(234,232,223,.22);
+    color:#eae8df;
+    padding:16px 18px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:14px;
+    letter-spacing:.02em;
+    border-radius:3px;
+    outline:none;
+    transition:border-color .3s, background .3s;
+  }
+  .gate-input::placeholder{color:#5a5a52}
+  .gate-input:focus{
+    border-color:#7fb33a;
+    background:#13181 3;
+    background:#131813;
+  }
+  .gate-btn{
+    background:#7fb33a;
+    color:#070907;
+    border:none;
+    padding:16px 18px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    cursor:pointer;
+    border-radius:3px;
+    transition:background .3s, transform .3s;
+  }
+  .gate-btn:hover{background:#a8d96a;transform:translateY(-1px)}
+  .gate-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+  .gate-error{
+    color:#ff6a1a;
+    font-size:11px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    margin-top:4px;
+    min-height:14px;
+  }
+  .gate-footer{
+    margin-top:40px;
+    text-align:center;
+    font-size:10px;
+    color:#5a5a52;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+  }
+
+  /* ── ADMIN BAR ── */
+  .admin-bar{
+    position:fixed;
+    top:0;left:0;right:0;
+    z-index:9998;
+    background:#ff6a1a;
+    color:#070907;
+    padding:10px 20px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    font-weight:700;
+    box-shadow:0 4px 20px -4px rgba(255,106,26,.4);
+    /* diagonal stripes */
+    background-image:repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 12px,
+      rgba(0,0,0,.08) 12px,
+      rgba(0,0,0,.08) 24px
+    ),
+    linear-gradient(90deg, #ff6a1a, #ff7a1a);
+  }
+  .admin-bar-left{
+    display:flex;
+    align-items:center;
+    gap:14px;
+  }
+  .admin-bar .live-dot{
+    width:9px;height:9px;
+    border-radius:50%;
+    background:#070907;
+    box-shadow:0 0 10px rgba(0,0,0,.4);
+    animation:pulseDot 1.2s ease-in-out infinite;
+  }
+  @keyframes pulseDot{
+    0%,100%{opacity:1;transform:scale(1)}
+    50%{opacity:.4;transform:scale(.7)}
+  }
+  .admin-bar-changes{
+    background:#070907;
+    color:#a8d96a;
+    padding:5px 12px;
+    border-radius:99px;
+    font-size:10px;
+    letter-spacing:.12em;
+  }
+  .admin-bar-changes.has-changes{
+    color:#ff6a1a;
+    background:#070907;
+  }
+  .admin-bar-right{
+    display:flex;
+    gap:10px;
+    align-items:center;
+  }
+  .admin-bar-btn{
+    background:rgba(0,0,0,.18);
+    color:#070907;
+    border:1px solid rgba(0,0,0,.3);
+    padding:7px 14px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:10px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    font-weight:700;
+    cursor:pointer;
+    border-radius:3px;
+    transition:background .2s;
+  }
+  .admin-bar-btn:hover{background:rgba(0,0,0,.35)}
+  .admin-bar-btn.danger{
+    background:#070907;
+    color:#ff6a1a;
+    border-color:#ff6a1a;
+  }
+  .admin-bar-btn.danger:hover{background:#1a1a18}
+
+  /* shift page down to accommodate admin bar (which replaces the site's topbar visually) */
+  body{padding-top:42px}
+  .topbar{top:42px !important}
+  .status-bar{top:calc(42px + 74px) !important}
+  .hero{padding-top:170px !important}
+
+  /* ── EDITABLE SURFACES ── */
+  [data-edit]{
+    position:relative;
+    outline:1px dashed transparent;
+    outline-offset:4px;
+    border-radius:2px;
+    transition:outline-color .2s, background .2s;
+  }
+  [data-edit]:hover{
+    outline-color:rgba(127,179,58,.6);
+    background:rgba(127,179,58,.04);
+  }
+  [data-edit][contenteditable="true"]{
+    outline:1px solid #7fb33a !important;
+    outline-offset:2px;
+    background:rgba(127,179,58,.08);
+    cursor:text;
+  }
+  [data-edit][contenteditable="true"]:focus{
+    outline:2px solid #7fb33a !important;
+    background:rgba(127,179,58,.12);
+  }
+  /* small "edit" hint */
+  [data-edit]::after{
+    content:'';
+    position:absolute;
+    top:-12px;
+    right:-2px;
+    width:22px;
+    height:22px;
+    background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%237fb33a'%3E%3Cpath d='M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0L15.13 5.12l3.75 3.75 1.83-1.83z'/%3E%3C/svg%3E") center/contain no-repeat;
+    opacity:0;
+    transition:opacity .2s;
+    pointer-events:none;
+  }
+  [data-edit]:hover::after{opacity:.8}
+  [data-edit][contenteditable="true"]::after{display:none}
+
+  /* ── CARD ADMIN OVERLAY ── */
+  .card{
+    position:relative;
+  }
+  .card-admin-actions{
+    position:absolute;
+    top:8px;
+    right:8px;
+    z-index:10;
+    display:flex;
+    gap:4px;
+    opacity:0;
+    transition:opacity .2s;
+    pointer-events:none;
+  }
+  .card:hover .card-admin-actions{
+    opacity:1;
+    pointer-events:auto;
+  }
+  .card-admin-btn{
+    background:rgba(7,9,7,.92);
+    color:#eae8df;
+    border:1px solid rgba(234,232,223,.3);
+    width:30px;
+    height:30px;
+    border-radius:3px;
+    cursor:pointer;
+    font-family:'JetBrains Mono', monospace;
+    font-size:14px;
+    font-weight:700;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:all .2s;
+    padding:0;
+  }
+  .card-admin-btn:hover{
+    background:#7fb33a;
+    color:#070907;
+    border-color:#7fb33a;
+  }
+  .card-admin-btn.delete:hover{
+    background:#ff6a1a;
+    color:#070907;
+    border-color:#ff6a1a;
+  }
+
+  /* ── CATEGORY ADMIN OVERLAY ── */
+  .cat-row{position:relative}
+  .cat-admin-actions{
+    margin-left:14px;
+    display:inline-flex;
+    gap:6px;
+    vertical-align:middle;
+  }
+  .cat-admin-btn{
+    background:transparent;
+    color:#9c9c92;
+    border:1px solid rgba(234,232,223,.22);
+    padding:6px 10px;
+    border-radius:3px;
+    cursor:pointer;
+    font-family:'JetBrains Mono', monospace;
+    font-size:9px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    font-weight:600;
+    transition:all .2s;
+  }
+  .cat-admin-btn:hover{
+    color:#7fb33a;
+    border-color:#7fb33a;
+  }
+  .cat-admin-btn.delete:hover{
+    color:#ff6a1a;
+    border-color:#ff6a1a;
+  }
+  .add-category-row{
+    border:1px dashed rgba(127,179,58,.4);
+    border-radius:6px;
+    padding:30px 20px;
+    text-align:center;
+    margin-top:30px;
+    cursor:pointer;
+    transition:border-color .3s, background .3s;
+  }
+  .add-category-row:hover{
+    border-color:#7fb33a;
+    background:rgba(127,179,58,.05);
+  }
+  .add-category-row .label{
+    font-family:'JetBrains Mono', monospace;
+    color:#7fb33a;
+    font-size:11px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    font-weight:700;
+  }
+
+  /* ── CARD EDITOR MODAL (for image/badge fields) ── */
+  .modal-overlay{
+    position:fixed;
+    inset:0;
+    z-index:9999;
+    background:rgba(7,9,7,.85);
+    backdrop-filter:blur(8px);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .3s;
+  }
+  .modal-overlay.shown{opacity:1;pointer-events:auto}
+  .modal{
+    background:#131813;
+    border:1px solid rgba(234,232,223,.22);
+    border-radius:6px;
+    padding:32px;
+    width:min(540px, 100%);
+    max-height:90vh;
+    overflow-y:auto;
+    font-family:'JetBrains Mono', monospace;
+    color:#eae8df;
+  }
+  .modal h3{
+    font-family:'Bebas Neue', Impact, sans-serif;
+    font-size:32px;
+    letter-spacing:.02em;
+    text-transform:uppercase;
+    margin-bottom:20px;
+    color:#eae8df;
+  }
+  .modal h3 .green{color:#7fb33a}
+  .modal-field{
+    margin-bottom:18px;
+  }
+  .modal-field label{
+    display:block;
+    font-family:'JetBrains Mono', monospace;
+    font-size:10px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:#9c9c92;
+    margin-bottom:6px;
+    font-weight:600;
+  }
+  .modal-field input,
+  .modal-field select,
+  .modal-field textarea{
+    width:100%;
+    background:#0a0d0a;
+    border:1px solid rgba(234,232,223,.22);
+    color:#eae8df;
+    padding:12px 14px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:13px;
+    border-radius:3px;
+    outline:none;
+    transition:border-color .2s;
+  }
+  .modal-field textarea{min-height:80px;resize:vertical}
+  .modal-field input:focus,
+  .modal-field select:focus,
+  .modal-field textarea:focus{border-color:#7fb33a}
+  .modal-field .hint{
+    font-size:10px;
+    color:#5a5a52;
+    margin-top:4px;
+    letter-spacing:.04em;
+    text-transform:none;
+  }
+  .modal-actions{
+    display:flex;
+    gap:10px;
+    justify-content:flex-end;
+    margin-top:24px;
+    padding-top:20px;
+    border-top:1px solid rgba(234,232,223,.1);
+  }
+  .modal-btn{
+    background:transparent;
+    color:#eae8df;
+    border:1px solid rgba(234,232,223,.3);
+    padding:12px 20px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    font-weight:600;
+    cursor:pointer;
+    border-radius:3px;
+    transition:all .2s;
+  }
+  .modal-btn:hover{border-color:#eae8df}
+  .modal-btn.primary{
+    background:#7fb33a;
+    color:#070907;
+    border-color:#7fb33a;
+    font-weight:700;
+  }
+  .modal-btn.primary:hover{background:#a8d96a}
+  .modal-btn.danger{
+    color:#ff6a1a;
+    border-color:#ff6a1a;
+  }
+  .modal-btn.danger:hover{background:#ff6a1a;color:#070907}
+
+  /* ── COMMIT CONFIRMATION ── */
+  .commit-summary{
+    background:#0a0d0a;
+    border:1px solid rgba(234,232,223,.1);
+    border-radius:3px;
+    padding:16px;
+    margin-bottom:18px;
+    max-height:300px;
+    overflow-y:auto;
+    font-size:11px;
+    line-height:1.6;
+  }
+  .commit-summary .change{
+    padding:6px 0;
+    border-bottom:1px solid rgba(234,232,223,.06);
+  }
+  .commit-summary .change:last-child{border-bottom:none}
+  .commit-summary .path{
+    color:#7fb33a;
+    font-weight:700;
+    font-size:10px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    margin-bottom:2px;
+  }
+  .commit-summary .diff-from{
+    color:#9c9c92;
+    text-decoration:line-through;
+    margin-bottom:2px;
+    word-break:break-word;
+  }
+  .commit-summary .diff-to{
+    color:#a8d96a;
+    word-break:break-word;
+  }
+  .commit-summary .added{color:#a8d96a;font-weight:700}
+  .commit-summary .removed{color:#ff6a1a;font-weight:700}
+  .commit-summary .empty{
+    color:#5a5a52;
+    text-align:center;
+    padding:20px 0;
+    font-style:italic;
+  }
+
+  /* ── TOAST ── */
+  .toast{
+    position:fixed;
+    bottom:24px;
+    left:50%;
+    transform:translateX(-50%) translateY(20px);
+    background:#7fb33a;
+    color:#070907;
+    padding:14px 24px;
+    border-radius:3px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    font-weight:700;
+    z-index:99999;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .3s, transform .3s;
+    box-shadow:0 10px 40px -10px rgba(127,179,58,.6);
+  }
+  .toast.shown{
+    opacity:1;
+    transform:translateX(-50%) translateY(0);
+  }
+  .toast.error{
+    background:#ff6a1a;
+    box-shadow:0 10px 40px -10px rgba(255,106,26,.6);
+  }
+  .toast.error a{
+    color:#070907;
+    text-decoration:underline;
+  }
+
+  /* ── BUSY OVERLAY ── */
+  .busy{
+    position:fixed;
+    inset:0;
+    z-index:99998;
+    background:rgba(7,9,7,.85);
+    backdrop-filter:blur(4px);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    gap:20px;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .3s;
+  }
+  .busy.shown{opacity:1;pointer-events:auto}
+  .busy-spinner{
+    width:48px;
+    height:48px;
+    border:2px solid rgba(127,179,58,.2);
+    border-top-color:#7fb33a;
+    border-radius:50%;
+    animation:spin 1s linear infinite;
+  }
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .busy-text{
+    color:#7fb33a;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    font-weight:700;
+  }
+
+  /* hide cursor on admin — distracting */
+  .cursor,.cursor-dot{display:none !important}
+  body{cursor:auto !important}
+  a,button{cursor:pointer !important}
+
+  /* card click should not navigate in admin mode */
+  .card{pointer-events:auto}
+  .card{cursor:pointer}
+
+  /* small responsive adjustments */
+  @media (max-width:700px){
+    .admin-bar{padding:8px 12px;font-size:9px}
+    .admin-bar-btn{padding:5px 10px;font-size:9px}
+    .admin-bar-changes{display:none}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ PASSWORD GATE ============ -->
+<div class="gate" id="gate">
+  <div class="gate-inner">
+    <div class="gate-brand">
+      <div class="gate-mark"></div>
+      <div class="gate-brand-text">
+        BULLPRINT
+        <span class="sub">ADMIN · ACCÈS</span>
+      </div>
+    </div>
+    <h1>MODE <span class="red">ADMIN.</span></h1>
+    <p>
+      Cette page n'est pas pour les visiteurs. Si tu es arrivé ici par
+      hasard, ferme cet onglet. Sinon, entre le mot de passe.
+    </p>
+    <form class="gate-form" id="gateForm" autocomplete="off">
+      <input
+        type="password"
+        class="gate-input"
+        id="gatePassword"
+        placeholder="Mot de passe"
+        autofocus
+        autocomplete="new-password"
+      >
+      <button type="submit" class="gate-btn" id="gateBtn">
+        Entrer →
+      </button>
+      <div class="gate-error" id="gateError"></div>
+    </form>
+    <div class="gate-footer">
+      BULLPRINT 3D · BLEU CANARD ÉDITION
+    </div>
+  </div>
+</div>
+
+<!-- ============ ADMIN BAR ============ -->
+<div class="admin-bar" id="adminBar" style="display:none">
+  <div class="admin-bar-left">
+    <span class="live-dot"></span>
+    <span>MODE ADMIN</span>
+    <span class="admin-bar-changes" id="changesIndicator">Aucun changement</span>
+  </div>
+  <div class="admin-bar-right">
+    <button class="admin-bar-btn" id="btnDiscard">Annuler tout</button>
+    <button class="admin-bar-btn" id="btnValidate">Valider →</button>
+    <button class="admin-bar-btn danger" id="btnLogout">Quitter</button>
+  </div>
+</div>
+
+<!-- ============ THE RENDERED SITE GOES HERE ============ -->
+<!-- Identical structure to public site, but the body content stays empty
+     until render.js populates it from content.json -->
+
+<div class="cursor"></div>
+<div class="cursor-dot"></div>
+
+<!-- intro will be auto-hidden via CSS -->
+<div class="intro" style="display:none"></div>
+
+<header class="topbar">
+  <a href="#" class="brand" style="text-decoration:none;color:inherit">
+    <div class="brand-mark"></div>
+    <div class="brand-text">
+      <span data-bind="brand.name" data-edit data-path="site.brandName">BULLPRINT</span>
+      <span class="sub" data-bind="brand.sub" data-edit data-path="site.brandSub">3D · ATELIER</span>
+    </div>
+  </a>
+  <nav class="nav" data-bind="nav"></nav>
+  <a href="#order" class="nav-cta"><span data-bind="navCta" data-edit data-path="navCta">Devis →</span></a>
+</header>
+
+<div class="status-bar">
+  <div class="status-track" data-bind="statusBar"></div>
+</div>
+
+<section class="hero">
+  <div class="hero-rail" data-bind="hero.rail" data-edit data-path="hero.rail"></div>
+
+  <div>
+    <div class="hero-eyebrow" data-bind="hero.eyebrow">
+      <span class="live"></span>
+      <span class="eyebrow-text" data-edit data-path="hero.eyebrow"></span>
+    </div>
+    <h1 data-bind="hero.title" data-edit-title data-path="hero.titleLines"></h1>
+    <p class="hero-lede" data-bind="hero.lede" data-edit data-path="hero.lede"></p>
+    <div class="hero-cta">
+      <a class="btn btn-primary" data-bind="hero.ctaPrimary"><span class="label" data-edit data-path="hero.ctaPrimary"></span> <span class="arrow">→</span></a>
+      <a class="btn btn-ghost" data-bind="hero.ctaGhost"><span class="label" data-edit data-path="hero.ctaGhost"></span></a>
+      <a target="_blank" class="ig-icon" data-bind="site.instagramUrl" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+          <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+          <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+        </svg>
+        <span class="ig-label" data-bind="site.instagramHandle" data-edit data-path="site.instagramHandle"></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="hero-card">
+    <span class="bracket tl"></span>
+    <span class="bracket tr"></span>
+    <span class="bracket bl"></span>
+    <span class="bracket br"></span>
+    <div class="scan-line"></div>
+    <img class="product-img" data-bind="hero.featuredCard.image" alt="">
+    <div class="hero-card-meta">
+      <span class="hc-tag" data-bind="hero.featuredCard.tag" data-edit data-path="hero.featuredCard.tag"></span>
+      <span class="hc-num" data-bind="hero.featuredCard.num" data-edit data-path="hero.featuredCard.num"></span>
+    </div>
+    <div class="hero-card-foot">
+      <h3 data-bind="hero.featuredCard.title" data-edit data-path="hero.featuredCard.title"></h3>
+      <div class="meta-row">
+        <span data-bind="hero.featuredCard.meta" data-edit data-path="hero.featuredCard.meta"></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="gallery" id="galerie">
+  <div class="section-head reveal cascade">
+    <div>
+      <div class="section-num"><em data-bind="gallery.sectionNum">02 /</em><span data-bind="gallery.sectionLabel" data-edit data-path="gallery.sectionLabel"></span></div>
+      <h2 data-bind="gallery.title" data-edit-title data-path="gallery.titleLines"></h2>
+    </div>
+    <div class="meta" data-bind="gallery.meta"></div>
+  </div>
+
+  <div class="cat-stack" data-bind="gallery.categories"></div>
+</section>
+
+<section class="atelier" id="atelier">
+  <div class="atelier-inner reveal cascade">
+    <div class="section-num"><em data-bind="atelier.sectionNum">03 /</em><span data-bind="atelier.sectionLabel" data-edit data-path="atelier.sectionLabel"></span></div>
+    <h2 class="atelier-title" data-bind="atelier.title" data-edit-title data-path="atelier.titleLines"></h2>
+
+    <div class="atelier-grid">
+      <div class="atelier-text" data-bind="atelier.paragraphs"></div>
+      <div class="atelier-stack" data-bind="atelier.postes"></div>
+    </div>
+
+    <p class="atelier-foot">
+      <span data-bind="atelier.footNote" data-edit data-path="atelier.footNote"></span>
+      <a target="_blank" data-bind="site.instagramUrl"><span data-bind="site.instagramHandle"></span> →</a>
+    </p>
+  </div>
+</section>
+
+<section class="custom" id="custom">
+  <div class="custom-inner reveal">
+    <div>
+      <div class="section-num"><em data-bind="custom.sectionNum">04 /</em><span data-bind="custom.sectionLabel" data-edit data-path="custom.sectionLabel"></span></div>
+      <h2 data-bind="custom.title" data-edit-title data-path="custom.titleLines"></h2>
+      <p data-bind="custom.paragraph" data-edit data-path="custom.paragraph"></p>
+      <div class="custom-cta">
+        <a href="#order" class="btn btn-primary" data-bind="custom.ctaPrimary"><span class="label" data-edit data-path="custom.ctaPrimary"></span> <span class="arrow">→</span></a>
+        <a target="_blank" class="btn btn-ghost" data-bind="custom.ctaGhost"><span class="label" data-edit data-path="custom.ctaGhost"></span></a>
+      </div>
+    </div>
+    <div class="steps" data-bind="custom.steps"></div>
+  </div>
+</section>
+
+<section class="order reveal cascade" id="order">
+  <div class="section-num" style="justify-content:center"><em data-bind="order.sectionNum">05 /</em><span data-bind="order.sectionLabel" data-edit data-path="order.sectionLabel"></span></div>
+  <h2 data-bind="order.title" data-edit-title data-path="order.titleLines"></h2>
+  <p data-bind="order.paragraph" data-edit data-path="order.paragraph"></p>
+  <div class="order-cta">
+    <a class="btn btn-primary" data-bind="order.ctaPrimary"><span class="label" data-edit data-path="order.ctaPrimary"></span> <span class="arrow">→</span></a>
+    <a target="_blank" class="btn btn-ghost" data-bind="order.ctaGhost"><span class="label" data-edit data-path="order.ctaGhost"></span></a>
+  </div>
+  <div class="order-handles" data-bind="order.handles"></div>
+</section>
+
+<footer>
+  <div class="foot">
+    <div class="foot-brand">
+      <div class="brand">
+        <div class="brand-mark"></div>
+        <div class="brand-text">
+          <span data-bind="brand.name">BULLPRINT</span>
+          <span class="sub" data-bind="brand.sub">3D · ATELIER</span>
+        </div>
+      </div>
+      <p data-bind="footer.tagline" data-edit data-path="footer.tagline"></p>
+    </div>
+    <div data-bind="footer.columns" style="display:contents"></div>
+  </div>
+  <div class="foot-bottom">
+    <div data-bind="footer.copyright" data-edit data-path="footer.copyright"></div>
+    <div class="sig" data-bind="footer.signature" data-edit data-path="footer.signature"></div>
+  </div>
+</footer>
+
+<!-- ============ MODALS ============ -->
+<div class="modal-overlay" id="cardModal">
+  <div class="modal">
+    <h3>Modifier la <span class="green">carte</span></h3>
+    <div class="modal-field">
+      <label>Nom du produit</label>
+      <input type="text" id="cardName" placeholder="Ex: Casque Iron Man">
+    </div>
+    <div class="modal-field">
+      <label>Catégorie (libellé court)</label>
+      <input type="text" id="cardCategory" placeholder="Ex: Marvel">
+    </div>
+    <div class="modal-field">
+      <label>Sous-titre / Description courte</label>
+      <input type="text" id="cardSub" placeholder="Ex: Résine · peint main · taille adulte">
+    </div>
+    <div class="modal-field">
+      <label>Badge (libellé)</label>
+      <input type="text" id="cardBadge" placeholder="Ex: NOUVEAU, BESTSELLER, LIMITÉ — vide = aucun">
+    </div>
+    <div class="modal-field">
+      <label>Badge (style)</label>
+      <select id="cardBadgeStyle">
+        <option value="default">Défaut (vert/blanc)</option>
+        <option value="hot">Hot (orange) — bestseller, XL</option>
+        <option value="new">New (blanc) — nouveau, drop</option>
+        <option value="rare">Rare (vert glow) — limité, variant</option>
+      </select>
+    </div>
+    <div class="modal-field">
+      <label>Image (chemin du fichier)</label>
+      <input type="text" id="cardImage" placeholder="assets/products/nom-de-fichier.jpg">
+      <div class="hint">Le fichier doit déjà exister dans le dossier assets/products/. Mettre l'image se fait séparément.</div>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn danger" id="cardDelete">Supprimer</button>
+      <button class="modal-btn" id="cardCancel">Annuler</button>
+      <button class="modal-btn primary" id="cardSave">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="categoryModal">
+  <div class="modal">
+    <h3>Catégorie</h3>
+    <div class="modal-field">
+      <label>Nom de la catégorie (affiché)</label>
+      <input type="text" id="catName" placeholder="Ex: CASQUES">
+    </div>
+    <div class="modal-field">
+      <label>Identifiant (utilisé en interne)</label>
+      <input type="text" id="catId" placeholder="ex: casques">
+      <div class="hint">Minuscules, sans espaces. Auto-généré si laissé vide.</div>
+    </div>
+    <div class="modal-field">
+      <label>Numéro affiché (CAT · XX)</label>
+      <input type="text" id="catNum" placeholder="01">
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn danger" id="catDelete" style="display:none">Supprimer</button>
+      <button class="modal-btn" id="catCancel">Annuler</button>
+      <button class="modal-btn primary" id="catSave">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="commitModal">
+  <div class="modal">
+    <h3>Confirmer les <span class="green">changements</span></h3>
+    <p style="font-size:12px;color:#9c9c92;margin-bottom:14px;line-height:1.6">
+      Voici ce qui va être publié sur le site. Cette action déclenche
+      la mise à jour publique (≈ 1 minute).
+    </p>
+    <div class="commit-summary" id="commitSummary"></div>
+    <div class="modal-field">
+      <label>Message du commit (optionnel)</label>
+      <input type="text" id="commitMsg" placeholder="ex: corrections de prix">
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn" id="commitCancel">Annuler</button>
+      <button class="modal-btn primary" id="commitConfirm">Publier maintenant</button>
+    </div>
+  </div>
+</div>
+
+<div class="busy" id="busy">
+  <div class="busy-spinner"></div>
+  <div class="busy-text" id="busyText">Publication en cours...</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- ============ SCRIPTS ============ -->
+<script>
+  // Prevent render.js auto-init — admin.js controls loading
+  window.__BULLPRINT_NO_AUTOLOAD__ = true;
+</script>
+<script src="../render.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>

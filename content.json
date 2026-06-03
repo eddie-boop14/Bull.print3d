@@ -1,0 +1,397 @@
+{
+  "version": 1,
+  "updatedAt": "2026-05-21",
+  "site": {
+    "title": "BULLPRINT 3D — Casques, Lampes & Pièces de Collection · Impression 3D Fait Main",
+    "description": "Bullprint 3D. Atelier d'impression 3D fan-culture grade. Casques cosplay, lampes de personnages, statues, figurines articulées. Fait à la commande, livraison France · Belgique · Suisse.",
+    "brandName": "BULLPRINT",
+    "brandSub": "3D · ATELIER",
+    "instagramUrl": "https://www.instagram.com/bull.print3d",
+    "instagramHandle": "@bull.print3d",
+    "email": "contact@bullprint3d.fr"
+  },
+  "nav": [
+    { "label": "Galerie", "href": "#galerie" },
+    { "label": "L'Atelier", "href": "#atelier" },
+    { "label": "Sur Mesure", "href": "#custom" },
+    { "label": "Commander", "href": "#order" }
+  ],
+  "navCta": "Devis →",
+  "statusBar": [
+    { "text": "Atelier en ligne", "warn": false },
+    { "text": "Fait à la commande", "warn": false },
+    { "text": "Quelques places ce mois-ci", "warn": true },
+    { "text": "Livraison FR · BE · CH", "warn": false },
+    { "text": "Une seule paire de mains", "warn": false },
+    { "text": "Pièces uniques signées", "warn": false }
+  ],
+  "hero": {
+    "rail": "BULLPRINT · ATELIER · MMXXVI · FRANCE",
+    "eyebrow": "ATELIER OUVERT · COMMANDES EN COURS",
+    "titleLines": [
+      [{ "text": "DES", "style": "solid" }, { "text": "CASQUES.", "style": "green" }],
+      [{ "text": "DES", "style": "outline" }, { "text": "LAMPES.", "style": "solid" }],
+      [{ "text": "DES", "style": "solid" }, { "text": "PIÈCES", "style": "green" }],
+      [{ "text": "DE", "style": "outline" }, { "text": "COLLECTION.", "style": "solid" }]
+    ],
+    "lede": "Atelier d'impression 3D **fan-culture grade**. On imprime les pièces que les autres n'osent pas — casques portables, lampes de personnages, statues détaillées. Une commande, une pièce, signée. **Bullprint, fais-le.**",
+    "ctaPrimary": "Voir la galerie",
+    "ctaPrimaryHref": "#galerie",
+    "ctaGhost": "Commande sur mesure",
+    "ctaGhostHref": "#custom",
+    "featuredCard": {
+      "image": "assets/products/deadpool-red.jpg",
+      "tag": "PIÈCE EN VEDETTE",
+      "num": "001",
+      "title": "Casque Deadpool",
+      "meta": "RÉSINE · PEINT MAIN · TAILLE ADULTE"
+    }
+  },
+  "gallery": {
+    "sectionNum": "02",
+    "sectionLabel": "GALERIE · L'ATELIER",
+    "titleLines": [
+      [{ "text": "CE QU'ON A", "style": "solid" }, { "text": "DÉJÀ", "style": "green" }],
+      [{ "text": "IMPRIMÉ.", "style": "outline" }]
+    ],
+    "metaLines": [
+      "19 PIÈCES SÉLECTIONNÉES",
+      "7 CATÉGORIES",
+      "TOUTES SUR COMMANDE"
+    ],
+    "categories": [
+      {
+        "id": "casques",
+        "num": "01",
+        "name": "CASQUES",
+        "cards": [
+          {
+            "image": "assets/products/deadpool-red.jpg",
+            "badge": "BESTSELLER",
+            "badgeStyle": "hot",
+            "category": "Marvel",
+            "name": "Deadpool Classic Red",
+            "sub": "Résine · peint main · taille adulte"
+          },
+          {
+            "image": "assets/products/deadpool-blue.jpg",
+            "badge": "VARIANT",
+            "badgeStyle": "rare",
+            "category": "Marvel",
+            "name": "Deadpool Blue",
+            "sub": "Édition rare · 32cm"
+          },
+          {
+            "image": "assets/products/blue-beetle.jpg",
+            "badge": "DC",
+            "badgeStyle": "new",
+            "category": "DC",
+            "name": "Blue Beetle Scarab",
+            "sub": "Adulte · 24cm · peint main"
+          }
+        ]
+      },
+      {
+        "id": "starwars",
+        "num": "02",
+        "name": "STAR WARS",
+        "cards": [
+          {
+            "image": "assets/products/b1-droid.jpg",
+            "badge": "XL",
+            "badgeStyle": "hot",
+            "category": "Figurine",
+            "name": "B1 Battle Droid",
+            "sub": "80cm · socle hexagonal"
+          },
+          {
+            "image": "assets/products/k2so.jpg",
+            "badge": "GRANDEUR NATURE",
+            "badgeStyle": "hot",
+            "category": "Figurine",
+            "name": "K-2SO · Rogue One",
+            "sub": "180cm · taille humaine"
+          },
+          {
+            "image": "assets/products/millennium-falcon.jpg",
+            "badge": "ICÔNE",
+            "badgeStyle": "default",
+            "category": "Maquette",
+            "name": "Millennium Falcon",
+            "sub": "35cm · grain de surface authentique"
+          },
+          {
+            "image": "assets/products/grogu-lamp.jpg",
+            "badge": "SÉRIE",
+            "badgeStyle": "default",
+            "category": "Lampe",
+            "name": "Grogu Glow",
+            "sub": "LED inclus · 25cm"
+          },
+          {
+            "image": "assets/products/bd1.jpg",
+            "badge": "DROID",
+            "badgeStyle": "default",
+            "category": "Figurine",
+            "name": "BD-1 Droïde",
+            "sub": "Jedi Survivor · 18cm"
+          },
+          {
+            "image": "assets/products/b1-droid-lamp.jpg",
+            "badge": "DUO",
+            "badgeStyle": "rare",
+            "category": "Figurines",
+            "name": "B1 Battle Pair",
+            "sub": "2 droïdes · 30cm chacun"
+          },
+          {
+            "image": "assets/products/deathstar-clock.jpg",
+            "badge": "NOUVEAU",
+            "badgeStyle": "new",
+            "category": "Horloge",
+            "name": "Death Star Clock",
+            "sub": "30cm · mécanisme silencieux"
+          }
+        ]
+      },
+      {
+        "id": "bustes",
+        "num": "03",
+        "name": "BUSTES & DIORAMAS",
+        "cards": [
+          {
+            "image": "assets/products/vecna.jpg",
+            "badge": "LIMITÉ",
+            "badgeStyle": "rare",
+            "category": "Stranger Things",
+            "name": "Vecna",
+            "sub": "Buste 20cm · finition rouge"
+          },
+          {
+            "image": "assets/products/slimer.jpg",
+            "badge": "CULT",
+            "badgeStyle": "default",
+            "category": "Ghostbusters",
+            "name": "Slimer + Trap",
+            "sub": "22cm · diorama complet"
+          }
+        ]
+      },
+      {
+        "id": "lampes",
+        "num": "04",
+        "name": "LAMPES",
+        "cards": [
+          {
+            "image": "assets/products/grogu-lamp.jpg",
+            "badge": "SÉRIE",
+            "badgeStyle": "default",
+            "category": "Star Wars",
+            "name": "Grogu Glow",
+            "sub": "LED inclus · 25cm"
+          },
+          {
+            "image": "assets/products/luxo.jpg",
+            "badge": "ARTICULÉ",
+            "badgeStyle": "default",
+            "category": "Pixar",
+            "name": "Luxo Jr",
+            "sub": "Articulée · LED chaude"
+          }
+        ]
+      },
+      {
+        "id": "gaming",
+        "num": "05",
+        "name": "GAMING & POP",
+        "cards": [
+          {
+            "image": "assets/products/kong-bros.jpg",
+            "badge": "DUO",
+            "badgeStyle": "new",
+            "category": "Nintendo",
+            "name": "Kong Bros · DK & Diddy",
+            "sub": "Duo · 20cm chacun · peint main"
+          },
+          {
+            "image": "assets/products/pandas.jpg",
+            "badge": "SET",
+            "badgeStyle": "new",
+            "category": "Set",
+            "name": "Panda Squad · 6 PCS",
+            "sub": "6 porte-clés + support bambou"
+          }
+        ]
+      },
+      {
+        "id": "deco",
+        "num": "06",
+        "name": "DÉCO & INSOLITES",
+        "cards": [
+          {
+            "image": "assets/products/wine-skeleton.jpg",
+            "badge": "INSOLITE",
+            "badgeStyle": "default",
+            "category": "Déco",
+            "name": "Skeleton Wine Holder",
+            "sub": "Bouteille standard · gris"
+          },
+          {
+            "image": "assets/products/eye-hueforge.jpg",
+            "badge": "HUEFORGE",
+            "badgeStyle": "new",
+            "category": "Tableau",
+            "name": "L'Œil · Hueforge",
+            "sub": "20×20cm · couches couleur"
+          }
+        ]
+      },
+      {
+        "id": "uniques",
+        "num": "07",
+        "name": "PIÈCES UNIQUES",
+        "cards": [
+          {
+            "image": "assets/products/robot-bar.jpg",
+            "badge": "SUR MESURE",
+            "badgeStyle": "rare",
+            "category": "Pièce unique",
+            "name": "Bar-Bot Mascotte",
+            "sub": "Création pour bar local"
+          },
+          {
+            "image": "assets/products/robot-waitress.jpg",
+            "badge": "UNIQUE",
+            "badgeStyle": "default",
+            "category": "Pièce unique",
+            "name": "Waitress Bot",
+            "sub": "Articulée · rouge & blanc"
+          }
+        ]
+      }
+    ]
+  },
+  "atelier": {
+    "sectionNum": "03",
+    "sectionLabel": "L'ATELIER",
+    "titleLines": [
+      [{ "text": "OÙ", "style": "solid" }, { "text": "TOUT", "style": "green" }],
+      [{ "text": "SE", "style": "outline" }, { "text": "FAIT.", "style": "solid" }]
+    ],
+    "paragraphs": [
+      "Pas de showroom, pas d'open space. Une pièce, des imprimantes, un poste de finition. C'est là que tout sort — du modèle 3D jusqu'à la peinture main.",
+      "On tourne souvent jusqu'à tard, parce que le bon ponçage prend du temps et que la peinture ne triche pas. Une pièce passe par toutes les étapes ici, du fichier brut au carton d'expédition.",
+      "C'est rugueux, c'est petit, c'est honnête. Et c'est pour ça qu'on peut faire ce qu'on fait."
+    ],
+    "postes": [
+      {
+        "image": "assets/atelier/poste-01-fdm.jpg",
+        "label": "POSTE 01",
+        "name": "IMPRESSION FDM",
+        "desc": "Pour les grosses pièces, les structures, les bases. PLA et PETG."
+      },
+      {
+        "image": "assets/atelier/poste-02-resin.jpg",
+        "label": "POSTE 02",
+        "name": "IMPRESSION RÉSINE",
+        "desc": "Pour les détails fins, les bustes, les casques. Résine ABS-like."
+      },
+      {
+        "image": "assets/atelier/poste-03-sand.jpg",
+        "label": "POSTE 03",
+        "name": "PONÇAGE & APPRÊT",
+        "desc": "Là où les couches d'impression disparaissent pour de bon."
+      },
+      {
+        "image": "assets/atelier/poste-04-paint.jpg",
+        "label": "POSTE 04",
+        "name": "PEINTURE MAIN",
+        "desc": "Aérographe et pinceau. Vernis mat ou satiné selon la pièce."
+      }
+    ],
+    "footNote": "Schémas techniques. Photos du vrai atelier à venir."
+  },
+  "custom": {
+    "sectionNum": "04",
+    "sectionLabel": "COMMANDE SUR MESURE",
+    "titleLines": [
+      [{ "text": "UNE", "style": "solid" }, { "text": "IDÉE.", "style": "green" }],
+      [{ "text": "ON LA", "style": "outline" }, { "text": "SORT.", "style": "solid" }]
+    ],
+    "paragraph": "Tu envoies une référence, une photo, un croquis, un fichier STL. On regarde, on décide ensemble, on imprime. **Casques, lampes, statues, props, mascottes, pièces de rechange** — si ça se modélise, ça se fait.",
+    "ctaPrimary": "Demander un devis",
+    "ctaGhost": "Voir l'Insta",
+    "steps": [
+      {
+        "num": "01",
+        "title": "Tu envoies",
+        "desc": "Photo, référence, fichier STL, croquis sur un coin de table — tout passe."
+      },
+      {
+        "num": "02",
+        "title": "On décide",
+        "desc": "On regarde ensemble. Matière, finition, taille, budget. Si c'est non, on le dit franchement."
+      },
+      {
+        "num": "03",
+        "title": "On imprime",
+        "desc": "Photos pendant le process. Peinture main si tu veux. Une pièce à la fois."
+      },
+      {
+        "num": "04",
+        "title": "On livre",
+        "desc": "France, Belgique, Suisse. Emballage costaud. Si ça casse en chemin, on refait."
+      }
+    ]
+  },
+  "order": {
+    "sectionNum": "05",
+    "sectionLabel": "COMMANDER",
+    "titleLines": [
+      [{ "text": "DIS-NOUS", "style": "solid" }],
+      [{ "text": "CE QUE TU", "style": "solid" }, { "text": "VEUX.", "style": "green" }]
+    ],
+    "paragraph": "On répond toujours. On dit oui quand on peut, non quand on doit. Et quand on dit oui — on le fait bien.",
+    "ctaPrimary": "Écrire à l'atelier",
+    "ctaGhost": "DM Instagram",
+    "handles": [
+      { "label": "@bull.print3d", "href": "https://instagram.com/bull.print3d" },
+      { "label": "contact@bullprint3d.fr", "href": "mailto:contact@bullprint3d.fr" },
+      { "label": "France · Belgique · Suisse", "href": "#" }
+    ]
+  },
+  "footer": {
+    "tagline": "Atelier d'impression 3D fan-culture grade. Casques, lampes, statues, pièces de collection. Fait à la commande.",
+    "columns": [
+      {
+        "title": "Galerie",
+        "links": [
+          { "label": "Casques", "href": "#galerie" },
+          { "label": "Star Wars", "href": "#galerie" },
+          { "label": "Bustes & Dioramas", "href": "#galerie" },
+          { "label": "Lampes", "href": "#galerie" },
+          { "label": "Pièces uniques", "href": "#galerie" }
+        ]
+      },
+      {
+        "title": "Atelier",
+        "links": [
+          { "label": "L'atelier", "href": "#atelier" },
+          { "label": "Sur mesure", "href": "#custom" },
+          { "label": "Devis", "href": "#order" },
+          { "label": "Contact", "href": "mailto:contact@bullprint3d.fr" }
+        ]
+      },
+      {
+        "title": "Suivre",
+        "links": [
+          { "label": "Instagram", "href": "https://instagram.com/bull.print3d" },
+          { "label": "TikTok", "href": "#" },
+          { "label": "Discord", "href": "#" }
+        ]
+      }
+    ],
+    "copyright": "© MMXXVI · BULLPRINT 3D",
+    "signature": "SIGNÉ EDMASTER & CLAUDIUS · BLEU CANARD ÉDITION 2026"
+  }
+}
