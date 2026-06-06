@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /secret-admin/
+
+Sitemap: https://bullprint3d.com/sitemap.xml

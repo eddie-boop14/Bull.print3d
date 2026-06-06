@@ -8,7 +8,7 @@
     "brandSub": "3D · ATELIER",
     "instagramUrl": "https://www.instagram.com/bull.print3d",
     "instagramHandle": "@bull.print3d",
-    "email": "contact@bullprint3d.fr"
+    "email": "contact@bullprint3d.com"
   },
   "nav": [
     {
@@ -498,8 +498,8 @@
         "href": "https://instagram.com/bull.print3d"
       },
       {
-        "label": "contact@bullprint3d.fr",
-        "href": "mailto:contact@bullprint3d.fr"
+        "label": "contact@bullprint3d.com",
+        "href": "mailto:contact@bullprint3d.com"
       },
       {
         "label": "France · Belgique · Suisse",
@@ -552,7 +552,7 @@
           },
           {
             "label": "Contact",
-            "href": "mailto:contact@bullprint3d.fr"
+            "href": "mailto:contact@bullprint3d.com"
           }
         ]
       },
