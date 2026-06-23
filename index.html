@@ -137,19 +137,31 @@
 
 <!-- ============ L'ATELIER ============ -->
 <section class="atelier" id="atelier">
-  <div class="atelier-inner reveal cascade">
-    <div class="section-num"><em data-bind="atelier.sectionNum">03 /</em><span data-bind="atelier.sectionLabel"></span></div>
-    <h2 class="atelier-title" data-bind="atelier.title"></h2>
+  <div class="atelier-inner">
 
-    <div class="atelier-grid">
-      <div class="atelier-text" data-bind="atelier.paragraphs"></div>
-      <div class="atelier-stack" data-bind="atelier.postes"></div>
+    <div class="section-label reveal" data-bind="atelier.label"></div>
+
+    <div class="atelier-head">
+      <h2 class="atelier-title reveal" data-bind="atelier.title"></h2>
+      <div class="atelier-lede reveal" data-bind="atelier.lede"></div>
+      <figure class="atelier-detail reveal">
+        <img data-bind="atelier.detailImage" alt="" loading="lazy">
+      </figure>
     </div>
 
-    <p class="atelier-foot">
-      <span data-bind="atelier.footNote"></span>
-      <a target="_blank" data-bind="site.instagramUrl"><span data-bind="site.instagramHandle"></span> →</a>
-    </p>
+    <!-- BENCH -->
+    <div class="bench-bar reveal">
+      <span class="live"><span class="ping"></span><span data-bind="atelier.benchLive"></span></span>
+      <span data-bind="atelier.benchNote"></span>
+    </div>
+
+    <div class="bench reveal stagger" data-bind="atelier.machines"></div>
+
+    <!-- MATERIALS -->
+    <div class="mat-label reveal" data-bind="atelier.materialsLabel"></div>
+
+    <div class="mats reveal stagger" data-bind="atelier.materials"></div>
+
   </div>
 </section>
 

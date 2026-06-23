@@ -183,37 +183,85 @@
 
     // atelier
     if (data.atelier) {
-      const sn = document.querySelector('[data-bind="atelier.sectionNum"]');
-      if (sn) sn.textContent = data.atelier.sectionNum + ' /';
-      const sl = document.querySelector('[data-bind="atelier.sectionLabel"]');
-      if (sl) sl.textContent = data.atelier.sectionLabel;
+      const A = data.atelier;
 
+      // section label  →  <em>05 /</em> L'ATELIER
+      const lbl = document.querySelector('[data-bind="atelier.label"]');
+      if (lbl && A.label) lbl.innerHTML = `<em>${escapeHtml(A.label.num)} /</em> ${escapeHtml(A.label.text)}`;
+
+      // title  →  parts with optional style / line break
       const at = document.querySelector('[data-bind="atelier.title"]');
-      if (at) at.innerHTML = renderTitleLines(data.atelier.titleLines).replace(/\n/g, '<br>');
-
-      const ap = document.querySelector('[data-bind="atelier.paragraphs"]');
-      if (ap && data.atelier.paragraphs) {
-        ap.innerHTML = data.atelier.paragraphs.map(p => `<p>${renderRichText(p)}</p>`).join('');
+      if (at && Array.isArray(A.title)) {
+        at.innerHTML = A.title.map(p => {
+          if (p.br) return '<br>';
+          const cls = p.style === 'green' ? ' class="green"' : p.style === 'outline' ? ' class="outline"' : '';
+          return cls ? `<span${cls}>${escapeHtml(p.t)}</span>` : escapeHtml(p.t);
+        }).join('');
       }
 
-      const ast = document.querySelector('[data-bind="atelier.postes"]');
-      if (ast && data.atelier.postes) {
-        ast.innerHTML = data.atelier.postes.map(p => `
-          <div class="atelier-block">
-            <div class="ab-photo">
-              <img src="${escapeHtml(p.image)}" alt="${escapeHtml(p.name)}" loading="lazy">
-              <span class="ab-bracket tl"></span>
-              <span class="ab-bracket br"></span>
+      // lede paragraphs (supports **bold**)
+      const al = document.querySelector('[data-bind="atelier.lede"]');
+      if (al && Array.isArray(A.lede)) al.innerHTML = A.lede.map(p => `<p>${renderRichText(p)}</p>`).join('');
+
+      // detail image
+      const adimg = document.querySelector('[data-bind="atelier.detailImage"]');
+      if (adimg && A.detailImage) { adimg.src = A.detailImage; if (A.detailAlt) adimg.alt = A.detailAlt; }
+
+      // bench status bar
+      const abl = document.querySelector('[data-bind="atelier.benchLive"]');
+      if (abl) abl.textContent = A.benchLive || '';
+      const abn = document.querySelector('[data-bind="atelier.benchNote"]');
+      if (abn) abn.textContent = A.benchNote || '';
+
+      // machines
+      const bench = document.querySelector('[data-bind="atelier.machines"]');
+      if (bench && Array.isArray(A.machines)) {
+        bench.innerHTML = A.machines.map(m => {
+          const printing = m.status === 'printing';
+          const chips = (m.chips || []).map(c => `<span class="chip">${escapeHtml(c)}</span>`).join('');
+          return `<article class="machine" tabindex="0">
+            <div class="m-photo"><img src="${escapeHtml(m.image)}" alt="Bambu Lab ${escapeHtml(m.name)}" loading="lazy"></div>
+            ${printing ? '<div class="m-prog"><span></span></div>' : ''}
+            <div class="m-top">
+              <span class="m-status${printing ? ' printing' : ''}"><span class="dot"></span>${escapeHtml(m.statusLabel)}</span>
+              <span class="m-idx">${escapeHtml(m.idx)}</span>
             </div>
-            <div class="ab-label">${escapeHtml(p.label)}</div>
-            <div class="ab-name">${escapeHtml(p.name)}</div>
-            <div class="ab-desc">${escapeHtml(p.desc)}</div>
-          </div>
-        `).join('');
+            <div class="m-name">${escapeHtml(m.name)}</div>
+            <div class="m-sub">${escapeHtml(m.tagline)}</div>
+            <div class="m-chips">${chips}</div>
+            <p class="m-best"><b>${escapeHtml(m.bestLead)}</b> ${escapeHtml(m.bestRest)}</p>
+          </article>`;
+        }).join('');
       }
 
-      const af = document.querySelector('[data-bind="atelier.footNote"]');
-      if (af) af.innerHTML = `<em>${escapeHtml(data.atelier.footNote)}</em>`;
+      // materials label  →  <em>·</em> LA MATIÈRE …
+      const aml = document.querySelector('[data-bind="atelier.materialsLabel"]');
+      if (aml) aml.innerHTML = `<em>·</em> ${escapeHtml(A.materialsLabel || '')}`;
+
+      // materials — icon id maps to an inline SVG (concept of the infographic, rebuilt natively)
+      const ICONS = {
+        leaf:   '<path d="M11 20A7 7 0 0 1 4 13C4 8 9 4 20 4c0 11-4 16-9 16Z"/><path d="M11 20c0-5 2-8 6-10"/>',
+        heat:   '<path d="M14 14.76V5a2 2 0 1 0-4 0v9.76a4 4 0 1 0 4 0Z"/>',
+        impact: '<circle cx="12" cy="12" r="3.1"/><path d="M12 2.2v3M12 18.8v3M2.2 12h3M18.8 12h3M5.1 5.1l2.1 2.1M16.8 16.8l2.1 2.1M18.9 5.1l-2.1 2.1M7.2 16.8l-2.1 2.1"/>',
+        sun:    '<circle cx="12" cy="12" r="4"/><path d="M12 2v2.2M12 19.8V22M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M2 12h2.2M19.8 12H22M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6"/>'
+      };
+      const mats = document.querySelector('[data-bind="atelier.materials"]');
+      if (mats && Array.isArray(A.materials)) {
+        mats.innerHTML = A.materials.map(mt => {
+          const icon = ICONS[mt.icon] || '';
+          return `<article class="mat" tabindex="0">
+            <div class="swatch finish-${escapeHtml(mt.finish)}"><img src="${escapeHtml(mt.image)}" alt="Filament ${escapeHtml(mt.code)}" loading="lazy"><span class="sheen"></span></div>
+            <div class="mat-body">
+              <div class="mat-head">
+                <span class="mat-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${icon}</svg></span>
+                <span class="mat-code">${escapeHtml(mt.code)}</span>
+              </div>
+              <div class="mat-prop">${escapeHtml(mt.property)}</div>
+              <p class="mat-desc">${escapeHtml(mt.desc)}</p>
+            </div>
+          </article>`;
+        }).join('');
+      }
     }
 
     // custom

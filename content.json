@@ -360,62 +360,124 @@
     ]
   },
   "atelier": {
-    "sectionNum": "03",
-    "sectionLabel": "L'ATELIER",
-    "titleLines": [
-      [
-        {
-          "text": "OÙ",
-          "style": "solid"
-        },
-        {
-          "text": "TOUT",
-          "style": "green"
-        }
-      ],
-      [
-        {
-          "text": "SE",
-          "style": "outline"
-        },
-        {
-          "text": "FAIT.",
-          "style": "solid"
-        }
-      ]
-    ],
-    "paragraphs": [
-      "Pas de showroom, pas d'open space. Une pièce, des imprimantes, un poste de finition. C'est là que tout sort — du modèle 3D jusqu'à la peinture main.",
-      "On tourne souvent jusqu'à tard, parce que le bon ponçage prend du temps et que la peinture ne triche pas. Une pièce passe par toutes les étapes ici, du fichier brut au carton d'expédition.",
-      "C'est rugueux, c'est petit, c'est honnête. Et c'est pour ça qu'on peut faire ce qu'on fait."
-    ],
-    "postes": [
+    "label": {
+      "num": "05",
+      "text": "L'ATELIER"
+    },
+    "title": [
       {
-        "image": "assets/atelier/poste-01-fdm.jpg",
-        "label": "POSTE 01",
-        "name": "IMPRESSION FDM",
-        "desc": "Pour les grosses pièces, les structures, les bases. PLA et PETG."
+        "t": "OÙ "
       },
       {
-        "image": "assets/atelier/poste-02-resin.jpg",
-        "label": "POSTE 02",
-        "name": "IMPRESSION RÉSINE",
-        "desc": "Pour les détails fins, les bustes, les casques. Résine ABS-like."
+        "t": "TOUT",
+        "style": "green"
       },
       {
-        "image": "assets/atelier/poste-03-sand.jpg",
-        "label": "POSTE 03",
-        "name": "PONÇAGE & APPRÊT",
-        "desc": "Là où les couches d'impression disparaissent pour de bon."
+        "br": true
       },
       {
-        "image": "assets/atelier/poste-04-paint.jpg",
-        "label": "POSTE 04",
-        "name": "PEINTURE MAIN",
-        "desc": "Aérographe et pinceau. Vernis mat ou satiné selon la pièce."
+        "t": "SE FAIT.",
+        "style": "outline"
       }
     ],
-    "footNote": "Schémas techniques. Photos du vrai atelier à venir."
+    "lede": [
+      "Pas de showroom, pas d'open space. Trois imprimantes Bambu Lab, un poste de finition, une seule paire de mains.",
+      "Du fichier brut au carton d'expédition, **une pièce passe par toutes les étapes ici** — choix de la machine, choix de la matière, impression, ponçage, peinture.",
+      "C'est rugueux, c'est petit, c'est honnête. Et c'est pour ça qu'on peut faire ce que les autres ne font pas."
+    ],
+    "detailImage": "assets/atelier/bench-detail.jpg",
+    "detailAlt": "Imprimante ouverte avec bobines de filament",
+    "benchLive": "Banc en ligne · 3 machines",
+    "benchNote": "FDM · Bambu Lab",
+    "machines": [
+      {
+        "id": "h2d",
+        "name": "H2D",
+        "tagline": "Le grand format",
+        "idx": "H2 · 01",
+        "status": "printing",
+        "statusLabel": "En impression",
+        "image": "assets/atelier/machine-h2d.jpg",
+        "chips": [
+          "Bi-buse",
+          "350×320×325",
+          "Chambre chauffée"
+        ],
+        "bestLead": "Les grosses pièces, le multi-matière, les supports solubles.",
+        "bestRest": "Casques d'un bloc, statues hautes, prototypes propres à démouler."
+      },
+      {
+        "id": "x1e",
+        "name": "X1E",
+        "tagline": "L'ingénierie",
+        "idx": "X1 · 02",
+        "status": "ready",
+        "statusLabel": "Prêt",
+        "image": "assets/atelier/machine-x1e.jpg",
+        "chips": [
+          "Fermée",
+          "256³",
+          "Matières techniques"
+        ],
+        "bestLead": "Les matières qui doivent encaisser.",
+        "bestRest": "ABS, ASA, pièces fonctionnelles. Le poste fermé pour ce qui chauffe et ce qui tient dans le temps."
+      },
+      {
+        "id": "a1",
+        "name": "A1",
+        "tagline": "Vitesse & propre",
+        "idx": "A1 · 03",
+        "status": "ready",
+        "statusLabel": "Prêt",
+        "image": "assets/atelier/machine-a1.jpg",
+        "chips": [
+          "Ouverte",
+          "Rapide",
+          "Multi-couleur"
+        ],
+        "bestLead": "Les pièces nettes, vite.",
+        "bestRest": "PLA et PETG, finitions propres, couleur. Prototypes, premières passes, tout ce qui doit sortir clean."
+      }
+    ],
+    "materialsLabel": "LA MATIÈRE — CE QU'ON IMPRIME DEDANS",
+    "materials": [
+      {
+        "id": "pla",
+        "code": "PLA",
+        "image": "assets/atelier/mat-pla.jpg",
+        "finish": "matte",
+        "icon": "leaf",
+        "property": "Facilité d'utilisation",
+        "desc": "Précis et facile à peindre, la plus large palette. Pour l'expo, le détail fin, les pièces qui restent à l'intérieur."
+      },
+      {
+        "id": "petg",
+        "code": "PETG",
+        "image": "assets/atelier/mat-petg.jpg",
+        "finish": "gloss",
+        "icon": "heat",
+        "property": "Résistance à la chaleur",
+        "desc": "Costaud, plie un peu sans casser, résiste à l'eau. Pour les pièces qui servent vraiment, pas seulement qui se regardent."
+      },
+      {
+        "id": "abs",
+        "code": "ABS",
+        "image": "assets/atelier/mat-abs.jpg",
+        "finish": "matte",
+        "icon": "impact",
+        "property": "Résistance mécanique",
+        "desc": "Encaisse les chocs et la chaleur. Le classique technique — imprimé au poste fermé, lissable, solide."
+      },
+      {
+        "id": "asa",
+        "code": "ASA",
+        "image": "assets/atelier/mat-asa.jpg",
+        "finish": "satin",
+        "icon": "sun",
+        "property": "Résistance aux UV / extérieur",
+        "desc": "Comme l'ABS, mais ne jaunit pas au soleil. Pour ce qui vit dehors et doit garder sa couleur des années."
+      }
+    ]
   },
   "custom": {
     "sectionNum": "04",

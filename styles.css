@@ -2299,3 +2299,128 @@ body.intro-done .hero-rail{opacity:1}
 }
 .atelier-block .ab-label{padding-top:20px}
 .atelier-block .ab-desc{padding-bottom:22px}
+
+
+/* ============================================================
+   L'ATELIER — appended. Tokens reused from the site root
+   (--green --bone --bone-dim --rule --display --mono).
+   Atelier-only tokens are scoped to .atelier so they can't
+   clobber global --green-glow (used elsewhere on the site).
+   Motion uses the site's .reveal/.stagger -> .visible observer.
+   ============================================================ */
+.atelier{--green-glow:rgba(127,179,58,.5);--panel:rgba(0,0,0,.34)}
+/* neutralize the previous atelier card chrome so the new full-bleed layout is clean */
+.atelier-inner{background:none;border:0;border-radius:0;padding:0;max-width:none}
+.atelier-inner::before,.atelier-inner::after{content:none;display:none}
+.atelier-title{margin:0}
+
+/* ============================================================
+   L'ATELIER — append to styles.css
+   Uses existing Bullprint tokens: --green --bone --bone-dim --rule
+   --display --mono. If your token names differ, map them at the top.
+   Fallbacks below are provided so the block renders even standalone.
+   ============================================================ */
+
+.atelier{position:relative;padding:120px 28px;max-width:1700px;margin:0 auto;overflow:hidden}
+@media(max-width:800px){.atelier{padding:80px 18px}}
+.atelier::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(127,179,58,.045) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(127,179,58,.045) 1px,transparent 1px);
+  background-size:54px 54px;
+  -webkit-mask:radial-gradient(ellipse 85% 80% at 50% 40%,#000 25%,transparent 78%);
+          mask:radial-gradient(ellipse 85% 80% at 50% 40%,#000 25%,transparent 78%);
+}
+.atelier-inner{position:relative;z-index:2}
+
+.atelier .section-label,
+.atelier .mat-label{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:11px;letter-spacing:.18em;color:var(--bone-dim);text-transform:uppercase;margin-bottom:26px}
+.atelier .section-label em,
+.atelier .mat-label em{color:var(--green);font-style:normal;font-weight:700}
+.atelier .section-label::after,
+.atelier .mat-label::after{content:'';height:1px;flex:1;max-width:120px;background:var(--rule)}
+
+.atelier-head{display:grid;grid-template-columns:1.05fr .95fr;grid-template-areas:"title detail" "lede detail";gap:28px 60px;align-items:start;margin-bottom:60px}
+@media(max-width:960px){.atelier-head{grid-template-columns:1fr;grid-template-areas:"title" "lede" "detail";gap:24px}}
+.atelier-title{grid-area:title;font-family:var(--display);font-weight:900;font-size:clamp(46px,6.4vw,104px);line-height:.86;letter-spacing:-.015em;text-transform:uppercase;align-self:end}
+.atelier-title .green{color:var(--green)}
+.atelier-title .outline{-webkit-text-stroke:1.4px var(--bone);color:transparent}
+.atelier-lede{grid-area:lede}
+.atelier-lede p{color:var(--bone-dim);font-size:15.5px;line-height:1.72;margin-bottom:14px;max-width:48ch}
+.atelier-lede p strong{color:var(--bone);font-weight:500}
+.atelier-detail{grid-area:detail;margin:0;border:1px solid var(--rule);border-radius:4px;overflow:hidden;background:#0a0d0a}
+.atelier-detail img{display:block;width:100%;height:100%;max-height:420px;object-fit:cover;filter:brightness(.9) contrast(1.04) saturate(1.02)}
+
+/* bench status bar */
+.bench-bar{display:flex;align-items:center;justify-content:space-between;gap:16px;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);padding:14px 2px;margin-bottom:30px;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--bone-dim)}
+.bench-bar .live{display:inline-flex;align-items:center;gap:8px;color:var(--green)}
+.bench-bar .ping{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 0 0 var(--green-glow);animation:bp-ping 2.4s ease-out infinite}
+@keyframes bp-ping{0%{box-shadow:0 0 0 0 var(--green-glow)}70%{box-shadow:0 0 0 8px transparent}100%{box-shadow:0 0 0 0 transparent}}
+
+/* machine cards */
+.bench{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:64px}
+@media(max-width:880px){.bench{grid-template-columns:1fr}}
+.machine{position:relative;background:var(--panel);border:1px solid var(--rule);border-radius:4px;padding:0 0 26px;overflow:hidden;transition:border-color .4s,transform .4s,background .4s}
+.machine:hover{border-color:var(--green);transform:translateY(-4px);background:rgba(127,179,58,.05)}
+.m-photo{position:relative;aspect-ratio:16/11;overflow:hidden;background:#e9ece8;border-bottom:1px solid var(--rule)}
+.m-photo img{width:100%;height:100%;object-fit:cover;filter:brightness(.98) contrast(1.03);transition:transform .8s cubic-bezier(.2,.7,.2,1)}
+.machine:hover .m-photo img{transform:scale(1.05)}
+.m-top{display:flex;align-items:center;justify-content:space-between;padding:18px 22px 0}
+.m-status{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;display:inline-flex;align-items:center;gap:7px;padding:5px 9px;border:1px solid var(--rule);border-radius:99px;color:var(--bone-dim)}
+.m-status.printing{color:var(--green);border-color:rgba(127,179,58,.35)}
+.m-status .dot{width:6px;height:6px;border-radius:50%;background:var(--bone-dim)}
+.m-status.printing .dot{background:var(--green);animation:bp-blink 1.3s steps(2) infinite}
+@keyframes bp-blink{50%{opacity:.25}}
+.m-idx{font-family:var(--mono);font-size:10px;color:var(--bone-dim);letter-spacing:.1em}
+.m-name{font-family:var(--display);font-weight:800;font-size:34px;line-height:1;letter-spacing:-.01em;text-transform:uppercase;padding:14px 22px 2px}
+.m-sub{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--green);padding:0 22px 16px}
+.m-chips{display:flex;flex-wrap:wrap;gap:6px;padding:0 22px 16px}
+.m-chips .chip{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--bone-dim);border:1px solid var(--rule);border-radius:3px;padding:4px 7px}
+.m-best{font-size:13.5px;line-height:1.55;color:var(--bone-dim);padding:0 22px}
+.m-best b{color:var(--bone);font-weight:500}
+.m-prog{position:absolute;left:0;bottom:0;height:2px;width:100%;background:rgba(127,179,58,.12);overflow:hidden}
+.m-prog span{position:absolute;left:-38%;top:0;height:100%;width:38%;background:var(--green);box-shadow:0 0 10px var(--green-glow);animation:bp-run 3.6s cubic-bezier(.5,0,.2,1) infinite}
+@keyframes bp-run{to{left:100%}}
+
+/* materials */
+.mats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+@media(max-width:880px){.mats{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:480px){.mats{grid-template-columns:1fr}}
+.mat{background:var(--panel);border:1px solid var(--rule);border-radius:4px;padding:0 0 20px;overflow:hidden;transition:border-color .35s,transform .35s}
+.mat:hover{border-color:var(--green);transform:translateY(-3px)}
+.swatch{position:relative;aspect-ratio:4/3;overflow:hidden;border-bottom:1px solid var(--rule)}
+.swatch img{width:100%;height:100%;object-fit:cover;transition:transform .7s cubic-bezier(.2,.7,.2,1)}
+.mat:hover .swatch img{transform:scale(1.06)}
+.swatch .sheen{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .4s}
+.mat:hover .swatch .sheen{opacity:1}
+.finish-gloss .sheen{background:linear-gradient(115deg,transparent 38%,rgba(255,255,255,.28) 50%,transparent 62%)}
+.finish-satin .sheen{background:linear-gradient(115deg,transparent 42%,rgba(255,255,255,.14) 50%,transparent 58%)}
+.finish-matte .sheen{background:radial-gradient(120% 90% at 30% 18%,rgba(255,255,255,.06),transparent 60%)}
+.mat-body{padding:16px 18px 0}
+.mat-head{display:flex;align-items:center;gap:11px;margin-bottom:8px}
+.mat-ico{flex:0 0 auto;width:34px;height:34px;border:1px solid var(--rule);border-radius:50%;display:grid;place-items:center;color:var(--green);transition:border-color .35s,background .35s,transform .45s}
+.mat-ico svg{width:18px;height:18px}
+.mat:hover .mat-ico{border-color:var(--green);background:rgba(127,179,58,.1);transform:rotate(-6deg)}
+.mat-code{font-family:var(--display);font-weight:900;font-size:26px;letter-spacing:-.01em;color:var(--bone);line-height:1}
+.mat-prop{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--green);margin-bottom:11px}
+.mat-prop::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--green);flex:0 0 auto}
+.mat-desc{font-size:13px;line-height:1.55;color:var(--bone-dim)}
+
+/* reveal — share with site observer if one already exists */
+.atelier .reveal{opacity:0;transform:translateY(26px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
+.atelier .reveal.visible{opacity:1;transform:none}
+.atelier .stagger>*{opacity:0;transform:translateY(26px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
+.atelier .stagger.visible>*{opacity:1;transform:none}
+.atelier .stagger.visible>*:nth-child(2){transition-delay:.09s}
+.atelier .stagger.visible>*:nth-child(3){transition-delay:.18s}
+.atelier .stagger.visible>*:nth-child(4){transition-delay:.27s}
+
+@media(prefers-reduced-motion:reduce){
+  .atelier *,.atelier *::before,.atelier *::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+  .atelier .reveal,.atelier .stagger>*{opacity:1;transform:none}
+}
+
+/* atelier — visible keyboard focus on the interactive cards */
+.atelier .machine:focus-visible,
+.atelier .mat:focus-visible{outline:2px solid var(--green);outline-offset:3px;border-color:var(--green)}
