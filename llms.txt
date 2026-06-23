@@ -2,7 +2,7 @@
 
 > Atelier d'impression 3D fan-culture grade. Casques cosplay, lampes de personnages, statues, bustes, dioramas et figurines articulées — fait à la commande par une seule paire de mains. Devis cas par cas, livraison France · Belgique · Suisse.
 
-Bullprint 3D est un atelier artisanal (FDM + résine), pas une boutique en ligne : pas de panier, pas de prix affichés, pas de délais figés. Chaque pièce est imprimée, poncée et peinte à la commande, puis signée. Le contact se fait par devis (email ou Instagram).
+Bullprint 3D est un atelier artisanal (impression FDM), pas une boutique en ligne : pas de panier, pas de prix affichés, pas de délais figés. Chaque pièce est imprimée, poncée et peinte à la commande, puis signée. Le contact se fait par devis (email ou Instagram).
 
 - **Site** : https://bullprint3d.com
 - **Contact** : contact@bullprint3d.com
@@ -12,7 +12,7 @@ Bullprint 3D est un atelier artisanal (FDM + résine), pas une boutique en ligne
 ## Sections du site
 
 - [Galerie](https://bullprint3d.com/#galerie) : pièces réalisées, classées par catégorie
-- [L'Atelier](https://bullprint3d.com/#atelier) : les 4 postes du process — impression FDM, impression résine, ponçage, peinture
+- [L'Atelier](https://bullprint3d.com/#atelier) : le banc — 3 imprimantes Bambu Lab (H2D · X1E · A1) et 4 matières (PLA · PETG · ABS · ASA)
 - [Sur Mesure](https://bullprint3d.com/#custom) : commande personnalisée en 4 étapes — tu envoies / on décide / on imprime / on livre
 - [Commander](https://bullprint3d.com/#order) : demander un devis par email ou DM Instagram
 
