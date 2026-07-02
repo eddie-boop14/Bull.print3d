@@ -39,20 +39,16 @@
       "warn": false
     },
     {
-      "text": "Quelques places ce mois-ci",
+      "text": "Retrait sur place ou expédition possible",
       "warn": true
-    },
-    {
-      "text": "Livraison FR · BE · CH",
-      "warn": false
     },
     {
       "text": "Une seule paire de mains",
       "warn": false
     },
     {
-      "text": "Pièces uniques signées",
-      "warn": false
+      "text": "Nouvelles impressions en cours",
+      "warn": true
     }
   ],
   "hero": {
