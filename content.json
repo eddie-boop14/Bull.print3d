@@ -49,14 +49,6 @@
     {
       "text": "Nouvelles impressions en cours",
       "warn": true
-    },
-    {
-      "text": "ii",
-      "warn": false
-    },
-    {
-      "text": "kk",
-      "warn": false
     }
   ],
   "hero": {
@@ -103,7 +95,7 @@
           "style": "solid"
         },
         {
-          "text": "BRUT.",
+          "text": "BRUTES.",
           "style": "green"
         }
       ]
@@ -377,8 +369,8 @@
           "350×320×325",
           "Chambre chauffée"
         ],
-        "bestLead": "Les grosses pièces, le multi-matière, les supports solubles.",
-        "bestRest": "Casques d'un bloc, statues hautes, prototypes propres à démouler."
+        "bestLead": "Les grosses pièces, le multi-matière.",
+        "bestRest": "Casques d'un bloc, statues hautes."
       },
       {
         "id": "x1e",
@@ -390,10 +382,10 @@
         "image": "assets/atelier/machine-x1e.jpg",
         "chips": [
           "Fermée",
-          "256³",
+          "256x256x256",
           "Matières techniques"
         ],
-        "bestLead": "Les matières qui doivent encaisser.",
+        "bestLead": "Les matières qui doivent encaisser",
         "bestRest": "ABS, ASA, pièces fonctionnelles. Le poste fermé pour ce qui chauffe et ce qui tient dans le temps."
       },
       {
@@ -503,7 +495,7 @@
       {
         "num": "01",
         "title": "Tu envoies",
-        "desc": "Photo, référence, fichier STL, croquis sur un coin de table — tout passe."
+        "desc": "Photo, référence, fichier STL ou 3MF, croquis sur un coin de table — tout passe."
       },
       {
         "num": "02",
@@ -513,12 +505,12 @@
       {
         "num": "03",
         "title": "On imprime",
-        "desc": "Photos pendant le process. Peinture main si tu veux. Une pièce à la fois."
+        "desc": "Photos pendant le process. Une pièce à la fois."
       },
       {
         "num": "04",
-        "title": "On livre",
-        "desc": "France, Belgique, Suisse. Emballage costaud. Si ça casse en chemin, on refait."
+        "title": "RETRAIT OU EXPEDITION",
+        "desc": "Emballage avec soin, retrait possible (et privilégié) dans le 77 (Seine et Marne) ou expédition."
       }
     ]
   },
@@ -556,7 +548,7 @@
         "href": "mailto:contact.bullprint3d@gmail.com"
       },
       {
-        "label": "France · Belgique · Suisse",
+        "label": "07.68.38.86.02",
         "href": "#"
       }
     ]
@@ -572,7 +564,7 @@
             "href": "#galerie"
           },
           {
-            "label": "Star Wars",
+            "label": "DroÏdes",
             "href": "#galerie"
           },
           {
