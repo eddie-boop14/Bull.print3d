@@ -71,6 +71,14 @@
     cancel: $('#footerColsCancel'),
   };
 
+  const handlesModal = $('#handlesModal');
+  const handlesModalEls = {
+    rows: $('#handlesRows'),
+    add: $('#handlesAdd'),
+    save: $('#handlesSave'),
+    cancel: $('#handlesCancel'),
+  };
+
   const commitModal = $('#commitModal');
   const commitSummary = $('#commitSummary');
   const commitMsg = $('#commitMsg');
@@ -376,6 +384,19 @@
         e.preventDefault();
         e.stopPropagation();
         openFooterColumnsEditor();
+      });
+    }
+
+    // 7. Order handles (@insta · email · pays livrés) → modal editor.
+    // Same story as the footer columns: the container survives rerender,
+    // only its innerHTML is wiped, so one guarded delegated binding.
+    const handlesEl = $('[data-bind="order.handles"]');
+    if (handlesEl && !handlesEl.dataset.adminBound) {
+      handlesEl.dataset.adminBound = '1';
+      handlesEl.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        openHandlesEditor();
       });
     }
   };
@@ -853,6 +874,84 @@
   });
 
   // ─────────────────────────────────────────────────────────────
+  // ORDER HANDLES EDITOR (@insta · email · pays livrés)
+  // ─────────────────────────────────────────────────────────────
+  let handleItems = null; // local copy while the modal is open
+
+  const renderHandlesRows = () => {
+    handlesModalEls.rows.innerHTML = '';
+    handleItems.forEach((h, idx) => {
+      const row = document.createElement('div');
+      row.className = 'link-row';
+      row.innerHTML = `
+        <div class="link-inputs">
+          <input type="text" data-idx="${idx}" data-field="label" placeholder="Texte affiché">
+          <input type="text" data-idx="${idx}" data-field="href" placeholder="https://…, mailto:… ou # (sans lien)">
+        </div>
+        <div class="link-btns">
+          <button class="modal-btn mini-btn" data-action="up" data-idx="${idx}"${idx === 0 ? ' disabled' : ''}>↑</button>
+          <button class="modal-btn mini-btn" data-action="down" data-idx="${idx}"${idx === handleItems.length - 1 ? ' disabled' : ''}>↓</button>
+          <button class="modal-btn mini-btn danger" data-action="del" data-idx="${idx}" title="Supprimer">×</button>
+        </div>
+      `;
+      row.querySelector('input[data-field="label"]').value = h.label || '';
+      row.querySelector('input[data-field="href"]').value = h.href || '';
+      handlesModalEls.rows.appendChild(row);
+    });
+  };
+
+  const openHandlesEditor = () => {
+    handleItems = deepClone(working.order.handles || []);
+    if (!handleItems.length) handleItems.push({ label: '', href: '#' });
+    renderHandlesRows();
+    openModal(handlesModal);
+  };
+
+  handlesModalEls.rows.addEventListener('input', (e) => {
+    if (!handleItems) return;
+    const idx = parseInt(e.target.dataset.idx, 10);
+    const field = e.target.dataset.field;
+    if (isNaN(idx) || !field) return;
+    handleItems[idx][field] = e.target.value;
+  });
+
+  handlesModalEls.rows.addEventListener('click', (e) => {
+    const btn = e.target.closest('button[data-action]');
+    if (!btn || !handleItems) return;
+    const idx = parseInt(btn.dataset.idx, 10);
+    const action = btn.dataset.action;
+    if (action === 'up' && idx > 0) {
+      [handleItems[idx - 1], handleItems[idx]] = [handleItems[idx], handleItems[idx - 1]];
+    } else if (action === 'down' && idx < handleItems.length - 1) {
+      [handleItems[idx + 1], handleItems[idx]] = [handleItems[idx], handleItems[idx + 1]];
+    } else if (action === 'del') {
+      if (handleItems.length <= 1) { alert('Il faut au moins une ligne.'); return; }
+      handleItems.splice(idx, 1);
+    } else {
+      return;
+    }
+    renderHandlesRows();
+  });
+
+  handlesModalEls.add.addEventListener('click', () => {
+    handleItems.push({ label: '', href: '#' });
+    renderHandlesRows();
+    const labels = handlesModalEls.rows.querySelectorAll('input[data-field="label"]');
+    if (labels.length) labels[labels.length - 1].focus();
+  });
+
+  handlesModalEls.cancel.addEventListener('click', () => closeModal(handlesModal));
+  handlesModalEls.save.addEventListener('click', () => {
+    const cleaned = handleItems
+      .map((h) => ({ label: String(h.label || '').trim(), href: String(h.href || '').trim() || '#' }))
+      .filter((h) => h.label); // rows without a label are dropped
+    if (!cleaned.length) { alert('Il faut au moins une ligne.'); return; }
+    working.order.handles = cleaned;
+    closeModal(handlesModal);
+    rerender();
+  });
+
+  // ─────────────────────────────────────────────────────────────
   // RE-RENDER from working copy
   // ─────────────────────────────────────────────────────────────
   const rerender = () => {
@@ -1033,7 +1132,7 @@
   btnLogout.addEventListener('click', handleLogout);
 
   // Close modals on outside click
-  [cardModal, catModal, statusModal, footerColsModal, commitModal].forEach((m) => {
+  [cardModal, catModal, statusModal, footerColsModal, handlesModal, commitModal].forEach((m) => {
     m.addEventListener('click', (e) => {
       if (e.target === m) closeModal(m);
     });

@@ -403,6 +403,19 @@
     background:rgba(127,179,58,.04);
   }
 
+  /* ── ORDER HANDLES (@insta · email · pays livrés) — editable via modal ── */
+  [data-bind="order.handles"]{
+    cursor:pointer;
+    outline:1px dashed transparent;
+    outline-offset:6px;
+    border-radius:2px;
+    transition:outline-color .2s, background .2s;
+  }
+  [data-bind="order.handles"]:hover{
+    outline-color:rgba(127,179,58,.6);
+    background:rgba(127,179,58,.04);
+  }
+
   /* ── MODAL ROW EDITORS (status bar + footer links) ── */
   .row-edit{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:8px}
   .row-edit input[type="text"]{
@@ -992,6 +1005,24 @@
     <div class="modal-actions">
       <button class="modal-btn" id="footerColsCancel">Annuler</button>
       <button class="modal-btn primary" id="footerColsSave">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="handlesModal">
+  <div class="modal">
+    <h3>Contacts & <span class="green">livraison</span></h3>
+    <p style="font-size:12px;color:#9c9c92;margin-bottom:14px;line-height:1.6">
+      Les lignes affichées sous « Nous contacter » : Instagram, email,
+      pays livrés… Le lien peut être une URL (https://…), un email
+      (mailto:…) ou « # » pour un texte sans lien (ex : la ligne des pays).
+      Les lignes sans libellé seront ignorées.
+    </p>
+    <div id="handlesRows"></div>
+    <button class="modal-btn" id="handlesAdd" style="margin-top:10px">+ Ajouter une ligne</button>
+    <div class="modal-actions">
+      <button class="modal-btn" id="handlesCancel">Annuler</button>
+      <button class="modal-btn primary" id="handlesSave">Enregistrer</button>
     </div>
   </div>
 </div>
