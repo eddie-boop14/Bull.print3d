@@ -350,8 +350,13 @@
       "Du fichier brut au carton d'expédition, **une pièce passe par toutes les étapes ici** — choix de la machine, choix de la matière, impression, ponçage, peinture.",
       "C'est rugueux, c'est petit, c'est honnête. Et c'est pour ça qu'on peut faire ce que les autres ne font pas."
     ],
-    "detailImage": "assets/atelier/bench-detail.jpg",
-    "detailAlt": "Imprimante ouverte avec bobines de filament",
+    "photos": [
+      "assets/atelier/bench-lineup.jpg",
+      "assets/atelier/poste-01-fdm.jpg",
+      "assets/atelier/poste-04-paint.jpg",
+      "assets/atelier/materials-ref.jpg"
+    ],
+    "tagline": "Grand choix de couleurs et de matériaux.",
     "benchLive": "Banc en ligne · 3 machines",
     "benchNote": "FDM · Bambu Lab",
     "machines": [
@@ -441,6 +446,24 @@
         "icon": "sun",
         "property": "Résistance aux UV / extérieur",
         "desc": "Comme l'ABS, mais ne jaunit pas au soleil. Pour ce qui vit dehors et doit garder sa couleur des années."
+      },
+      {
+        "id": "tpu",
+        "code": "TPU",
+        "image": "assets/atelier/materials-ref.jpg",
+        "finish": "matte",
+        "icon": "flex",
+        "property": "Flexibilité",
+        "desc": "Souple et résistant à l'abrasion. Pour les pièces qui plient sans casser : protections, joints, pièces flexibles."
+      },
+      {
+        "id": "autres",
+        "code": "AUTRES",
+        "image": "assets/atelier/materials-ref.jpg",
+        "finish": "satin",
+        "icon": "plus",
+        "property": "Sur demande",
+        "desc": "Une matière spécifique en tête ? On en parle, et on regarde ensemble ce qui est possible sur nos machines."
       }
     ]
   },

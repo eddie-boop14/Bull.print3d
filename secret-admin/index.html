@@ -445,29 +445,14 @@
     text-transform:uppercase;
     font-weight:700;
   }
-  .atelier-detail{position:relative}
-  .detail-img-btn{
-    position:absolute;
-    top:8px;
-    right:8px;
-    z-index:10;
-    background:rgba(7,9,7,.92);
-    color:#eae8df;
-    border:1px solid rgba(234,232,223,.3);
-    width:34px;
-    height:34px;
-    border-radius:3px;
+  .atelier-photos{
     cursor:pointer;
-    font-family:'JetBrains Mono', monospace;
-    font-size:15px;
-    font-weight:700;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    transition:all .2s;
-    padding:0;
+    outline:1px dashed transparent;
+    outline-offset:4px;
+    border-radius:2px;
+    transition:outline-color .2s;
   }
-  .detail-img-btn:hover{background:#7fb33a;color:#070907;border-color:#7fb33a}
+  .atelier-photos:hover{outline-color:rgba(127,179,58,.6)}
 
   /* ── MODAL ROW EDITORS (status bar + footer links) ── */
   .row-edit{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:8px}
@@ -910,9 +895,10 @@
     <div class="atelier-head">
       <h2 class="atelier-title reveal" data-bind="atelier.title"></h2>
       <div class="atelier-lede reveal" data-bind="atelier.lede"></div>
-      <figure class="atelier-detail reveal">
-        <img data-bind="atelier.detailImage" alt="" loading="lazy">
-      </figure>
+      <div class="atelier-visual reveal">
+        <div class="atelier-photos" data-bind="atelier.photos"></div>
+        <p class="atelier-tagline" data-bind="atelier.tagline" data-edit data-path="atelier.tagline"></p>
+      </div>
     </div>
 
     <!-- BENCH -->
@@ -1160,6 +1146,8 @@
         <option value="heat">🌡 Thermomètre (chaleur)</option>
         <option value="impact">✳ Impact (résistance mécanique)</option>
         <option value="sun">☀ Soleil (UV / extérieur)</option>
+        <option value="flex">〰 Vague (flexible / TPU)</option>
+        <option value="plus">＋ Plus (autres / sur demande)</option>
       </select>
     </div>
     <div class="modal-field">
@@ -1170,6 +1158,23 @@
     <div class="modal-actions">
       <button class="modal-btn" id="materialCancel">Annuler</button>
       <button class="modal-btn primary" id="materialSave">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="photosModal">
+  <div class="modal">
+    <h3>Photos de <span class="green">l'atelier</span></h3>
+    <p style="font-size:12px;color:#9c9c92;margin-bottom:14px;line-height:1.6">
+      Les photos affichées en haut de la section Atelier (3–4 conseillées).
+      Chemin d'un fichier existant dans assets/atelier/ — les images
+      voyagent par Git, pas par l'admin. Les lignes vides seront ignorées.
+    </p>
+    <div id="photosRows"></div>
+    <button class="modal-btn" id="photosAdd" style="margin-top:10px">+ Ajouter une photo</button>
+    <div class="modal-actions">
+      <button class="modal-btn" id="photosCancel">Annuler</button>
+      <button class="modal-btn primary" id="photosSave">Enregistrer</button>
     </div>
   </div>
 </div>

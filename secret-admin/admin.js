@@ -101,6 +101,14 @@
     cancel: $('#materialCancel'),
   };
 
+  const photosModal = $('#photosModal');
+  const photosModalEls = {
+    rows: $('#photosRows'),
+    add: $('#photosAdd'),
+    save: $('#photosSave'),
+    cancel: $('#photosCancel'),
+  };
+
   const handlesModal = $('#handlesModal');
   const handlesModalEls = {
     rows: $('#handlesRows'),
@@ -477,30 +485,17 @@
       });
     }
 
-    // 10. Atelier detail image → "✎" button, one-field prompt.
+    // 10. Atelier photo strip → modal editor (list of image paths).
     // No uploader on purpose: image files still travel via Git into
-    // assets/atelier/ — the admin only edits the path.
-    const fig = $('.atelier-detail');
-    if (fig && !fig.dataset.adminBound) {
-      fig.dataset.adminBound = '1';
-      const btn = document.createElement('button');
-      btn.className = 'detail-img-btn';
-      btn.textContent = '✎';
-      btn.title = "Modifier le chemin de l'image";
-      btn.addEventListener('click', (e) => {
+    // assets/atelier/ — the admin only edits the paths.
+    const strip = $('[data-bind="atelier.photos"]');
+    if (strip && !strip.dataset.adminBound) {
+      strip.dataset.adminBound = '1';
+      strip.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
-        const v = prompt(
-          "Chemin de l'image de détail.\nLe fichier doit déjà exister dans assets/atelier/ (les images voyagent par Git, pas par l'admin).",
-          working.atelier.detailImage || 'assets/atelier/'
-        );
-        if (v === null) return;
-        const trimmed = v.trim();
-        if (!trimmed) return;
-        working.atelier.detailImage = trimmed;
-        rerender();
+        openPhotosEditor();
       });
-      fig.appendChild(btn);
     }
   };
 
@@ -1055,6 +1050,77 @@
   });
 
   // ─────────────────────────────────────────────────────────────
+  // ATELIER PHOTOS EDITOR (photo strip — list of image paths)
+  // ─────────────────────────────────────────────────────────────
+  let photoItems = null; // local copy while the modal is open
+
+  const renderPhotosRows = () => {
+    photosModalEls.rows.innerHTML = '';
+    photoItems.forEach((p, idx) => {
+      const row = document.createElement('div');
+      row.className = 'row-edit';
+      row.innerHTML = `
+        <input type="text" data-idx="${idx}" placeholder="assets/atelier/photo.jpg">
+        <button class="modal-btn mini-btn" data-action="up" data-idx="${idx}"${idx === 0 ? ' disabled' : ''}>↑</button>
+        <button class="modal-btn mini-btn" data-action="down" data-idx="${idx}"${idx === photoItems.length - 1 ? ' disabled' : ''}>↓</button>
+        <button class="modal-btn mini-btn danger" data-action="del" data-idx="${idx}" title="Supprimer">×</button>
+      `;
+      row.querySelector('input').value = p || '';
+      photosModalEls.rows.appendChild(row);
+    });
+  };
+
+  const openPhotosEditor = () => {
+    photoItems = deepClone(working.atelier.photos || []);
+    if (!photoItems.length) photoItems.push('assets/atelier/');
+    renderPhotosRows();
+    openModal(photosModal);
+  };
+
+  photosModalEls.rows.addEventListener('input', (e) => {
+    if (!photoItems) return;
+    const idx = parseInt(e.target.dataset.idx, 10);
+    if (isNaN(idx)) return;
+    photoItems[idx] = e.target.value;
+  });
+
+  photosModalEls.rows.addEventListener('click', (e) => {
+    const btn = e.target.closest('button[data-action]');
+    if (!btn || !photoItems) return;
+    const idx = parseInt(btn.dataset.idx, 10);
+    const action = btn.dataset.action;
+    if (action === 'up' && idx > 0) {
+      [photoItems[idx - 1], photoItems[idx]] = [photoItems[idx], photoItems[idx - 1]];
+    } else if (action === 'down' && idx < photoItems.length - 1) {
+      [photoItems[idx + 1], photoItems[idx]] = [photoItems[idx], photoItems[idx + 1]];
+    } else if (action === 'del') {
+      if (photoItems.length <= 1) { alert('Il faut au moins une photo.'); return; }
+      photoItems.splice(idx, 1);
+    } else {
+      return;
+    }
+    renderPhotosRows();
+  });
+
+  photosModalEls.add.addEventListener('click', () => {
+    photoItems.push('assets/atelier/');
+    renderPhotosRows();
+    const inputs = photosModalEls.rows.querySelectorAll('input');
+    if (inputs.length) inputs[inputs.length - 1].focus();
+  });
+
+  photosModalEls.cancel.addEventListener('click', () => closeModal(photosModal));
+  photosModalEls.save.addEventListener('click', () => {
+    const cleaned = photoItems
+      .map((p) => String(p || '').trim())
+      .filter((p) => p && p !== 'assets/atelier/'); // empty / untouched rows are dropped
+    if (!cleaned.length) { alert('Il faut au moins une photo.'); return; }
+    working.atelier.photos = cleaned;
+    closeModal(photosModal);
+    rerender();
+  });
+
+  // ─────────────────────────────────────────────────────────────
   // MACHINE EDITOR (atelier bench)
   // status: 'printing' drives the progress bar + animated dot in
   // render.js; every other value renders as a plain "ready" card.
@@ -1136,7 +1202,7 @@
     materialModalEls.property.value = mt.property || '';
     materialModalEls.desc.value = mt.desc || '';
     materialModalEls.finish.value = ['matte', 'satin', 'gloss'].includes(mt.finish) ? mt.finish : 'matte';
-    materialModalEls.icon.value = ['leaf', 'heat', 'impact', 'sun'].includes(mt.icon) ? mt.icon : 'leaf';
+    materialModalEls.icon.value = ['leaf', 'heat', 'impact', 'sun', 'flex', 'plus'].includes(mt.icon) ? mt.icon : 'leaf';
     materialModalEls.image.value = mt.image || '';
 
     openModal(materialModal);
@@ -1341,7 +1407,7 @@
   btnLogout.addEventListener('click', handleLogout);
 
   // Close modals on outside click
-  [cardModal, catModal, statusModal, footerColsModal, handlesModal, machineModal, materialModal, commitModal].forEach((m) => {
+  [cardModal, catModal, statusModal, footerColsModal, handlesModal, machineModal, materialModal, photosModal, commitModal].forEach((m) => {
     m.addEventListener('click', (e) => {
       if (e.target === m) closeModal(m);
     });

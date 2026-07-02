@@ -12,7 +12,7 @@ Bullprint 3D est un atelier artisanal (impression FDM), pas une boutique en lign
 ## Sections du site
 
 - [Galerie](https://bullprint3d.com/#galerie) : pièces réalisées, classées par catégorie
-- [L'Atelier](https://bullprint3d.com/#atelier) : le banc — 3 imprimantes Bambu Lab (H2D · X1E · A1) et 4 matières (PLA · PETG · ABS · ASA)
+- [L'Atelier](https://bullprint3d.com/#atelier) : le banc — 3 imprimantes Bambu Lab (H2D · X1E · A1) et 6 matières (PLA · PETG · ABS · ASA · TPU · autres sur demande)
 - [Sur Mesure](https://bullprint3d.com/#custom) : commande personnalisée en 4 étapes — tu envoies / on décide / on imprime / on livre
 - [Commander](https://bullprint3d.com/#order) : demander un devis par email ou DM Instagram
 

@@ -203,9 +203,15 @@
       const al = document.querySelector('[data-bind="atelier.lede"]');
       if (al && Array.isArray(A.lede)) al.innerHTML = A.lede.map(p => `<p>${renderRichText(p)}</p>`).join('');
 
-      // detail image
-      const adimg = document.querySelector('[data-bind="atelier.detailImage"]');
-      if (adimg && A.detailImage) { adimg.src = A.detailImage; if (A.detailAlt) adimg.alt = A.detailAlt; }
+      // photo strip + tagline (Elodie's spec — replaces the old single detailImage)
+      const strip = document.querySelector('[data-bind="atelier.photos"]');
+      if (strip && Array.isArray(A.photos)) {
+        strip.innerHTML = A.photos.map((p, i) =>
+          `<figure class="atelier-photo"><img src="${escapeHtml(p)}" alt="L'atelier Bullprint 3D — photo ${i + 1}" loading="lazy"></figure>`
+        ).join('');
+      }
+      const atg = document.querySelector('[data-bind="atelier.tagline"]');
+      if (atg) atg.textContent = A.tagline || '';
 
       // bench status bar
       const abl = document.querySelector('[data-bind="atelier.benchLive"]');
@@ -243,7 +249,9 @@
         leaf:   '<path d="M11 20A7 7 0 0 1 4 13C4 8 9 4 20 4c0 11-4 16-9 16Z"/><path d="M11 20c0-5 2-8 6-10"/>',
         heat:   '<path d="M14 14.76V5a2 2 0 1 0-4 0v9.76a4 4 0 1 0 4 0Z"/>',
         impact: '<circle cx="12" cy="12" r="3.1"/><path d="M12 2.2v3M12 18.8v3M2.2 12h3M18.8 12h3M5.1 5.1l2.1 2.1M16.8 16.8l2.1 2.1M18.9 5.1l-2.1 2.1M7.2 16.8l-2.1 2.1"/>',
-        sun:    '<circle cx="12" cy="12" r="4"/><path d="M12 2v2.2M12 19.8V22M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M2 12h2.2M19.8 12H22M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6"/>'
+        sun:    '<circle cx="12" cy="12" r="4"/><path d="M12 2v2.2M12 19.8V22M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M2 12h2.2M19.8 12H22M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6"/>',
+        flex:   '<path d="M3 12c3-6 6-6 9 0s6 6 9 0"/>',
+        plus:   '<path d="M12 5.2v13.6M5.2 12h13.6"/>'
       };
       const mats = document.querySelector('[data-bind="atelier.materials"]');
       if (mats && Array.isArray(A.materials)) {
