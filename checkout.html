@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Commander — BULLPRINT 3D</title>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<meta name="theme-color" content="#101310">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;500;600&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .intro{display:none !important}
+  html.locked{overflow:auto !important}
+  .cursor,.cursor-dot{display:none !important}
+  body{cursor:auto !important}
+  .reveal{opacity:1 !important;transform:none !important}
+</style>
+</head>
+<body class="intro-done subpage">
+
+<header class="topbar shown">
+  <a href="/" class="brand" style="text-decoration:none;color:inherit">
+    <div class="brand-mark"></div>
+    <div class="brand-text">
+      <span data-bind="brand.name">BULLPRINT</span>
+      <span class="sub" data-bind="brand.sub">3D · ATELIER</span>
+    </div>
+  </a>
+  <nav class="nav" data-bind="nav"></nav>
+  <a href="/boutique.html" class="nav-cta"><span>← Boutique</span></a>
+</header>
+
+<main class="shop-page checkout-page">
+  <div class="section-num"><em>·</em><span>COMMANDE</span></div>
+  <h1 class="shop-title">Finaliser la <span class="green">commande</span></h1>
+
+  <div class="checkout-grid">
+    <form id="checkoutForm" class="checkout-form" novalidate>
+      <h3>Tes coordonnées</h3>
+      <div class="ck-field">
+        <label for="ckName">Nom complet *</label>
+        <input id="ckName" name="name" type="text" autocomplete="name" required>
+      </div>
+      <div class="ck-row">
+        <div class="ck-field">
+          <label for="ckEmail">Email *</label>
+          <input id="ckEmail" name="email" type="email" autocomplete="email" required>
+        </div>
+        <div class="ck-field">
+          <label for="ckPhone">Téléphone</label>
+          <input id="ckPhone" name="phone" type="tel" autocomplete="tel">
+        </div>
+      </div>
+
+      <h3>Livraison</h3>
+      <div class="ck-ship">
+        <label class="ck-radio">
+          <input type="radio" name="shippingMethod" value="domicile" checked>
+          <span>Livraison à domicile <em>(France · Belgique · Suisse)</em></span>
+        </label>
+        <label class="ck-radio" id="pickupOption">
+          <input type="radio" name="shippingMethod" value="pickup">
+          <span id="pickupLabel">Retrait à l'atelier — gratuit</span>
+        </label>
+      </div>
+
+      <div id="addressBlock">
+        <div class="ck-field">
+          <label for="ckAddress">Adresse *</label>
+          <input id="ckAddress" name="address" type="text" autocomplete="street-address">
+        </div>
+        <div class="ck-row">
+          <div class="ck-field" style="max-width:140px">
+            <label for="ckPostcode">Code postal *</label>
+            <input id="ckPostcode" name="postcode" type="text" inputmode="numeric" autocomplete="postal-code">
+          </div>
+          <div class="ck-field">
+            <label for="ckCity">Ville *</label>
+            <input id="ckCity" name="city" type="text" autocomplete="address-level2">
+          </div>
+        </div>
+      </div>
+
+      <div class="ck-field">
+        <label for="ckNotes">Notes pour l'atelier (couleur, personnalisation…)</label>
+        <textarea id="ckNotes" name="notes" rows="3" maxlength="500"></textarea>
+      </div>
+
+      <div class="ck-error" id="checkoutError"></div>
+
+      <button class="btn btn-primary ck-pay" id="payBtn" type="submit">
+        <span class="label">Payer par carte</span> <span class="arrow">→</span>
+      </button>
+      <p class="ck-legal">Paiement sécurisé SumUp — aucune donnée bancaire ne transite par ce site.
+      En payant tu acceptes les <a href="/cgv.html" target="_blank">CGV</a>.</p>
+    </form>
+
+    <aside class="checkout-recap">
+      <h3>Récapitulatif</h3>
+      <div id="checkoutRecap"></div>
+    </aside>
+  </div>
+</main>
+
+<footer>
+  <div class="foot-bottom">
+    <div data-bind="footer.copyright"></div>
+    <div class="sig" data-bind="footer.signature"></div>
+  </div>
+</footer>
+
+<script src="render.js"></script>
+<script src="cart.js"></script>
+</body>
+</html>

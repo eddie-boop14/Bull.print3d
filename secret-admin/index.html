@@ -454,6 +454,52 @@
   }
   .atelier-photos:hover{outline-color:rgba(127,179,58,.6)}
 
+  /* ── BOUTIQUE (SHOP-01) — gestion produits + réglages ── */
+  .shop-switch{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:14px;
+    border:1px solid rgba(234,232,223,.22);
+    border-radius:3px;
+    margin-bottom:18px;
+    cursor:pointer;
+  }
+  .shop-switch input{width:22px;height:22px;accent-color:#7fb33a;cursor:pointer}
+  .shop-switch .on{color:#a8d96a;font-weight:700}
+  .shop-switch .off{color:#ff6a1a;font-weight:700}
+  .shop-prod-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:10px 12px;
+    border:1px solid rgba(234,232,223,.12);
+    border-radius:3px;
+    margin-bottom:8px;
+    background:#0a0d0a;
+  }
+  .shop-prod-row img{width:44px;height:44px;object-fit:cover;border-radius:3px;background:#070907}
+  .shop-prod-row .sp-name{flex:1;min-width:0;font-size:12.5px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .shop-prod-row .sp-meta{font-size:9.5px;color:#9c9c92;letter-spacing:.08em;text-transform:uppercase}
+  .shop-prod-row .sp-vis{font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;padding:4px 8px;border-radius:99px}
+  .shop-prod-row .sp-vis.on{background:rgba(127,179,58,.15);color:#a8d96a}
+  .shop-prod-row .sp-vis.off{background:rgba(255,106,26,.12);color:#ff6a1a}
+  .variant-row{display:flex;gap:6px;align-items:center;margin-bottom:8px;flex-wrap:wrap}
+  .variant-row input[type="text"]{flex:1;min-width:90px;background:#0a0d0a;border:1px solid rgba(234,232,223,.22);color:#eae8df;padding:9px 11px;font-family:'JetBrains Mono',monospace;font-size:12px;border-radius:3px;outline:none}
+  .variant-row input[type="text"]:focus{border-color:#7fb33a}
+  .variant-row .v-price{max-width:110px}
+  .variant-row .v-vis{display:flex;align-items:center;gap:4px;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:#9c9c92;white-space:nowrap;cursor:pointer}
+  .variant-row .v-vis input{accent-color:#7fb33a}
+
+  /* ── 📷 PHOTO PICKER (Job S7 — upload sans Git) ── */
+  .photo-picker{display:flex;align-items:center;gap:10px;margin-top:8px;flex-wrap:wrap}
+  .photo-btn{position:relative;overflow:hidden;display:inline-block}
+  .photo-btn input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer}
+  .photo-preview{width:52px;height:52px;object-fit:cover;border-radius:3px;border:1px solid rgba(234,232,223,.25);display:none}
+  .photo-status{font-size:10px;color:#9c9c92;letter-spacing:.04em;flex:1;min-width:120px}
+  .photo-status.ok{color:#a8d96a}
+  .photo-status.err{color:#ff6a1a}
+
   /* ── MODAL ROW EDITORS (status bar + footer links) ── */
   .row-edit{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:8px}
   .row-edit input[type="text"]{
@@ -794,6 +840,7 @@
     <span class="admin-bar-changes" id="changesIndicator">Aucun changement</span>
   </div>
   <div class="admin-bar-right">
+    <button class="admin-bar-btn" id="btnShop">🛒 Boutique</button>
     <button class="admin-bar-btn" id="btnDiscard">Annuler tout</button>
     <button class="admin-bar-btn" id="btnValidate">Valider →</button>
     <button class="admin-bar-btn danger" id="btnLogout">Quitter</button>
@@ -995,7 +1042,11 @@
     <div class="modal-field">
       <label>Image (chemin du fichier)</label>
       <input type="text" id="cardImage" placeholder="assets/products/nom-de-fichier.jpg">
-      <div class="hint">Le fichier doit déjà exister dans le dossier assets/products/. Mettre l'image se fait séparément.</div>
+      <div class="photo-picker" data-dir="products" data-path-input="cardImage">
+        <label class="modal-btn photo-btn">📷 Choisir une photo<input type="file" accept="image/*"></label>
+        <img class="photo-preview" alt="">
+        <span class="photo-status"></span>
+      </div>
     </div>
     <div class="modal-actions">
       <button class="modal-btn danger" id="cardDelete">Supprimer</button>
@@ -1106,7 +1157,11 @@
     <div class="modal-field">
       <label>Image (chemin du fichier)</label>
       <input type="text" id="machineImage" placeholder="assets/atelier/machine-xxx.jpg">
-      <div class="hint">Le fichier doit déjà exister dans assets/atelier/ — les images voyagent par Git, pas par l'admin.</div>
+      <div class="photo-picker" data-dir="atelier" data-path-input="machineImage">
+        <label class="modal-btn photo-btn">📷 Choisir une photo<input type="file" accept="image/*"></label>
+        <img class="photo-preview" alt="">
+        <span class="photo-status"></span>
+      </div>
     </div>
     <div class="modal-actions">
       <button class="modal-btn danger" id="machineDelete">Supprimer</button>
@@ -1153,11 +1208,102 @@
     <div class="modal-field">
       <label>Image (chemin du fichier)</label>
       <input type="text" id="materialImage" placeholder="assets/atelier/mat-xxx.jpg">
-      <div class="hint">Le fichier doit déjà exister dans assets/atelier/ — les images voyagent par Git, pas par l'admin.</div>
+      <div class="photo-picker" data-dir="atelier" data-path-input="materialImage">
+        <label class="modal-btn photo-btn">📷 Choisir une photo<input type="file" accept="image/*"></label>
+        <img class="photo-preview" alt="">
+        <span class="photo-status"></span>
+      </div>
     </div>
     <div class="modal-actions">
       <button class="modal-btn" id="materialCancel">Annuler</button>
       <button class="modal-btn primary" id="materialSave">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="shopModal">
+  <div class="modal">
+    <h3>La <span class="green">Boutique</span></h3>
+    <label class="shop-switch">
+      <input type="checkbox" id="shopEnabled">
+      <span id="shopEnabledLabel">⚡ Boutique <span class="off">HORS LIGNE</span></span>
+    </label>
+    <p style="font-size:11px;color:#9c9c92;margin:-8px 0 18px;line-height:1.5">
+      Interrupteur général : hors ligne, la page boutique affiche « ouvre bientôt »
+      et le lien disparaît du menu. Rien n'est achetable tant que c'est coupé.
+    </p>
+
+    <h3 style="font-size:22px">Livraison</h3>
+    <div class="ck-row" style="display:flex;gap:10px">
+      <div class="modal-field" style="flex:1">
+        <label>Frais de port (€)</label>
+        <input type="text" id="shipFlat" inputmode="decimal" placeholder="6,90">
+      </div>
+      <div class="modal-field" style="flex:1">
+        <label>Offerts dès (€)</label>
+        <input type="text" id="shipFreeAbove" inputmode="decimal" placeholder="60">
+      </div>
+    </div>
+    <div class="modal-field">
+      <label class="v-vis" style="font-size:10px;display:flex;align-items:center;gap:8px;cursor:pointer">
+        <input type="checkbox" id="shipPickupEnabled" style="accent-color:#7fb33a"> Retrait à l'atelier proposé
+      </label>
+    </div>
+    <div class="modal-field">
+      <label>Libellé du retrait</label>
+      <input type="text" id="shipPickupLabel" placeholder="Retrait à l'atelier — gratuit">
+    </div>
+
+    <h3 style="font-size:22px">Produits</h3>
+    <div id="shopProductList"></div>
+    <button class="modal-btn" id="shopAddProduct" style="margin-top:6px">+ Produit</button>
+
+    <div class="modal-actions">
+      <button class="modal-btn" id="shopCancel">Fermer</button>
+      <button class="modal-btn primary" id="shopSave">Enregistrer les réglages</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="productModal">
+  <div class="modal">
+    <h3>Modifier le <span class="green">produit</span></h3>
+    <div class="modal-field">
+      <label class="v-vis" style="font-size:10px;display:flex;align-items:center;gap:8px;cursor:pointer">
+        <input type="checkbox" id="productVisible" style="accent-color:#7fb33a"> Visible dans la boutique
+      </label>
+    </div>
+    <div class="modal-field">
+      <label>Nom</label>
+      <input type="text" id="productName" placeholder="Ex: Buste Deadpool">
+    </div>
+    <div class="modal-field">
+      <label>Description</label>
+      <textarea id="productDesc" placeholder="Matière, finition, dimensions…"></textarea>
+    </div>
+    <div class="modal-field">
+      <label>Délai affiché</label>
+      <input type="text" id="productLeadTime" placeholder="Imprimé à la commande — 7 à 10 jours">
+    </div>
+    <div class="modal-field">
+      <label>Photo</label>
+      <input type="text" id="productImage" placeholder="assets/shop/…">
+      <div class="photo-picker" data-dir="shop" data-path-input="productImage">
+        <label class="modal-btn photo-btn">📷 Choisir une photo<input type="file" accept="image/*"></label>
+        <img class="photo-preview" alt="">
+        <span class="photo-status"></span>
+      </div>
+    </div>
+    <div class="modal-field">
+      <label>Variantes (laisser le libellé vide si prix unique)</label>
+      <div id="productVariants"></div>
+      <button class="modal-btn mini-btn" id="productAddVariant" type="button">+ Ajouter une variante</button>
+      <div class="hint">Prix en euros, virgule française : 24,90 — une variante doit être cochée « visible » pour être achetable.</div>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn danger" id="productDelete">Supprimer</button>
+      <button class="modal-btn" id="productCancel">Annuler</button>
+      <button class="modal-btn primary" id="productSave">Enregistrer</button>
     </div>
   </div>
 </div>
@@ -1171,7 +1317,14 @@
       voyagent par Git, pas par l'admin. Les lignes vides seront ignorées.
     </p>
     <div id="photosRows"></div>
-    <button class="modal-btn" id="photosAdd" style="margin-top:10px">+ Ajouter une photo</button>
+    <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+      <button class="modal-btn" id="photosAdd">+ Ajouter un chemin</button>
+      <label class="modal-btn photo-btn">📷 Ajouter une photo<input type="file" accept="image/*" id="photosUploadInput"></label>
+    </div>
+    <div class="photo-picker" style="margin-top:8px">
+      <img class="photo-preview" id="photosUploadPreview" alt="">
+      <span class="photo-status" id="photosUploadStatus"></span>
+    </div>
     <div class="modal-actions">
       <button class="modal-btn" id="photosCancel">Annuler</button>
       <button class="modal-btn primary" id="photosSave">Enregistrer</button>

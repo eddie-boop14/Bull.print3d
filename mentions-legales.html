@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="fr">
+<!-- À VALIDER PAR CEDRIC / conseil juridique — les identifiants légaux
+     sont des tokens [À COMPLÉTER], jamais inventés. -->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mentions légales — BULLPRINT 3D</title>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<meta name="theme-color" content="#101310">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;500;600&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .intro{display:none !important}
+  html.locked{overflow:auto !important}
+  .cursor,.cursor-dot{display:none !important}
+  body{cursor:auto !important}
+  .reveal{opacity:1 !important;transform:none !important}
+</style>
+</head>
+<body class="intro-done subpage">
+
+<header class="topbar shown">
+  <a href="/" class="brand" style="text-decoration:none;color:inherit">
+    <div class="brand-mark"></div>
+    <div class="brand-text">
+      <span data-bind="brand.name">BULLPRINT</span>
+      <span class="sub" data-bind="brand.sub">3D · ATELIER</span>
+    </div>
+  </a>
+  <nav class="nav" data-bind="nav"></nav>
+</header>
+
+<main class="legal-page">
+  <h1>Mentions <span class="green">légales</span></h1>
+  <div class="legal-updated">Version de travail — <span class="legal-todo">À VALIDER PAR CEDRIC / CONSEIL JURIDIQUE</span></div>
+
+  <h2>Éditeur du site</h2>
+  <p>Bullprint 3D — <span class="legal-todo">[À COMPLÉTER : forme juridique]</span><br>
+  Responsable de publication : <span class="legal-todo">[À COMPLÉTER : nom]</span><br>
+  SIRET : <span class="legal-todo">[À COMPLÉTER]</span><br>
+  Adresse : <span class="legal-todo">[À COMPLÉTER]</span><br>
+  Email : contact.bullprint3d@gmail.com</p>
+
+  <h2>Hébergement</h2>
+  <p>Netlify, Inc. — 512 2nd Street, Suite 200, San Francisco, CA 94107, USA —
+  <a href="https://www.netlify.com" target="_blank" rel="noopener">netlify.com</a></p>
+
+  <h2>Paiement</h2>
+  <p>Les paiements en ligne sont traités par SumUp Payments Limited. Aucune donnée bancaire
+  ne transite par ce site ni n'y est conservée.</p>
+
+  <h2>Propriété intellectuelle</h2>
+  <p>L'ensemble du site (textes, photos, identité visuelle) est la propriété de Bullprint 3D
+  sauf mention contraire. Les univers évoqués dans les créations fan-culture appartiennent à
+  leurs ayants droit respectifs.</p>
+</main>
+
+<footer>
+  <div class="foot-bottom">
+    <div data-bind="footer.copyright"></div>
+    <div class="sig" data-bind="footer.signature"></div>
+  </div>
+</footer>
+
+<script src="render.js"></script>
+</body>
+</html>

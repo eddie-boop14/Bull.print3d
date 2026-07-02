@@ -2,6 +2,11 @@
   publish = "."
   functions = "netlify/functions"
 
+# Les fonctions boutique relisent les prix depuis content.json —
+# le fichier est embarque dans le bundle de chaque fonction.
+[functions]
+  included_files = ["content.json"]
+
 # Make sure /secret-admin/ is reachable
 [[redirects]]
   from = "/secret-admin"

@@ -612,11 +612,89 @@
           {
             "label": "Instagram",
             "href": "https://instagram.com/bull.print3d"
+          },
+          {
+            "label": "CGV",
+            "href": "cgv.html"
+          },
+          {
+            "label": "Mentions légales",
+            "href": "mentions-legales.html"
+          },
+          {
+            "label": "Confidentialité",
+            "href": "politique-de-confidentialite.html"
           }
         ]
       }
     ],
     "copyright": "© MMXXVI · BULLPRINT 3D",
     "signature": "SIGNÉ EDMASTER & CLAUDIUS · BLEU CANARD ÉDITION 2026"
+  },
+  "shop": {
+    "enabled": false,
+    "currency": "EUR",
+    "title": "La Boutique",
+    "intro": "Pièces imprimées, poncées et peintes à l'atelier. Chaque commande part signée.",
+    "shipping": {
+      "flat": 6.9,
+      "freeAbove": 60,
+      "pickup": {
+        "enabled": true,
+        "label": "Retrait à l'atelier — gratuit"
+      }
+    },
+    "products": [
+      {
+        "id": "buste-deadpool",
+        "visible": false,
+        "name": "Buste Deadpool",
+        "image": "assets/products/deadpool-red.jpg",
+        "description": "Buste imprimé FDM, poncé et peint main. [PRIX À VALIDER PAR CEDRIC]",
+        "leadTime": "Imprimé à la commande — 7 à 10 jours",
+        "variants": [
+          {
+            "label": "",
+            "price": "0,00",
+            "visible": false
+          }
+        ]
+      },
+      {
+        "id": "droide-b1",
+        "visible": false,
+        "name": "Droïde B1",
+        "image": "assets/products/b1-droid.jpg",
+        "description": "Figurine droïde de combat B1, finition peinte. [PRIX À VALIDER PAR CEDRIC]",
+        "leadTime": "Imprimé à la commande — 7 à 10 jours",
+        "variants": [
+          {
+            "label": "Classique",
+            "price": "0,00",
+            "visible": false
+          },
+          {
+            "label": "Peint main",
+            "price": "0,00",
+            "visible": false
+          }
+        ]
+      },
+      {
+        "id": "millennium-falcon",
+        "visible": false,
+        "name": "Millennium Falcon",
+        "image": "assets/products/millennium-falcon.jpg",
+        "description": "Vaisseau détaillé, socle inclus. [PRIX À VALIDER PAR CEDRIC]",
+        "leadTime": "Imprimé à la commande — 7 à 10 jours",
+        "variants": [
+          {
+            "label": "",
+            "price": "0,00",
+            "visible": false
+          }
+        ]
+      }
+    ]
   }
 }

@@ -109,6 +109,34 @@
     cancel: $('#photosCancel'),
   };
 
+  const shopModal = $('#shopModal');
+  const shopEls = {
+    enabled: $('#shopEnabled'),
+    enabledLabel: $('#shopEnabledLabel'),
+    flat: $('#shipFlat'),
+    freeAbove: $('#shipFreeAbove'),
+    pickupEnabled: $('#shipPickupEnabled'),
+    pickupLabel: $('#shipPickupLabel'),
+    productList: $('#shopProductList'),
+    addProduct: $('#shopAddProduct'),
+    save: $('#shopSave'),
+    cancel: $('#shopCancel'),
+  };
+
+  const productModal = $('#productModal');
+  const productEls = {
+    visible: $('#productVisible'),
+    name: $('#productName'),
+    desc: $('#productDesc'),
+    leadTime: $('#productLeadTime'),
+    image: $('#productImage'),
+    variants: $('#productVariants'),
+    addVariant: $('#productAddVariant'),
+    save: $('#productSave'),
+    cancel: $('#productCancel'),
+    delete: $('#productDelete'),
+  };
+
   const handlesModal = $('#handlesModal');
   const handlesModalEls = {
     rows: $('#handlesRows'),
@@ -1234,6 +1262,316 @@
   materialModalEls.cancel.addEventListener('click', () => closeModal(materialModal));
 
   // ─────────────────────────────────────────────────────────────
+  // 📷 PHOTO UPLOAD (Job S7) — compression navigateur puis commit
+  // repo via upload-image.js. Cedric ne voit jamais le mot "Git".
+  // ─────────────────────────────────────────────────────────────
+  const compressImage = async (file) => {
+    const MAX_SIDE = 1600;
+    const TARGET = 400 * 1024;
+    const bitmap = await createImageBitmap(file);
+    const scale = Math.min(1, MAX_SIDE / Math.max(bitmap.width, bitmap.height));
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.max(1, Math.round(bitmap.width * scale));
+    canvas.height = Math.max(1, Math.round(bitmap.height * scale));
+    canvas.getContext('2d').drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+    const encode = (type, q) => new Promise((res) => canvas.toBlob(res, type, q));
+    // WebP q0.8, fallback JPEG si le navigateur n'encode pas le WebP
+    let blob = await encode('image/webp', 0.8);
+    if (!blob || blob.type !== 'image/webp') blob = await encode('image/jpeg', 0.82);
+    let q = 0.65;
+    while (blob && blob.size > TARGET && q >= 0.35) {
+      blob = await encode(blob.type, q);
+      q -= 0.15;
+    }
+    if (!blob) throw new Error('compression impossible sur ce navigateur');
+    return blob;
+  };
+
+  const uploadPhoto = async (file, dir) => {
+    const blob = await compressImage(file);
+    const b64 = await new Promise((res, rej) => {
+      const fr = new FileReader();
+      fr.onload = () => res(String(fr.result).split(',')[1]);
+      fr.onerror = () => rej(new Error('lecture du fichier impossible'));
+      fr.readAsDataURL(blob);
+    });
+    const res = await fetch('/.netlify/functions/upload-image', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Admin-Secret': secret },
+      body: JSON.stringify({ filename: file.name || 'photo', dir, data: b64 }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || !data.path) throw new Error(data.error || 'upload échoué');
+    return data.path;
+  };
+
+  // Chaque .photo-picker pilote le champ chemin déclaré dans data-path-input.
+  // Le bouton Enregistrer du modal est bloqué pendant l'upload.
+  $$('.photo-picker[data-path-input]').forEach((picker) => {
+    const fileInput = picker.querySelector('input[type="file"]');
+    const preview = picker.querySelector('.photo-preview');
+    const status = picker.querySelector('.photo-status');
+    const pathInput = document.getElementById(picker.dataset.pathInput);
+    const modal = picker.closest('.modal');
+    const saveBtn = modal ? modal.querySelector('.modal-btn.primary') : null;
+    if (!fileInput || !pathInput) return;
+
+    fileInput.addEventListener('change', async () => {
+      const file = fileInput.files && fileInput.files[0];
+      if (!file) return;
+      preview.src = URL.createObjectURL(file);   // aperçu immédiat
+      preview.style.display = '';
+      status.className = 'photo-status';
+      status.textContent = 'Compression + envoi…';
+      if (saveBtn) saveBtn.disabled = true;
+      try {
+        const path = await uploadPhoto(file, picker.dataset.dir || 'shop');
+        pathInput.value = path;
+        status.className = 'photo-status ok';
+        status.textContent = '✓ envoyée — en ligne dans ~1 min ⏳';
+      } catch (e) {
+        status.className = 'photo-status err';
+        status.textContent = '✗ ' + e.message;
+      } finally {
+        if (saveBtn) saveBtn.disabled = false;
+        fileInput.value = '';
+      }
+    });
+  });
+
+  // Cas particulier : le modal photos de l'atelier — l'upload ajoute
+  // directement une ligne à la liste.
+  const photosUploadInput = $('#photosUploadInput');
+  if (photosUploadInput) {
+    const preview = $('#photosUploadPreview');
+    const status = $('#photosUploadStatus');
+    photosUploadInput.addEventListener('change', async () => {
+      const file = photosUploadInput.files && photosUploadInput.files[0];
+      if (!file || !photoItems) return;
+      preview.src = URL.createObjectURL(file);
+      preview.style.display = '';
+      status.className = 'photo-status';
+      status.textContent = 'Compression + envoi…';
+      photosModalEls.save.disabled = true;
+      try {
+        const path = await uploadPhoto(file, 'atelier');
+        photoItems.push(path);
+        renderPhotosRows();
+        status.className = 'photo-status ok';
+        status.textContent = '✓ ajoutée — en ligne dans ~1 min ⏳';
+      } catch (e) {
+        status.className = 'photo-status err';
+        status.textContent = '✗ ' + e.message;
+      } finally {
+        photosModalEls.save.disabled = false;
+        photosUploadInput.value = '';
+      }
+    });
+  }
+
+  // ─────────────────────────────────────────────────────────────
+  // BOUTIQUE (Job S5) — réglages + produits
+  // Les prix restent des chaînes FR ("24,90") : jamais réécrits,
+  // le parseur virgule ne sert qu'à l'affichage/au serveur.
+  // ─────────────────────────────────────────────────────────────
+  const ensureShop = () => {
+    if (!working.shop) {
+      working.shop = {
+        enabled: false, currency: 'EUR',
+        title: 'La Boutique', intro: '',
+        shipping: { flat: 6.9, freeAbove: 60, pickup: { enabled: true, label: 'Retrait à l\'atelier — gratuit' } },
+        products: [],
+      };
+    }
+    if (!Array.isArray(working.shop.products)) working.shop.products = [];
+    if (!working.shop.shipping) working.shop.shipping = { flat: 0, freeAbove: 0, pickup: { enabled: true, label: '' } };
+    if (!working.shop.shipping.pickup) working.shop.shipping.pickup = { enabled: true, label: '' };
+    return working.shop;
+  };
+
+  const frNum = (s) => {
+    const n = parseFloat(String(s == null ? '' : s).replace(/[^\d,.-]/g, '').replace(',', '.'));
+    return Number.isFinite(n) && n >= 0 ? n : 0;
+  };
+
+  const renderShopSwitchLabel = () => {
+    shopEls.enabledLabel.innerHTML = shopEls.enabled.checked
+      ? '⚡ Boutique <span class="on">EN LIGNE</span>'
+      : '⚡ Boutique <span class="off">HORS LIGNE</span>';
+  };
+  shopEls.enabled.addEventListener('change', renderShopSwitchLabel);
+
+  const renderShopProductList = () => {
+    const shop = ensureShop();
+    shopEls.productList.innerHTML = '';
+    if (!shop.products.length) {
+      shopEls.productList.innerHTML = '<div style="color:#5a5a52;font-size:11px;padding:10px 0">Aucun produit. « + Produit » pour créer le premier.</div>';
+      return;
+    }
+    shop.products.forEach((p, idx) => {
+      const purchasable = p.visible && (p.variants || []).some(v => v.visible);
+      const row = document.createElement('div');
+      row.className = 'shop-prod-row';
+      row.innerHTML = `
+        <img alt="">
+        <div style="flex:1;min-width:0">
+          <div class="sp-name"></div>
+          <div class="sp-meta">${(p.variants || []).length} variante${(p.variants || []).length > 1 ? 's' : ''}</div>
+        </div>
+        <span class="sp-vis ${purchasable ? 'on' : 'off'}">${purchasable ? 'EN VENTE' : 'MASQUÉ'}</span>
+        <button class="modal-btn mini-btn" data-idx="${idx}">✎</button>
+      `;
+      row.querySelector('img').src = p.image || '';
+      row.querySelector('.sp-name').textContent = p.name || '(sans nom)';
+      row.querySelector('button').addEventListener('click', () => openProductEditor(idx));
+      shopEls.productList.appendChild(row);
+    });
+  };
+
+  const openShopEditor = () => {
+    const shop = ensureShop();
+    shopEls.enabled.checked = !!shop.enabled;
+    renderShopSwitchLabel();
+    shopEls.flat.value = String(shop.shipping.flat ?? '').replace('.', ',');
+    shopEls.freeAbove.value = String(shop.shipping.freeAbove ?? '').replace('.', ',');
+    shopEls.pickupEnabled.checked = shop.shipping.pickup.enabled !== false;
+    shopEls.pickupLabel.value = shop.shipping.pickup.label || '';
+    renderShopProductList();
+    openModal(shopModal);
+  };
+
+  shopEls.cancel.addEventListener('click', () => closeModal(shopModal));
+  shopEls.save.addEventListener('click', () => {
+    const shop = ensureShop();
+    shop.enabled = shopEls.enabled.checked;
+    shop.shipping.flat = frNum(shopEls.flat.value);
+    shop.shipping.freeAbove = frNum(shopEls.freeAbove.value);
+    shop.shipping.pickup.enabled = shopEls.pickupEnabled.checked;
+    shop.shipping.pickup.label = shopEls.pickupLabel.value.trim() || 'Retrait à l\'atelier — gratuit';
+    closeModal(shopModal);
+    rerender();
+    showToast(shop.enabled ? '⚡ Boutique EN LIGNE (après Valider)' : 'Boutique hors ligne (après Valider)');
+  });
+  shopEls.addProduct.addEventListener('click', () => openProductEditor(-1));
+
+  // ── Éditeur produit ──
+  let productCtx = null;      // { idx } | { idx: -1 }
+  let productVariants = null; // copie locale des variantes
+
+  const renderVariantRows = () => {
+    productEls.variants.innerHTML = '';
+    productVariants.forEach((v, idx) => {
+      const row = document.createElement('div');
+      row.className = 'variant-row';
+      row.innerHTML = `
+        <input type="text" data-idx="${idx}" data-field="label" placeholder="Libellé (ex: Taille M — vide si unique)">
+        <input type="text" data-idx="${idx}" data-field="price" class="v-price" inputmode="decimal" placeholder="24,90">
+        <label class="v-vis"><input type="checkbox" data-idx="${idx}" data-field="visible"> visible</label>
+        <button class="modal-btn mini-btn danger" data-action="del" data-idx="${idx}" title="Supprimer">×</button>
+      `;
+      row.querySelector('input[data-field="label"]').value = v.label || '';
+      row.querySelector('input[data-field="price"]').value = v.price || '';
+      row.querySelector('input[data-field="visible"]').checked = !!v.visible;
+      productEls.variants.appendChild(row);
+    });
+  };
+
+  const openProductEditor = (idx) => {
+    const shop = ensureShop();
+    productCtx = { idx };
+    const isNew = idx === -1;
+    const p = isNew
+      ? { id: '', visible: false, name: '', image: 'assets/shop/', description: '', leadTime: 'Imprimé à la commande — 7 à 10 jours', variants: [{ label: '', price: '', visible: false }] }
+      : shop.products[idx];
+    if (!p) return;
+
+    productEls.visible.checked = !!p.visible;
+    productEls.name.value = p.name || '';
+    productEls.desc.value = p.description || '';
+    productEls.leadTime.value = p.leadTime || '';
+    productEls.image.value = p.image || '';
+    productEls.delete.style.display = isNew ? 'none' : '';
+    productVariants = deepClone(p.variants && p.variants.length ? p.variants : [{ label: '', price: '', visible: false }]);
+    renderVariantRows();
+
+    openModal(productModal);
+    setTimeout(() => productEls.name.focus(), 100);
+  };
+
+  productEls.variants.addEventListener('input', (e) => {
+    if (!productVariants) return;
+    const idx = parseInt(e.target.dataset.idx, 10);
+    const field = e.target.dataset.field;
+    if (isNaN(idx) || !field) return;
+    if (field === 'visible') productVariants[idx].visible = e.target.checked;
+    else productVariants[idx][field] = e.target.value;
+  });
+  productEls.variants.addEventListener('click', (e) => {
+    const btn = e.target.closest('button[data-action="del"]');
+    if (!btn || !productVariants) return;
+    if (productVariants.length <= 1) { alert('Il faut au moins une variante.'); return; }
+    productVariants.splice(parseInt(btn.dataset.idx, 10), 1);
+    renderVariantRows();
+  });
+  productEls.addVariant.addEventListener('click', () => {
+    productVariants.push({ label: '', price: '', visible: false });
+    renderVariantRows();
+  });
+
+  productEls.cancel.addEventListener('click', () => closeModal(productModal));
+  productEls.save.addEventListener('click', () => {
+    if (!productCtx) return;
+    const shop = ensureShop();
+    const name = productEls.name.value.trim();
+    if (!name) { alert('Nom requis'); return; }
+    const isNew = productCtx.idx === -1;
+    const existing = isNew ? null : shop.products[productCtx.idx];
+
+    // les prix sont des chaînes saisies telles quelles — jamais réécrits
+    const variants = productVariants.map(v => ({
+      label: String(v.label || '').trim(),
+      price: String(v.price || '').trim(),
+      visible: !!v.visible,
+    }));
+    if (variants.some(v => v.visible && !(frNum(v.price) > 0))) {
+      alert('Une variante visible doit avoir un prix supérieur à 0.');
+      return;
+    }
+
+    let id = existing?.id || slugify(name) || 'produit';
+    if (isNew) {
+      let base = id, i = 2;
+      while (shop.products.some(p => p.id === id)) id = base + '-' + (i++);
+    }
+    const product = {
+      id,
+      visible: productEls.visible.checked,
+      name,
+      image: productEls.image.value.trim(),
+      description: productEls.desc.value.trim(),
+      leadTime: productEls.leadTime.value.trim(),
+      variants,
+    };
+    if (isNew) shop.products.push(product);
+    else shop.products[productCtx.idx] = product;
+
+    closeModal(productModal);
+    renderShopProductList();
+    rerender();
+  });
+  productEls.delete.addEventListener('click', () => {
+    if (!productCtx || productCtx.idx === -1) return;
+    const shop = ensureShop();
+    const p = shop.products[productCtx.idx];
+    if (!p) return;
+    if (!confirm(`Supprimer le produit "${p.name}" ?`)) return;
+    shop.products.splice(productCtx.idx, 1);
+    closeModal(productModal);
+    renderShopProductList();
+    rerender();
+  });
+
+  // ─────────────────────────────────────────────────────────────
   // RE-RENDER from working copy
   // ─────────────────────────────────────────────────────────────
   const rerender = () => {
@@ -1412,9 +1750,13 @@
   // ─────────────────────────────────────────────────────────────
   gateForm.addEventListener('submit', handleGateSubmit);
   btnLogout.addEventListener('click', handleLogout);
+  $('#btnShop').addEventListener('click', () => {
+    if (!working) return;
+    openShopEditor();
+  });
 
   // Close modals on outside click
-  [cardModal, catModal, statusModal, footerColsModal, handlesModal, machineModal, materialModal, photosModal, commitModal].forEach((m) => {
+  [cardModal, catModal, statusModal, footerColsModal, handlesModal, machineModal, materialModal, photosModal, shopModal, productModal, commitModal].forEach((m) => {
     m.addEventListener('click', (e) => {
       if (e.target === m) closeModal(m);
     });

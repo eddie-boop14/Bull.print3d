@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Paiement — BULLPRINT 3D</title>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<meta name="theme-color" content="#101310">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;500;600&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .intro{display:none !important}
+  html.locked{overflow:auto !important}
+  .cursor,.cursor-dot{display:none !important}
+  body{cursor:auto !important}
+  .reveal{opacity:1 !important;transform:none !important}
+</style>
+</head>
+<body class="intro-done subpage">
+
+<header class="topbar shown">
+  <a href="/" class="brand" style="text-decoration:none;color:inherit">
+    <div class="brand-mark"></div>
+    <div class="brand-text">
+      <span data-bind="brand.name">BULLPRINT</span>
+      <span class="sub" data-bind="brand.sub">3D · ATELIER</span>
+    </div>
+  </a>
+  <nav class="nav" data-bind="nav"></nav>
+</header>
+
+<main class="shop-page pay-page">
+  <!-- Rempli par cart.js UNIQUEMENT après vérification serveur du statut
+       SumUp (verify-checkout.js). Visite directe = état neutre, jamais de
+       faux succès. -->
+  <div class="pay-result" id="paymentResult">
+    <h2>Aucune commande en attente</h2>
+    <p>Si tu viens de payer, vérifie tes emails — sinon direction <a href="/boutique.html">la boutique</a>.</p>
+  </div>
+</main>
+
+<footer>
+  <div class="foot-bottom">
+    <div data-bind="footer.copyright"></div>
+    <div class="sig" data-bind="footer.signature"></div>
+  </div>
+</footer>
+
+<script src="render.js"></script>
+<script src="cart.js"></script>
+</body>
+</html>

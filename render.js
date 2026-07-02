@@ -58,12 +58,18 @@
       el.textContent = data.site.brandSub;
     });
 
-    // nav
+    // nav — anchor hrefs are rewritten to /#… on secondary pages (boutique,
+    // checkout…) where the anchors don't exist; Boutique link appears only
+    // when shop.enabled is true (one flag, no half-visible shop)
     const nav = document.querySelector('[data-bind="nav"]');
     if (nav && data.nav) {
-      nav.innerHTML = data.nav.map(n =>
-        `<a href="${escapeHtml(n.href)}">${escapeHtml(n.label)}</a>`
-      ).join('');
+      const onIndex = !!document.getElementById('galerie');
+      const links = data.nav.map(n => {
+        const href = (!onIndex && String(n.href).startsWith('#')) ? '/' + n.href : n.href;
+        return `<a href="${escapeHtml(href)}">${escapeHtml(n.label)}</a>`;
+      });
+      if (data.shop?.enabled) links.push(`<a href="/boutique.html">Boutique</a>`);
+      nav.innerHTML = links.join('');
     }
     const navCta = document.querySelector('[data-bind="navCta"] span');
     if (navCta) navCta.innerHTML = escapeHtml(data.navCta || '');
@@ -366,6 +372,44 @@
         const styled = sig.replace(/(EDMASTER &amp; CLAUDIUS|EDMASTER &amp;amp; CLAUDIUS)/i, 
           '<span class="sig-teal">$1</span>');
         fsg.innerHTML = styled;
+      }
+    }
+
+    // ── boutique page (hooks exist only on boutique.html) ──
+    const shopGrid = document.querySelector('[data-bind="shop.products"]');
+    if (shopGrid && data.shop) {
+      const S = data.shop;
+      const st = document.querySelector('[data-bind="shop.title"]');
+      if (st) st.textContent = S.title || 'La Boutique';
+      const si = document.querySelector('[data-bind="shop.intro"]');
+      if (si) si.textContent = S.intro || '';
+      const closed = document.querySelector('[data-shop-closed]');
+      const products = (S.enabled ? (S.products || []) : [])
+        .filter(p => p.visible && (p.variants || []).some(v => v.visible));
+      if (!products.length) {
+        shopGrid.innerHTML = '';
+        if (closed) closed.style.display = '';
+      } else {
+        if (closed) closed.style.display = 'none';
+        shopGrid.innerHTML = products.map(p => {
+          const variants = (p.variants || []).filter(v => v.visible);
+          const single = variants.length === 1;
+          const opts = variants.map((v, i) =>
+            `<option value="${i}">${escapeHtml(v.label || 'Standard')} — ${escapeHtml(v.price)} €</option>`
+          ).join('');
+          return `<article class="shop-card" data-product-id="${escapeHtml(p.id)}">
+            <div class="shop-img"><img src="${escapeHtml(p.image)}" alt="${escapeHtml(p.name)}" loading="lazy"></div>
+            <div class="shop-body">
+              <h3>${escapeHtml(p.name)}</h3>
+              <p class="shop-desc">${escapeHtml(p.description || '')}</p>
+              <div class="shop-lead">${escapeHtml(p.leadTime || '')}</div>
+              ${single
+                ? `<div class="shop-price">${escapeHtml(variants[0].price)} €</div><input type="hidden" class="shop-variant" value="0">`
+                : `<select class="shop-variant" aria-label="Variante">${opts}</select>`}
+              <button class="btn btn-primary shop-add" type="button"><span class="label">Ajouter au panier</span> <span class="arrow">→</span></button>
+            </div>
+          </article>`;
+        }).join('');
       }
     }
   };

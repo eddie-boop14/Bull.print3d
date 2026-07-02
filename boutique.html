@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Boutique — BULLPRINT 3D</title>
+<meta name="description" content="La boutique Bullprint 3D : pièces imprimées, poncées et peintes à l'atelier. Paiement carte sécurisé, livraison France · Belgique · Suisse.">
+<link rel="canonical" href="https://bullprint3d.com/boutique.html">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#101310">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;500;600&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  /* sous-page : pas d'intro, tout visible d'entrée */
+  .intro{display:none !important}
+  html.locked{overflow:auto !important}
+  .cursor,.cursor-dot{display:none !important}
+  body{cursor:auto !important}
+  .reveal{opacity:1 !important;transform:none !important}
+</style>
+</head>
+<body class="intro-done subpage">
+
+<header class="topbar shown">
+  <a href="/" class="brand" style="text-decoration:none;color:inherit">
+    <div class="brand-mark"></div>
+    <div class="brand-text">
+      <span data-bind="brand.name">BULLPRINT</span>
+      <span class="sub" data-bind="brand.sub">3D · ATELIER</span>
+    </div>
+  </a>
+  <nav class="nav" data-bind="nav"></nav>
+  <a href="/#order" class="nav-cta"><span data-bind="navCta">Devis →</span></a>
+</header>
+
+<div class="status-bar shown">
+  <div class="status-track" data-bind="statusBar"></div>
+</div>
+
+<main class="shop-page">
+  <div class="section-num"><em>·</em><span>LA BOUTIQUE</span></div>
+  <h1 class="shop-title" data-bind="shop.title">La Boutique</h1>
+  <p class="shop-intro" data-bind="shop.intro"></p>
+
+  <div class="shop-closed" data-shop-closed>
+    <h2>La boutique ouvre <span class="green">bientôt</span>.</h2>
+    <p>En attendant, tout se commande déjà sur devis — email ou DM Instagram, réponse sous 24h.</p>
+    <a class="btn btn-primary" href="/#order"><span class="label">Demander un devis</span> <span class="arrow">→</span></a>
+  </div>
+
+  <div class="shop-grid" data-bind="shop.products"></div>
+</main>
+
+<!-- panier flottant -->
+<button class="cart-fab" id="cartOpen" type="button" aria-label="Panier">
+  🛒<span class="cart-badge" data-cart-count style="display:none">0</span>
+</button>
+
+<!-- tiroir panier -->
+<div class="cart-overlay" id="cartOverlay"></div>
+<aside class="cart-drawer" id="cartDrawer" aria-label="Panier">
+  <div class="cart-head">
+    <h3>Panier</h3>
+    <button type="button" id="cartClose" aria-label="Fermer">×</button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-foot" id="cartFooter"></div>
+</aside>
+
+<footer>
+  <div class="foot">
+    <div class="foot-brand">
+      <div class="brand">
+        <div class="brand-mark"></div>
+        <div class="brand-text">
+          <span data-bind="brand.name">BULLPRINT</span>
+          <span class="sub" data-bind="brand.sub">3D · ATELIER</span>
+        </div>
+      </div>
+      <p data-bind="footer.tagline"></p>
+    </div>
+    <div data-bind="footer.columns" style="display:contents"></div>
+  </div>
+  <div class="foot-bottom">
+    <div data-bind="footer.copyright"></div>
+    <div class="sig" data-bind="footer.signature"></div>
+  </div>
+</footer>
+
+<script src="render.js"></script>
+<script src="cart.js"></script>
+</body>
+</html>
