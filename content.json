@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-06-03",
+  "updatedAt": "2026-07-02",
   "site": {
     "title": "BULLPRINT 3D — Casques, Lampes & Pièces de Collection · Impression 3D Fait Main",
     "description": "Bullprint 3D. Atelier d'impression 3D fan-culture grade. Casques cosplay, lampes de personnages, statues, figurines articulées. Fait à la commande, livraison France · Belgique · Suisse.",
@@ -91,16 +91,20 @@
       ],
       [
         {
-          "text": "DE",
+          "text": "PERSONNALISéES",
           "style": "outline"
         },
         {
-          "text": "COLLECTION.",
+          "text": "ou ",
           "style": "solid"
+        },
+        {
+          "text": "BRUT.",
+          "style": "green"
         }
       ]
     ],
-    "lede": "Atelier d'impression 3D **fan-culture grade**. On imprime les pièces que les autres n'osent pas — casques portables, lampes de personnages, statues détaillées. Une commande, une pièce, signée. **Bullprint, fais-le.**",
+    "lede": "**Bullprint3D** Atelier d'impression 3D. On imprime toutes pièces  (casques portables, lampes, statues, boucles d'oreilles, décorations intérieures, souvenirs, goodies). Contactez nous pour nous parler de votre projet.",
     "ctaPrimary": "Voir la galerie",
     "ctaPrimaryHref": "#galerie",
     "ctaGhost": "Commande sur mesure",
@@ -172,9 +176,9 @@
         ]
       },
       {
-        "id": "starwars",
+        "id": "droids",
         "num": "02",
-        "name": "STAR WARS",
+        "name": "DROÏDS",
         "cards": [
           {
             "image": "assets/products/b1-droid.jpg",
@@ -199,14 +203,6 @@
             "category": "Maquette",
             "name": "Millennium Falcon",
             "sub": "35cm · grain de surface authentique"
-          },
-          {
-            "image": "assets/products/grogu-lamp.jpg",
-            "badge": "SÉRIE",
-            "badgeStyle": "default",
-            "category": "Lampe",
-            "name": "Grogu Glow",
-            "sub": "LED inclus · 25cm"
           },
           {
             "image": "assets/products/bd1.jpg",
@@ -323,37 +319,6 @@
             "category": "Tableau",
             "name": "L'Œil · Hueforge",
             "sub": "20×20cm · couches couleur"
-          }
-        ]
-      },
-      {
-        "id": "uniques",
-        "num": "07",
-        "name": "PIÈCES UNIQUES",
-        "cards": [
-          {
-            "image": "assets/products/robot-bar.jpg",
-            "badge": "SUR MESURE",
-            "badgeStyle": "rare",
-            "category": "Pièce unique",
-            "name": "Bar-Bot Mascotte",
-            "sub": "Création pour bar local"
-          },
-          {
-            "image": "assets/products/robot-waitress.jpg",
-            "badge": "UNIQUE",
-            "badgeStyle": "default",
-            "category": "Pièce unique",
-            "name": "Waitress Bot",
-            "sub": "Articulée · rouge & blanc"
-          },
-          {
-            "image": "assets/products/null",
-            "badge": "Tag test",
-            "badgeStyle": "rare",
-            "category": "Test",
-            "name": "Produit test admin",
-            "sub": "Test#1"
           }
         ]
       }
@@ -504,7 +469,7 @@
         }
       ]
     ],
-    "paragraph": "Tu envoies une référence, une photo, un croquis, un fichier STL. On regarde, on décide ensemble, on imprime. **Casques, lampes, statues, props, mascottes, pièces de rechange** — si ça se modélise, ça se fait.",
+    "paragraph": "Tu envoies une référence, une photo, un croquis, un fichier STL. On regarde, on décide ensemble, on imprime. **Casques, lampes, statues, mascottes, pièces de rechange** — si ça se modélise, ça se fait.",
     "ctaPrimary": "Demander un devis",
     "ctaGhost": "Voir l'Insta",
     "steps": [
@@ -532,7 +497,7 @@
   },
   "order": {
     "sectionNum": "05",
-    "sectionLabel": "COMMANDER",
+    "sectionLabel": "NOUS CONTACTER",
     "titleLines": [
       [
         {
@@ -570,7 +535,7 @@
     ]
   },
   "footer": {
-    "tagline": "Atelier d'impression 3D fan-culture grade. Casques, lampes, statues, pièces de collection. Fait à la commande.",
+    "tagline": "Atelier d'impression 3D. Casques, lampes, statues... Fait à la commande.",
     "columns": [
       {
         "title": "Galerie",
