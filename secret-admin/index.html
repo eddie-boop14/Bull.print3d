@@ -416,6 +416,59 @@
     background:rgba(127,179,58,.04);
   }
 
+  /* ── ATELIER (machines + matières) — editable via modals ── */
+  .machine, .mat{
+    cursor:pointer;
+    outline:1px dashed transparent;
+    outline-offset:4px;
+    border-radius:2px;
+    transition:outline-color .2s;
+  }
+  .machine:hover, .mat:hover{outline-color:rgba(127,179,58,.6)}
+  .add-machine-row{
+    border:1px dashed rgba(127,179,58,.4);
+    border-radius:6px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:120px;
+    padding:20px;
+    cursor:pointer;
+    transition:border-color .3s, background .3s;
+  }
+  .add-machine-row:hover{border-color:#7fb33a;background:rgba(127,179,58,.05)}
+  .add-machine-row .label{
+    font-family:'JetBrains Mono', monospace;
+    color:#7fb33a;
+    font-size:11px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    font-weight:700;
+  }
+  .atelier-detail{position:relative}
+  .detail-img-btn{
+    position:absolute;
+    top:8px;
+    right:8px;
+    z-index:10;
+    background:rgba(7,9,7,.92);
+    color:#eae8df;
+    border:1px solid rgba(234,232,223,.3);
+    width:34px;
+    height:34px;
+    border-radius:3px;
+    cursor:pointer;
+    font-family:'JetBrains Mono', monospace;
+    font-size:15px;
+    font-weight:700;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:all .2s;
+    padding:0;
+  }
+  .detail-img-btn:hover{background:#7fb33a;color:#070907;border-color:#7fb33a}
+
   /* ── MODAL ROW EDITORS (status bar + footer links) ── */
   .row-edit{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:8px}
   .row-edit input[type="text"]{
@@ -844,20 +897,37 @@
   <div class="cat-stack" data-bind="gallery.categories"></div>
 </section>
 
+<!-- ⚠ MIRROR WARNING: this admin page duplicates the public markup by hand.
+     Any rebuild of a section in index.html MUST be mirrored here, or the
+     section renders empty in admin (render.js targets [data-bind] hooks that
+     no longer exist). This section is a copy of the public atelier block +
+     admin data-edit hooks on the scalar text nodes. -->
 <section class="atelier" id="atelier">
-  <div class="atelier-inner reveal cascade">
-    <div class="section-num"><em data-bind="atelier.sectionNum">03 /</em><span data-bind="atelier.sectionLabel" data-edit data-path="atelier.sectionLabel"></span></div>
-    <h2 class="atelier-title" data-bind="atelier.title" data-edit-title data-path="atelier.titleLines"></h2>
+  <div class="atelier-inner">
 
-    <div class="atelier-grid">
-      <div class="atelier-text" data-bind="atelier.paragraphs"></div>
-      <div class="atelier-stack" data-bind="atelier.postes"></div>
+    <div class="section-label reveal" data-bind="atelier.label"></div>
+
+    <div class="atelier-head">
+      <h2 class="atelier-title reveal" data-bind="atelier.title"></h2>
+      <div class="atelier-lede reveal" data-bind="atelier.lede"></div>
+      <figure class="atelier-detail reveal">
+        <img data-bind="atelier.detailImage" alt="" loading="lazy">
+      </figure>
     </div>
 
-    <p class="atelier-foot">
-      <span data-bind="atelier.footNote" data-edit data-path="atelier.footNote"></span>
-      <a target="_blank" data-bind="site.instagramUrl"><span data-bind="site.instagramHandle"></span> →</a>
-    </p>
+    <!-- BENCH -->
+    <div class="bench-bar reveal">
+      <span class="live"><span class="ping"></span><span data-bind="atelier.benchLive" data-edit data-path="atelier.benchLive"></span></span>
+      <span data-bind="atelier.benchNote" data-edit data-path="atelier.benchNote"></span>
+    </div>
+
+    <div class="bench reveal stagger" data-bind="atelier.machines"></div>
+
+    <!-- MATERIALS -->
+    <div class="mat-label reveal" data-bind="atelier.materialsLabel" data-edit data-path="atelier.materialsLabel"></div>
+
+    <div class="mats reveal stagger" data-bind="atelier.materials"></div>
+
   </div>
 </section>
 
@@ -1005,6 +1075,101 @@
     <div class="modal-actions">
       <button class="modal-btn" id="footerColsCancel">Annuler</button>
       <button class="modal-btn primary" id="footerColsSave">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="machineModal">
+  <div class="modal">
+    <h3>Modifier la <span class="green">machine</span></h3>
+    <div class="modal-field">
+      <label>Nom</label>
+      <input type="text" id="machineName" placeholder="Ex: H2D">
+    </div>
+    <div class="modal-field">
+      <label>Tagline</label>
+      <input type="text" id="machineTagline" placeholder="Ex: Le grand format">
+    </div>
+    <div class="modal-field">
+      <label>Index affiché</label>
+      <input type="text" id="machineIdx" placeholder="Ex: H2 · 01">
+    </div>
+    <div class="modal-field">
+      <label>Statut</label>
+      <select id="machineStatus">
+        <option value="ready">Prêt (point vert fixe)</option>
+        <option value="printing">En impression (barre de progression + point animé)</option>
+      </select>
+    </div>
+    <div class="modal-field">
+      <label>Libellé du statut (affiché)</label>
+      <input type="text" id="machineStatusLabel" placeholder="Ex: Prêt, En impression">
+    </div>
+    <div class="modal-field">
+      <label>Puces (séparées par des virgules)</label>
+      <input type="text" id="machineChips" placeholder="Ex: Bi-buse, 350×320×325, Chambre chauffée">
+    </div>
+    <div class="modal-field">
+      <label>Points forts — accroche (en gras)</label>
+      <input type="text" id="machineBestLead" placeholder="Ex: Les grosses pièces, le multi-matière.">
+    </div>
+    <div class="modal-field">
+      <label>Points forts — suite</label>
+      <textarea id="machineBestRest" placeholder="Ex: Casques d'un bloc, statues hautes…"></textarea>
+    </div>
+    <div class="modal-field">
+      <label>Image (chemin du fichier)</label>
+      <input type="text" id="machineImage" placeholder="assets/atelier/machine-xxx.jpg">
+      <div class="hint">Le fichier doit déjà exister dans assets/atelier/ — les images voyagent par Git, pas par l'admin.</div>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn danger" id="machineDelete">Supprimer</button>
+      <button class="modal-btn" id="machineCancel">Annuler</button>
+      <button class="modal-btn primary" id="machineSave">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="materialModal">
+  <div class="modal">
+    <h3>Modifier la <span class="green">matière</span></h3>
+    <div class="modal-field">
+      <label>Code</label>
+      <input type="text" id="materialCode" placeholder="Ex: PLA">
+    </div>
+    <div class="modal-field">
+      <label>Propriété clé</label>
+      <input type="text" id="materialProperty" placeholder="Ex: Facilité d'utilisation">
+    </div>
+    <div class="modal-field">
+      <label>Description</label>
+      <textarea id="materialDesc" placeholder="Ex: Précis et facile à peindre…"></textarea>
+    </div>
+    <div class="modal-field">
+      <label>Finition (rendu du reflet)</label>
+      <select id="materialFinish">
+        <option value="matte">Matte</option>
+        <option value="satin">Satin</option>
+        <option value="gloss">Gloss (brillant)</option>
+      </select>
+    </div>
+    <div class="modal-field">
+      <label>Icône</label>
+      <select id="materialIcon">
+        <option value="leaf">🌿 Feuille (facile / éco)</option>
+        <option value="heat">🌡 Thermomètre (chaleur)</option>
+        <option value="impact">✳ Impact (résistance mécanique)</option>
+        <option value="sun">☀ Soleil (UV / extérieur)</option>
+      </select>
+    </div>
+    <div class="modal-field">
+      <label>Image (chemin du fichier)</label>
+      <input type="text" id="materialImage" placeholder="assets/atelier/mat-xxx.jpg">
+      <div class="hint">Le fichier doit déjà exister dans assets/atelier/ — les images voyagent par Git, pas par l'admin.</div>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn" id="materialCancel">Annuler</button>
+      <button class="modal-btn primary" id="materialSave">Enregistrer</button>
     </div>
   </div>
 </div>

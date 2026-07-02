@@ -16,6 +16,8 @@
   let dirty = false;
   let cardModalCtx = null; // { categoryId, cardIndex } | { categoryId, cardIndex: -1 } for new
   let catModalCtx = null;  // { categoryId } | null for new
+  let machineModalCtx = null;  // { idx } | { idx: -1 } for new
+  let materialModalCtx = null; // { idx }
 
   // DOM
   const $ = (sel, root = document) => root.querySelector(sel);
@@ -69,6 +71,34 @@
     editor: $('#footerColumnsEditor'),
     save: $('#footerColsSave'),
     cancel: $('#footerColsCancel'),
+  };
+
+  const machineModal = $('#machineModal');
+  const machineModalEls = {
+    name: $('#machineName'),
+    tagline: $('#machineTagline'),
+    idx: $('#machineIdx'),
+    status: $('#machineStatus'),
+    statusLabel: $('#machineStatusLabel'),
+    chips: $('#machineChips'),
+    bestLead: $('#machineBestLead'),
+    bestRest: $('#machineBestRest'),
+    image: $('#machineImage'),
+    save: $('#machineSave'),
+    cancel: $('#machineCancel'),
+    delete: $('#machineDelete'),
+  };
+
+  const materialModal = $('#materialModal');
+  const materialModalEls = {
+    code: $('#materialCode'),
+    property: $('#materialProperty'),
+    desc: $('#materialDesc'),
+    finish: $('#materialFinish'),
+    icon: $('#materialIcon'),
+    image: $('#materialImage'),
+    save: $('#materialSave'),
+    cancel: $('#materialCancel'),
   };
 
   const handlesModal = $('#handlesModal');
@@ -254,6 +284,14 @@
   // EDITABLE OVERLAYS
   // ─────────────────────────────────────────────────────────────
   const attachAdminOverlays = () => {
+    // 0. Decorate freshly-rendered atelier lede paragraphs so the generic
+    // inline-editor binder (step 1) picks them up. These <p> are rebuilt on
+    // every rerender, which naturally resets their adminBound guards.
+    $$('[data-bind="atelier.lede"] > p').forEach((p, i) => {
+      p.setAttribute('data-edit', '');
+      p.setAttribute('data-path', 'atelier.lede.' + i);
+    });
+
     // 1. Plain text editable fields (data-edit, NOT data-edit-title)
     $$('[data-edit][data-path]').forEach((el) => {
       if (el.dataset.adminBound) return;
@@ -398,6 +436,71 @@
         e.stopPropagation();
         openHandlesEditor();
       });
+    }
+
+    // 8. Atelier machines → modal editor (delegated: the bench container
+    // survives rerender, its cards don't).
+    const bench = $('[data-bind="atelier.machines"]');
+    if (bench) {
+      if (!bench.dataset.adminBound) {
+        bench.dataset.adminBound = '1';
+        bench.addEventListener('click', (e) => {
+          const card = e.target.closest('.machine');
+          if (!card) return;
+          e.preventDefault();
+          const idx = Array.from(bench.querySelectorAll('.machine')).indexOf(card);
+          if (idx !== -1) openMachineEditor(idx);
+        });
+      }
+      // "+ Machine" cell — wiped with the container's innerHTML on every
+      // rerender, so re-inject each pass (same pattern as add-category-row)
+      if (!bench.querySelector('.add-machine-row')) {
+        const addRow = document.createElement('div');
+        addRow.className = 'add-machine-row';
+        addRow.innerHTML = '<div class="label">+ Machine</div>';
+        addRow.addEventListener('click', () => openMachineEditor(-1));
+        bench.appendChild(addRow);
+      }
+    }
+
+    // 9. Atelier materials → modal editor (edit only — the 4 filaments are
+    // the offer; add/remove is not a phone-admin job)
+    const mats = $('[data-bind="atelier.materials"]');
+    if (mats && !mats.dataset.adminBound) {
+      mats.dataset.adminBound = '1';
+      mats.addEventListener('click', (e) => {
+        const card = e.target.closest('.mat');
+        if (!card) return;
+        e.preventDefault();
+        const idx = Array.from(mats.querySelectorAll('.mat')).indexOf(card);
+        if (idx !== -1) openMaterialEditor(idx);
+      });
+    }
+
+    // 10. Atelier detail image → "✎" button, one-field prompt.
+    // No uploader on purpose: image files still travel via Git into
+    // assets/atelier/ — the admin only edits the path.
+    const fig = $('.atelier-detail');
+    if (fig && !fig.dataset.adminBound) {
+      fig.dataset.adminBound = '1';
+      const btn = document.createElement('button');
+      btn.className = 'detail-img-btn';
+      btn.textContent = '✎';
+      btn.title = "Modifier le chemin de l'image";
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const v = prompt(
+          "Chemin de l'image de détail.\nLe fichier doit déjà exister dans assets/atelier/ (les images voyagent par Git, pas par l'admin).",
+          working.atelier.detailImage || 'assets/atelier/'
+        );
+        if (v === null) return;
+        const trimmed = v.trim();
+        if (!trimmed) return;
+        working.atelier.detailImage = trimmed;
+        rerender();
+      });
+      fig.appendChild(btn);
     }
   };
 
@@ -952,6 +1055,112 @@
   });
 
   // ─────────────────────────────────────────────────────────────
+  // MACHINE EDITOR (atelier bench)
+  // status: 'printing' drives the progress bar + animated dot in
+  // render.js; every other value renders as a plain "ready" card.
+  // ─────────────────────────────────────────────────────────────
+  const openMachineEditor = (idx) => {
+    machineModalCtx = { idx };
+    const isNew = idx === -1;
+    const m = isNew
+      ? { id: '', name: '', tagline: '', idx: '', status: 'ready', statusLabel: 'Prêt', image: 'assets/atelier/', chips: [], bestLead: '', bestRest: '' }
+      : working.atelier.machines[idx];
+    if (!m) return;
+
+    machineModalEls.name.value = m.name || '';
+    machineModalEls.tagline.value = m.tagline || '';
+    machineModalEls.idx.value = m.idx || '';
+    machineModalEls.status.value = m.status === 'printing' ? 'printing' : 'ready';
+    machineModalEls.statusLabel.value = m.statusLabel || '';
+    machineModalEls.chips.value = (m.chips || []).join(', ');
+    machineModalEls.bestLead.value = m.bestLead || '';
+    machineModalEls.bestRest.value = m.bestRest || '';
+    machineModalEls.image.value = m.image || '';
+    machineModalEls.delete.style.display = isNew ? 'none' : '';
+
+    openModal(machineModal);
+    setTimeout(() => machineModalEls.name.focus(), 100);
+  };
+
+  machineModalEls.save.addEventListener('click', () => {
+    if (!machineModalCtx) return;
+    const { idx } = machineModalCtx;
+    const isNew = idx === -1;
+    const name = machineModalEls.name.value.trim();
+    if (!name) { alert('Nom requis'); return; }
+    const existing = isNew ? null : working.atelier.machines[idx];
+    const machine = {
+      id: existing?.id || slugify(name) || 'machine',
+      name,
+      tagline: machineModalEls.tagline.value.trim(),
+      idx: machineModalEls.idx.value.trim(),
+      status: machineModalEls.status.value === 'printing' ? 'printing' : 'ready',
+      statusLabel: machineModalEls.statusLabel.value.trim() || (machineModalEls.status.value === 'printing' ? 'En impression' : 'Prêt'),
+      image: machineModalEls.image.value.trim(),
+      chips: machineModalEls.chips.value.split(',').map((c) => c.trim()).filter(Boolean),
+      bestLead: machineModalEls.bestLead.value.trim(),
+      bestRest: machineModalEls.bestRest.value.trim(),
+    };
+    if (isNew) {
+      working.atelier.machines.push(machine);
+    } else {
+      working.atelier.machines[idx] = machine;
+    }
+    closeModal(machineModal);
+    rerender();
+  });
+  machineModalEls.cancel.addEventListener('click', () => closeModal(machineModal));
+  machineModalEls.delete.addEventListener('click', () => {
+    if (!machineModalCtx || machineModalCtx.idx === -1) return;
+    const m = working.atelier.machines[machineModalCtx.idx];
+    if (!m) return;
+    if (!confirm(`Supprimer la machine "${m.name}" ?`)) return;
+    working.atelier.machines.splice(machineModalCtx.idx, 1);
+    closeModal(machineModal);
+    rerender();
+  });
+
+  // ─────────────────────────────────────────────────────────────
+  // MATERIAL EDITOR (atelier filaments)
+  // finish/icon are dropdowns on purpose: legal finishes are the
+  // finish-* classes in styles.css (matte/satin/gloss), legal icons
+  // are the ICONS map keys in render.js (leaf/heat/impact/sun) —
+  // free-typing either would silently break the rendering.
+  // ─────────────────────────────────────────────────────────────
+  const openMaterialEditor = (idx) => {
+    materialModalCtx = { idx };
+    const mt = working.atelier.materials[idx];
+    if (!mt) return;
+
+    materialModalEls.code.value = mt.code || '';
+    materialModalEls.property.value = mt.property || '';
+    materialModalEls.desc.value = mt.desc || '';
+    materialModalEls.finish.value = ['matte', 'satin', 'gloss'].includes(mt.finish) ? mt.finish : 'matte';
+    materialModalEls.icon.value = ['leaf', 'heat', 'impact', 'sun'].includes(mt.icon) ? mt.icon : 'leaf';
+    materialModalEls.image.value = mt.image || '';
+
+    openModal(materialModal);
+    setTimeout(() => materialModalEls.code.focus(), 100);
+  };
+
+  materialModalEls.save.addEventListener('click', () => {
+    if (!materialModalCtx) return;
+    const mt = working.atelier.materials[materialModalCtx.idx];
+    if (!mt) return;
+    const code = materialModalEls.code.value.trim();
+    if (!code) { alert('Code requis'); return; }
+    mt.code = code;
+    mt.property = materialModalEls.property.value.trim();
+    mt.desc = materialModalEls.desc.value.trim();
+    mt.finish = materialModalEls.finish.value;
+    mt.icon = materialModalEls.icon.value;
+    mt.image = materialModalEls.image.value.trim();
+    closeModal(materialModal);
+    rerender();
+  });
+  materialModalEls.cancel.addEventListener('click', () => closeModal(materialModal));
+
+  // ─────────────────────────────────────────────────────────────
   // RE-RENDER from working copy
   // ─────────────────────────────────────────────────────────────
   const rerender = () => {
@@ -1132,7 +1341,7 @@
   btnLogout.addEventListener('click', handleLogout);
 
   // Close modals on outside click
-  [cardModal, catModal, statusModal, footerColsModal, handlesModal, commitModal].forEach((m) => {
+  [cardModal, catModal, statusModal, footerColsModal, handlesModal, machineModal, materialModal, commitModal].forEach((m) => {
     m.addEventListener('click', (e) => {
       if (e.target === m) closeModal(m);
     });
