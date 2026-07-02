@@ -299,6 +299,13 @@
       p.setAttribute('data-edit', '');
       p.setAttribute('data-path', 'atelier.lede.' + i);
     });
+    // Same treatment for the 4 "Sur Mesure" step cards (title + desc).
+    $$('[data-bind="custom.steps"] .step').forEach((step, i) => {
+      const h = step.querySelector('h4');
+      const p = step.querySelector('p');
+      if (h) { h.setAttribute('data-edit', ''); h.setAttribute('data-path', `custom.steps.${i}.title`); }
+      if (p) { p.setAttribute('data-edit', ''); p.setAttribute('data-path', `custom.steps.${i}.desc`); }
+    });
 
     // 1. Plain text editable fields (data-edit, NOT data-edit-title)
     $$('[data-edit][data-path]').forEach((el) => {
