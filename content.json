@@ -49,6 +49,14 @@
     {
       "text": "Nouvelles impressions en cours",
       "warn": true
+    },
+    {
+      "text": "ii",
+      "warn": false
+    },
+    {
+      "text": "kk",
+      "warn": false
     }
   ],
   "hero": {
