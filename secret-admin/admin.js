@@ -56,6 +56,21 @@
     delete: $('#catDelete'),
   };
 
+  const statusModal = $('#statusModal');
+  const statusModalEls = {
+    rows: $('#statusRows'),
+    add: $('#statusAdd'),
+    save: $('#statusSave'),
+    cancel: $('#statusCancel'),
+  };
+
+  const footerColsModal = $('#footerColumnsModal');
+  const footerColsEls = {
+    editor: $('#footerColumnsEditor'),
+    save: $('#footerColsSave'),
+    cancel: $('#footerColsCancel'),
+  };
+
   const commitModal = $('#commitModal');
   const commitSummary = $('#commitSummary');
   const commitMsg = $('#commitMsg');
@@ -334,6 +349,34 @@
       addCatBtn.innerHTML = '<div class="label">+ Ajouter une catégorie</div>';
       addCatBtn.addEventListener('click', () => openCategoryEditor(null));
       catStack.appendChild(addCatBtn);
+    }
+
+    // 5. Status bar (bande défilante) → modal editor.
+    // The marquee is paused via admin CSS so the bar stays clickable.
+    // The .status-bar element itself survives rerender (only the track's
+    // innerHTML is rewritten), so one delegated binding is enough.
+    const statusBarEl = $('.status-bar');
+    if (statusBarEl && !statusBarEl.dataset.adminBound) {
+      statusBarEl.dataset.adminBound = '1';
+      statusBarEl.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        openStatusEditor();
+      });
+    }
+
+    // 6. Footer columns → modal editor.
+    // The container is display:contents (no box, no hover of its own) but
+    // clicks on the column divs bubble up to it. Its innerHTML is wiped on
+    // every rerender, hence the adminBound guard on the container itself.
+    const footColsEl = $('[data-bind="footer.columns"]');
+    if (footColsEl && !footColsEl.dataset.adminBound) {
+      footColsEl.dataset.adminBound = '1';
+      footColsEl.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        openFooterColumnsEditor();
+      });
     }
   };
 
@@ -632,6 +675,184 @@
   });
 
   // ─────────────────────────────────────────────────────────────
+  // STATUS BAR EDITOR (bande défilante)
+  // ─────────────────────────────────────────────────────────────
+  let statusItems = null; // local copy while the modal is open
+
+  const renderStatusRows = () => {
+    statusModalEls.rows.innerHTML = '';
+    statusItems.forEach((item, idx) => {
+      const row = document.createElement('div');
+      row.className = 'row-edit';
+      row.innerHTML = `
+        <input type="text" data-idx="${idx}" data-field="text" placeholder="Message">
+        <label class="warn-toggle"><input type="checkbox" data-idx="${idx}" data-field="warn"> ⚠ orange</label>
+        <button class="modal-btn mini-btn" data-action="up" data-idx="${idx}"${idx === 0 ? ' disabled' : ''}>↑</button>
+        <button class="modal-btn mini-btn" data-action="down" data-idx="${idx}"${idx === statusItems.length - 1 ? ' disabled' : ''}>↓</button>
+        <button class="modal-btn mini-btn danger" data-action="del" data-idx="${idx}" title="Supprimer">×</button>
+      `;
+      // set values via properties — no HTML-escaping worries
+      row.querySelector('input[data-field="text"]').value = item.text || '';
+      row.querySelector('input[data-field="warn"]').checked = !!item.warn;
+      statusModalEls.rows.appendChild(row);
+    });
+  };
+
+  const openStatusEditor = () => {
+    statusItems = deepClone(working.statusBar || []);
+    if (!statusItems.length) statusItems.push({ text: '', warn: false });
+    renderStatusRows();
+    openModal(statusModal);
+  };
+
+  statusModalEls.rows.addEventListener('input', (e) => {
+    if (!statusItems) return;
+    const idx = parseInt(e.target.dataset.idx, 10);
+    if (isNaN(idx)) return;
+    if (e.target.dataset.field === 'text') statusItems[idx].text = e.target.value;
+    else if (e.target.dataset.field === 'warn') statusItems[idx].warn = e.target.checked;
+  });
+
+  statusModalEls.rows.addEventListener('click', (e) => {
+    const btn = e.target.closest('button[data-action]');
+    if (!btn || !statusItems) return;
+    const idx = parseInt(btn.dataset.idx, 10);
+    const action = btn.dataset.action;
+    if (action === 'up' && idx > 0) {
+      [statusItems[idx - 1], statusItems[idx]] = [statusItems[idx], statusItems[idx - 1]];
+    } else if (action === 'down' && idx < statusItems.length - 1) {
+      [statusItems[idx + 1], statusItems[idx]] = [statusItems[idx], statusItems[idx + 1]];
+    } else if (action === 'del') {
+      if (statusItems.length <= 1) { alert('Il faut au moins un message.'); return; }
+      statusItems.splice(idx, 1);
+    } else {
+      return;
+    }
+    renderStatusRows();
+  });
+
+  statusModalEls.add.addEventListener('click', () => {
+    statusItems.push({ text: '', warn: false });
+    renderStatusRows();
+    const inputs = statusModalEls.rows.querySelectorAll('input[data-field="text"]');
+    if (inputs.length) inputs[inputs.length - 1].focus();
+  });
+
+  statusModalEls.cancel.addEventListener('click', () => closeModal(statusModal));
+  statusModalEls.save.addEventListener('click', () => {
+    const cleaned = statusItems
+      .map((s) => ({ text: String(s.text || '').trim(), warn: !!s.warn }))
+      .filter((s) => s.text); // empty rows are dropped
+    if (!cleaned.length) { alert('Il faut au moins un message.'); return; }
+    working.statusBar = cleaned;
+    closeModal(statusModal);
+    rerender();
+  });
+
+  // ─────────────────────────────────────────────────────────────
+  // FOOTER COLUMNS EDITOR
+  // Column count stays fixed at 3 — the footer grid (display:contents
+  // into .foot) is tuned for 3 columns; adding/removing is out of scope.
+  // ─────────────────────────────────────────────────────────────
+  let footerCols = null; // local copy while the modal is open
+
+  const renderFooterColsEditor = () => {
+    footerColsEls.editor.innerHTML = '';
+    footerCols.forEach((col, colIdx) => {
+      const block = document.createElement('div');
+      block.className = 'col-block';
+      block.innerHTML = `
+        <div class="modal-field" style="margin-bottom:10px">
+          <label>Colonne ${colIdx + 1} — Titre</label>
+          <input type="text" data-col="${colIdx}" data-field="title">
+        </div>
+        <div class="links"></div>
+        <button class="modal-btn mini-btn" data-action="add-link" data-col="${colIdx}">+ Ajouter un lien</button>
+      `;
+      block.querySelector('input[data-field="title"]').value = col.title || '';
+      const linksDiv = block.querySelector('.links');
+      (col.links || []).forEach((l, linkIdx) => {
+        const row = document.createElement('div');
+        row.className = 'link-row';
+        row.innerHTML = `
+          <div class="link-inputs">
+            <input type="text" data-col="${colIdx}" data-idx="${linkIdx}" data-field="label" placeholder="Libellé">
+            <input type="text" data-col="${colIdx}" data-idx="${linkIdx}" data-field="href" placeholder="#ancre, mailto:… ou https://…">
+          </div>
+          <div class="link-btns">
+            <button class="modal-btn mini-btn" data-action="up" data-col="${colIdx}" data-idx="${linkIdx}"${linkIdx === 0 ? ' disabled' : ''}>↑</button>
+            <button class="modal-btn mini-btn" data-action="down" data-col="${colIdx}" data-idx="${linkIdx}"${linkIdx === col.links.length - 1 ? ' disabled' : ''}>↓</button>
+            <button class="modal-btn mini-btn danger" data-action="del" data-col="${colIdx}" data-idx="${linkIdx}" title="Supprimer">×</button>
+          </div>
+        `;
+        row.querySelector('input[data-field="label"]').value = l.label || '';
+        row.querySelector('input[data-field="href"]').value = l.href || '';
+        linksDiv.appendChild(row);
+      });
+      footerColsEls.editor.appendChild(block);
+    });
+  };
+
+  const openFooterColumnsEditor = () => {
+    footerCols = deepClone(working.footer.columns || []);
+    footerCols.forEach((c) => { if (!Array.isArray(c.links)) c.links = []; });
+    renderFooterColsEditor();
+    openModal(footerColsModal);
+  };
+
+  footerColsEls.editor.addEventListener('input', (e) => {
+    if (!footerCols) return;
+    const colIdx = parseInt(e.target.dataset.col, 10);
+    const field = e.target.dataset.field;
+    if (isNaN(colIdx) || !field) return;
+    if (field === 'title') { footerCols[colIdx].title = e.target.value; return; }
+    const linkIdx = parseInt(e.target.dataset.idx, 10);
+    if (isNaN(linkIdx)) return;
+    footerCols[colIdx].links[linkIdx][field] = e.target.value;
+  });
+
+  footerColsEls.editor.addEventListener('click', (e) => {
+    const btn = e.target.closest('button[data-action]');
+    if (!btn || !footerCols) return;
+    const colIdx = parseInt(btn.dataset.col, 10);
+    if (isNaN(colIdx)) return;
+    const links = footerCols[colIdx].links;
+    const action = btn.dataset.action;
+    if (action === 'add-link') {
+      links.push({ label: '', href: '#' });
+    } else {
+      const idx = parseInt(btn.dataset.idx, 10);
+      if (action === 'up' && idx > 0) {
+        [links[idx - 1], links[idx]] = [links[idx], links[idx - 1]];
+      } else if (action === 'down' && idx < links.length - 1) {
+        [links[idx + 1], links[idx]] = [links[idx], links[idx + 1]];
+      } else if (action === 'del') {
+        links.splice(idx, 1);
+      } else {
+        return;
+      }
+    }
+    renderFooterColsEditor();
+    if (action === 'add-link') {
+      const labels = footerColsEls.editor.querySelectorAll(`input[data-col="${colIdx}"][data-field="label"]`);
+      if (labels.length) labels[labels.length - 1].focus();
+    }
+  });
+
+  footerColsEls.cancel.addEventListener('click', () => closeModal(footerColsModal));
+  footerColsEls.save.addEventListener('click', () => {
+    const cleaned = footerCols.map((col) => ({
+      title: String(col.title || '').trim(),
+      links: (col.links || [])
+        .map((l) => ({ label: String(l.label || '').trim(), href: String(l.href || '').trim() || '#' }))
+        .filter((l) => l.label), // a link without a label is dropped
+    }));
+    working.footer.columns = cleaned;
+    closeModal(footerColsModal);
+    rerender();
+  });
+
+  // ─────────────────────────────────────────────────────────────
   // RE-RENDER from working copy
   // ─────────────────────────────────────────────────────────────
   const rerender = () => {
@@ -812,7 +1033,7 @@
   btnLogout.addEventListener('click', handleLogout);
 
   // Close modals on outside click
-  [cardModal, catModal, commitModal].forEach((m) => {
+  [cardModal, catModal, statusModal, footerColsModal, commitModal].forEach((m) => {
     m.addEventListener('click', (e) => {
       if (e.target === m) closeModal(m);
     });

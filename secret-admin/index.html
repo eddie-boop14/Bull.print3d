@@ -375,6 +375,89 @@
     font-weight:700;
   }
 
+  /* ── STATUS BAR (bande défilante) — editable via modal ── */
+  /* pause the marquee in admin so the bar is clickable */
+  .status-track{animation-play-state:paused !important}
+  .status-bar{
+    cursor:pointer;
+    outline:1px dashed transparent;
+    outline-offset:-3px;
+    transition:outline-color .2s, background .2s;
+  }
+  .status-bar:hover{
+    outline-color:rgba(127,179,58,.6);
+    background:rgba(127,179,58,.04);
+  }
+
+  /* ── FOOTER COLUMNS — editable via modal ── */
+  /* the container itself is display:contents (no box) — style its column divs */
+  [data-bind="footer.columns"] > div{
+    cursor:pointer;
+    outline:1px dashed transparent;
+    outline-offset:4px;
+    border-radius:2px;
+    transition:outline-color .2s, background .2s;
+  }
+  [data-bind="footer.columns"] > div:hover{
+    outline-color:rgba(127,179,58,.6);
+    background:rgba(127,179,58,.04);
+  }
+
+  /* ── MODAL ROW EDITORS (status bar + footer links) ── */
+  .row-edit{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:8px}
+  .row-edit input[type="text"]{
+    flex:1;
+    min-width:120px;
+    background:#0a0d0a;
+    border:1px solid rgba(234,232,223,.22);
+    color:#eae8df;
+    padding:10px 12px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px;
+    border-radius:3px;
+    outline:none;
+    transition:border-color .2s;
+  }
+  .row-edit input[type="text"]:focus{border-color:#7fb33a}
+  .mini-btn{padding:8px 10px !important;font-size:10px !important}
+  .warn-toggle{
+    display:flex;
+    align-items:center;
+    gap:5px;
+    font-size:9px;
+    color:#9c9c92;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    font-weight:600;
+    white-space:nowrap;
+    cursor:pointer;
+  }
+  .warn-toggle input{accent-color:#ff6a1a;cursor:pointer}
+  .col-block{
+    margin-bottom:16px;
+    padding:12px;
+    background:#0a0d0a;
+    border:1px solid rgba(234,232,223,.1);
+    border-radius:3px;
+  }
+  .col-block .links{margin-bottom:8px}
+  .link-row{display:flex;gap:6px;margin-bottom:10px}
+  .link-inputs{flex:1;display:flex;flex-direction:column;gap:4px;min-width:0}
+  .link-inputs input{
+    width:100%;
+    background:#070907;
+    border:1px solid rgba(234,232,223,.22);
+    color:#eae8df;
+    padding:9px 11px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px;
+    border-radius:3px;
+    outline:none;
+    transition:border-color .2s;
+  }
+  .link-inputs input:focus{border-color:#7fb33a}
+  .link-btns{display:flex;flex-direction:column;gap:4px}
+
   /* ── CARD EDITOR MODAL (for image/badge fields) ── */
   .modal-overlay{
     position:fixed;
@@ -873,6 +956,42 @@
       <button class="modal-btn danger" id="catDelete" style="display:none">Supprimer</button>
       <button class="modal-btn" id="catCancel">Annuler</button>
       <button class="modal-btn primary" id="catSave">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="statusModal">
+  <div class="modal">
+    <h3>Bande <span class="green">défilante</span></h3>
+    <p style="font-size:12px;color:#9c9c92;margin-bottom:14px;line-height:1.6">
+      Les messages défilent en boucle en haut du site. Cocher
+      « ⚠ orange » pour afficher le point d'alerte orange.
+      Les lignes vides seront ignorées.
+    </p>
+    <div id="statusRows"></div>
+    <button class="modal-btn" id="statusAdd" style="margin-top:10px">+ Ajouter un message</button>
+    <div class="modal-actions">
+      <button class="modal-btn" id="statusCancel">Annuler</button>
+      <button class="modal-btn primary" id="statusSave">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- Footer columns editor. Column count is fixed at 3 on purpose :
+     the footer grid layout (display:contents into .foot) is tuned for
+     3 columns — adding/removing columns is out of scope. -->
+<div class="modal-overlay" id="footerColumnsModal">
+  <div class="modal">
+    <h3>Colonnes du <span class="green">footer</span></h3>
+    <p style="font-size:12px;color:#9c9c92;margin-bottom:14px;line-height:1.6">
+      3 colonnes de liens. Un lien peut pointer vers une ancre
+      (#galerie), un email (mailto:…) ou une URL complète (https://…).
+      Les liens sans libellé seront ignorés.
+    </p>
+    <div id="footerColumnsEditor"></div>
+    <div class="modal-actions">
+      <button class="modal-btn" id="footerColsCancel">Annuler</button>
+      <button class="modal-btn primary" id="footerColsSave">Enregistrer</button>
     </div>
   </div>
 </div>
